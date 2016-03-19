@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Definitions.h"
+#include <functional>
 
 class Memory;
 
@@ -11,6 +12,7 @@ public:
 	~Processor();
 
 	void Reset();
+	void InitOpcodes();
 
 private:
 	void SetFlag(uint8 flag);
@@ -21,6 +23,8 @@ private:
 
 private:
 	Memory* memory;
+	std::function<void()> opcodes[256];
+	std::function<void()> opcodesCB[256];
 
 	uint16 PC;
 	uint16 SP;

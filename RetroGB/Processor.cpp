@@ -4,6 +4,7 @@
 Processor::Processor(Memory* mem)
 	: memory(mem)
 {
+	InitOpcodes();
 	Reset();
 }
 
@@ -40,4 +41,9 @@ void Processor::ClearFlags(uint8 flag)
 bool Processor::IsFlagSet(uint8 flag)
 {
 	return (F & flag) != 0;
+}
+
+void Processor::InitOpcodes()
+{
+	// TODO generate tables with CpuGenerator
 }
