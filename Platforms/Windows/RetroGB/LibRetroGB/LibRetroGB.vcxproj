@@ -65,6 +65,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\RetroGB\BootRoms.h" />
     <ClInclude Include="..\..\..\..\RetroGB\Cartridge.h" />
     <ClInclude Include="..\..\..\..\RetroGB\Definitions.h" />
     <ClInclude Include="..\..\..\..\RetroGB\Gameboy.h" />

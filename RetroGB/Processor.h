@@ -22,11 +22,14 @@ private:
 	void ClearFlags(uint8 flag);
 	bool IsFlagSet(uint8 flag);
 
+    void InvalidOpcode();
+
 private:
 	Memory* memory;
 	std::function<void()> opcodes[256];
 	std::function<void()> opcodesCB[256];
 
+    bool ime;
 	uint16 PC;
 	uint16 SP;
 

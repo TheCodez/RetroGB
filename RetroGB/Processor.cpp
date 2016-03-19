@@ -27,6 +27,8 @@ uint8 Processor::Run()
 		opcodes[opcode]();
 	}
 
+    LOG("PC: 0x%d, Opcode: 0x%d, Instr: 0x%d", PC, opcode, memory->ReadByte(PC));
+
 	return 0;
 }
 
@@ -40,8 +42,9 @@ void Processor::Reset(bool color)
 	BC = 0x0013;
 	DE = 0x00D8;
 	HL = 0x014F;
-	PC = 0x100; // TODO boot rom support
+	PC = 0x00; // TODO boot rom support
 	SP = 0xFFFE;
+    ime = true;
 }
 
 void Processor::SetFlag(uint8 flag)
@@ -80,7 +83,12 @@ void Processor::InitOpcodes()
 
 	for (int i = 0; i < 256; i++)
 	{
-		opcodes[i] = nop;
-		opcodesCB[i] = nop;
+        opcodes[i] = std::bind(&Processor::InitOpcodes, this);
+        opcodesCB[i] = std::bind(&Processor::InitOpcodes, this);
 	}
+}
+
+void Processor::InvalidOpcode()
+{
+    LOG("Not implemented opcode: 0x%d", memory->ReadByte(PC));
 }

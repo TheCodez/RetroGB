@@ -11,6 +11,11 @@ public:
 
 	void Reset();
 
+    void ScanLine(int line);
+    void RenderBackground(int line);
+    void RenderWindow(int line);
+    void RenderSprites(int line);
+
 private:
 	Memory* memory;
 	Processor* processor;

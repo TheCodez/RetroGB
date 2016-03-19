@@ -7,6 +7,7 @@
     <ClInclude Include="..\..\..\..\RetroGB\Definitions.h" />
     <ClInclude Include="..\..\..\..\RetroGB\Video.h" />
     <ClInclude Include="..\..\..\..\RetroGB\Cartridge.h" />
+    <ClInclude Include="..\..\..\..\RetroGB\BootRoms.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\RetroGB\Gameboy.cpp" />

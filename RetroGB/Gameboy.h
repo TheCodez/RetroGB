@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 class Processor;
 class Memory;
 class Video;
@@ -11,7 +13,9 @@ public:
 	Gameboy();
 	~Gameboy();
 
-	void Reset();
+    void Run();
+    void Reset();
+    void LoadRom(const std::string& fileName);
 
 private:
 	Memory* memory;
