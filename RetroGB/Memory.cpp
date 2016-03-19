@@ -43,8 +43,8 @@ void Memory::WriteByte(uint16 address, uint8 value)
 
 void Memory::WriteWord(uint16 address, uint16 value)
 {
-	WriteByte(address, value & 0xFF);
-	WriteByte(address + 1, value >> 8);
+    WriteByte(address, value & 0xFF);
+    WriteByte(address + 1, value >> 8);
 }
 
 uint8 Memory::ReadByte(uint16 address) const
@@ -67,10 +67,10 @@ uint8 Memory::ReadByte(uint16 address) const
         return rom[address];
     }
 
-	return 0x00;
+    return 0x00;
 }
 
 uint16 Memory::ReadWord(uint16 address) const
 {
-	return (uint16)(ReadByte(address) | (ReadByte(address + 1) << 8));
+    return (uint16)(ReadByte(address) | (ReadByte(address + 1) << 8));
 }

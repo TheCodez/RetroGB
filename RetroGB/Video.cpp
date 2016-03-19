@@ -3,7 +3,7 @@
 #include "Processor.h"
 
 Video::Video(Memory* mem, Processor* cpu)
-	: memory(mem), processor(cpu)
+    : memory(mem), processor(cpu)
 {
     Reset();
 }

@@ -5,17 +5,17 @@
 class Memory
 {
 public:
-	Memory();
-	~Memory();
+    Memory();
+    ~Memory();
 
-	void Reset();
+    void Reset();
     void LoadRom(uint8* r);
 
-	void WriteByte(uint16 address, uint8 value);
-	void WriteWord(uint16 address, uint16 value);
+    void WriteByte(uint16 address, uint8 value);
+    void WriteWord(uint16 address, uint16 value);
 
-	uint8 ReadByte(uint16 address) const;
-	uint16 ReadWord(uint16 address) const;
+    uint8 ReadByte(uint16 address) const;
+    uint16 ReadWord(uint16 address) const;
 
 private:
     uint8* rom;

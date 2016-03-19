@@ -6,11 +6,11 @@
 class Cartridge
 {
 public:
-	Cartridge();
-	~Cartridge();
+    Cartridge();
+    ~Cartridge();
 
     void LoadRom(const std::string& fileName);
-	void Reset();
+    void Reset();
 
     uint8* GetROM() const { return rom; }
     bool IsROMLoaded() const { return romLoaded; }

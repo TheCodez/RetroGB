@@ -6,10 +6,10 @@ class Memory;
 class Video
 {
 public:
-	Video(Memory* mem, Processor* cpu);
-	~Video();
+    Video(Memory* mem, Processor* cpu);
+    ~Video();
 
-	void Reset();
+    void Reset();
 
     void ScanLine(int line);
     void RenderBackground(int line);
@@ -17,7 +17,7 @@ public:
     void RenderSprites(int line);
 
 private:
-	Memory* memory;
-	Processor* processor;
+    Memory* memory;
+    Processor* processor;
 };
 

@@ -10,17 +10,17 @@ class Cartridge;
 class Gameboy
 {
 public:
-	Gameboy();
-	~Gameboy();
+    Gameboy();
+    ~Gameboy();
 
     void Run();
     void Reset();
     void LoadRom(const std::string& fileName);
 
 private:
-	Memory* memory;
-	Processor* processor;
-	Video* video;
-	Cartridge* cartridge;
+    Memory* memory;
+    Processor* processor;
+    Video* video;
+    Cartridge* cartridge;
 };
 
