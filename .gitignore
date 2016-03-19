@@ -26,3 +26,9 @@
 *.exe
 *.out
 *.app
+
+#Visual Studio files
+*.sdf
+*.v12.suo
+*.opensdf
+Debug
