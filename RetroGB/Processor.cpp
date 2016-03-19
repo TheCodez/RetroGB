@@ -13,9 +13,35 @@ Processor::~Processor()
 {
 }
 
-void Processor::Reset()
+uint8 Processor::Run()
 {
+	uint8 opcode = memory->ReadByte(PC++);
 
+	if (opcode == 0xCB)
+	{
+		opcode = memory->ReadByte(PC++);
+		opcodesCB[opcode]();
+	}
+	else
+	{
+		opcodes[opcode]();
+	}
+
+	return 0;
+}
+
+void Processor::Reset(bool color)
+{
+	if (color)
+		AF = 0x11B0;
+	else
+		AF = 0x01B0;
+
+	BC = 0x0013;
+	DE = 0x00D8;
+	HL = 0x014F;
+	PC = 0x100; // TODO boot rom support
+	SP = 0xFFFE;
 }
 
 void Processor::SetFlag(uint8 flag)
@@ -46,4 +72,15 @@ bool Processor::IsFlagSet(uint8 flag)
 void Processor::InitOpcodes()
 {
 	// TODO generate tables with CpuGenerator
+
+	auto nop = []() 
+	{ 
+		/* NOP */
+	};
+
+	for (int i = 0; i < 256; i++)
+	{
+		opcodes[i] = nop;
+		opcodesCB[i] = nop;
+	}
 }

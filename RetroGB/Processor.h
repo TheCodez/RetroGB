@@ -11,7 +11,8 @@ public:
 	Processor(Memory* mem);
 	~Processor();
 
-	void Reset();
+	uint8 Run();
+	void Reset(bool color = false);
 	void InitOpcodes();
 
 private:
