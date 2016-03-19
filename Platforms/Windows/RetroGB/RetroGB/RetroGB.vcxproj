@@ -16,7 +16,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -64,6 +64,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\RetroGB\Cartridge.h" />
+    <ClInclude Include="..\..\..\..\RetroGB\Definitions.h" />
+    <ClInclude Include="..\..\..\..\RetroGB\Gameboy.h" />
+    <ClInclude Include="..\..\..\..\RetroGB\Memory.h" />
+    <ClInclude Include="..\..\..\..\RetroGB\Processor.h" />
+    <ClInclude Include="..\..\..\..\RetroGB\Video.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\RetroGB\Cartridge.cpp" />
+    <ClCompile Include="..\..\..\..\RetroGB\Gameboy.cpp" />
+    <ClCompile Include="..\..\..\..\RetroGB\Memory.cpp" />
+    <ClCompile Include="..\..\..\..\RetroGB\Processor.cpp" />
+    <ClCompile Include="..\..\..\..\RetroGB\Video.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
