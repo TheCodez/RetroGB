@@ -27,8 +27,6 @@ uint8 Processor::Run()
         opcodes[opcode]();
     }
 
-    LOG("PC: 0x%d, Opcode: 0x%d, Instr: 0x%d", PC, opcode, memory->ReadByte(PC));
-
     return 0;
 }
 
@@ -72,23 +70,7 @@ bool Processor::IsFlagSet(uint8 flag)
     return (F & flag) != 0;
 }
 
-void Processor::InitOpcodes()
+void Processor::UnknownOpcode()
 {
-    // TODO generate tables with CpuGenerator
-
-    auto nop = []() 
-    { 
-        /* NOP */
-    };
-
-    for (int i = 0; i < 256; i++)
-    {
-        opcodes[i] = std::bind(&Processor::InitOpcodes, this);
-        opcodesCB[i] = std::bind(&Processor::InitOpcodes, this);
-    }
-}
-
-void Processor::InvalidOpcode()
-{
-    LOG("Not implemented opcode: 0x%d", memory->ReadByte(PC));
+    LOG("Unimplemented opcode: PC: 0x%d, Addr: 0x%d", PC, memory->ReadByte(PC));
 }

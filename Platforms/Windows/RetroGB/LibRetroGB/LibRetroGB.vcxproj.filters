@@ -17,5 +17,6 @@
     <ClCompile Include="..\..\..\..\RetroGB\Video.cpp" />
     <ClCompile Include="..\..\..\..\RetroGB\Cartridge.cpp" />
     <ClCompile Include="..\..\..\..\RetroGB\Color.cpp" />
+    <ClCompile Include="..\..\..\..\RetroGB\Processor.Generated.cpp" />
   </ItemGroup>
 </Project>

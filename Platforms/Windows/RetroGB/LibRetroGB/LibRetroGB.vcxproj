@@ -80,6 +80,7 @@
     <ClCompile Include="..\..\..\..\RetroGB\Gameboy.cpp" />
     <ClCompile Include="..\..\..\..\RetroGB\Memory.cpp" />
     <ClCompile Include="..\..\..\..\RetroGB\Processor.cpp" />
+    <ClCompile Include="..\..\..\..\RetroGB\Processor.Generated.cpp" />
     <ClCompile Include="..\..\..\..\RetroGB\Video.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
