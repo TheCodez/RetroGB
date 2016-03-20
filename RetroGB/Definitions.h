@@ -31,6 +31,11 @@ inline bool IsBitSet(uint8 value, uint8 bit)
     return (value & (0x01 << bit)) != 0;
 }
 
+inline bool GetBitValue(uint8 value, uint8 bit)
+{
+    return (value & (0x01 << bit)) ? 1 : 0;
+}
+
 inline bool StringReplace(std::string& str, const std::string& from, const std::string& to) {
     size_t start_pos = str.find(from);
     if (start_pos == std::string::npos)

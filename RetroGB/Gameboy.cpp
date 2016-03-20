@@ -39,7 +39,7 @@ void Gameboy::Reset(bool color)
 {
     memory->Reset();
     processor->Reset(color);
-    video->Reset();
+    video->Reset(color);
     //cartridge->Reset();
 }
 

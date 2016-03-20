@@ -19,5 +19,6 @@ public:
 
 private:
     uint8* rom;
+    uint8 data[0x10000]; // 65536
 };
 

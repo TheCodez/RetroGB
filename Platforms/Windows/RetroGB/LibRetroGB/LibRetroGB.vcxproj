@@ -67,6 +67,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\..\RetroGB\BootRoms.h" />
     <ClInclude Include="..\..\..\..\RetroGB\Cartridge.h" />
+    <ClInclude Include="..\..\..\..\RetroGB\Color.h" />
     <ClInclude Include="..\..\..\..\RetroGB\Definitions.h" />
     <ClInclude Include="..\..\..\..\RetroGB\Gameboy.h" />
     <ClInclude Include="..\..\..\..\RetroGB\Memory.h" />
@@ -75,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\RetroGB\Cartridge.cpp" />
+    <ClCompile Include="..\..\..\..\RetroGB\Color.cpp" />
     <ClCompile Include="..\..\..\..\RetroGB\Gameboy.cpp" />
     <ClCompile Include="..\..\..\..\RetroGB\Memory.cpp" />
     <ClCompile Include="..\..\..\..\RetroGB\Processor.cpp" />
