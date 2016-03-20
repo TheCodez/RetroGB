@@ -14,12 +14,14 @@ Cartridge::~Cartridge()
 
 void Cartridge::Reset()
 {
-    delete[] rom;
+    if (rom != nullptr)
+        delete[] rom;
 
+    title = "";
     licenseeCode = 0;
     colorGameboy = false;
     superGameboy = false;
-    cartridgeType = rom[0x0147];
+    cartridgeType = 0;
     romSize = 0;
     ramSize = 0;
     japanese = false;
@@ -49,15 +51,14 @@ void Cartridge::LoadRom(const std::string& fileName)
 
     if (rom != nullptr)
     {
-        char name[12];
-
-        for (int i = 0; i < 12; i++)
+        for (int i = 0x0134; i < 0x0143; i++)
         {
-            name[i] = rom[0x0134 + i];
+            if (rom[i] == 0)
+                break;
+
+            title += rom[i];
         }
 
-        title = name;
-        StringReplace(title, "0", "");
 
         licenseeCode = (rom[0x0144] << 8) | rom[0x0145];
         colorGameboy = rom[0x0143] == 0x80 || (rom[0x0143] == 0xC0);
