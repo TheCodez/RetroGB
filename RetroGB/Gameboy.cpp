@@ -29,21 +29,29 @@ void Gameboy::Run()
         if (cartridge->IsROMLoaded())
         {
             uint8 cycles = processor->Run();
+            video->Run(cycles);
             Sleep(400); // to see whats going on
         }
     }
 }
 
-void Gameboy::Reset()
+void Gameboy::Reset(bool color)
 {
     memory->Reset();
-    processor->Reset();
+    processor->Reset(color);
     video->Reset();
-    cartridge->Reset();
+    //cartridge->Reset();
 }
 
-void Gameboy::LoadRom(const std::string& fileName)
+bool Gameboy::LoadRom(const std::string& fileName)
 {
-    cartridge->LoadRom(fileName);
-    memory->LoadRom(cartridge->GetROM());
+    if (cartridge->LoadRom(fileName))
+    {
+        Reset(cartridge->IsGameboyColor());
+        memory->LoadRom(cartridge->GetROM());
+
+        return true;
+    }
+
+    return false;
 }

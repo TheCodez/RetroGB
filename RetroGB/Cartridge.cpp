@@ -26,12 +26,13 @@ void Cartridge::Reset()
     ramSize = 0;
     japanese = false;
     version = 0;
-
-    romLoaded = false;
+    oldLicenseeCode = 0;
 }
 
-void Cartridge::LoadRom(const std::string& fileName)
+bool Cartridge::LoadRom(const std::string& fileName)
 {
+    Reset();
+
     std::ifstream file(fileName, std::ios::in | std::ios::binary | std::ios::ate);
 
     if (file.is_open())
@@ -47,10 +48,7 @@ void Cartridge::LoadRom(const std::string& fileName)
         memcpy(rom, memblock, size);
 
         delete[] memblock;
-    }
 
-    if (rom != nullptr)
-    {
         for (int i = 0x0134; i < 0x0143; i++)
         {
             if (rom[i] == 0)
@@ -68,10 +66,10 @@ void Cartridge::LoadRom(const std::string& fileName)
         ramSize = rom[0x0149];
         japanese = rom[0x014A] == 0x00;
         version = rom[0x014C];
-
-        romLoaded = true;
+        oldLicenseeCode = rom[0x014B];
 
         LOG("Title: %s", title.c_str());
+        LOG("Licensee Code: %d", licenseeCode);
         LOG("Gameboy Color: %s", colorGameboy ? "true" : "false");
         LOG("Super Gameboy: %s", superGameboy ? "true" : "false");
         LOG("Cartridge Type: %d", cartridgeType);
@@ -79,5 +77,10 @@ void Cartridge::LoadRom(const std::string& fileName)
         LOG("RAM Size: %d", ramSize);
         LOG("Japanese: %s", japanese ? "true" : "false");
         LOG("Version: %d", version);
+        LOG("Old Licensee Code: %d", oldLicenseeCode);
+        
+        return true;
     }
+
+    return false;
 }
