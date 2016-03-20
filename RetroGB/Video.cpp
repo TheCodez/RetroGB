@@ -62,26 +62,26 @@ void Video::Run(uint8 cycles)
     }
 }
 
-void Video::ScanLine(int line)
+void Video::ScanLine(int scanLine)
 {
     uint8 lcdc = memory->ReadByte(0xFF40);
     
     if (IsBitSet(lcdc, 7))
     {
-        RenderBackground(line);
-        RenderWindow(line);
-        RenderSprites(line);
+        RenderBackground(scanLine);
+        RenderWindow(scanLine);
+        RenderSprites(scanLine);
     }
     else
     {
         for (int x = 0; x < SCREEN_WIDTH; x++)
         {
-            frameBuffer[x][line] = gameBoycolor ? Color::BLACK : Color::WHITE;
+            frameBuffer[x][scanLine] = gameBoycolor ? Color::BLACK : Color::WHITE;
         }
     }
 }
 
-void Video::RenderBackground(int line)
+void Video::RenderBackground(int scanLine)
 {
     uint8 lcdc = memory->ReadByte(0xFF40);
 
@@ -91,11 +91,11 @@ void Video::RenderBackground(int line)
         int scrollX = memory->ReadByte(0xFF43);
         int tiles = IsBitSet(lcdc, 4) ? 0x8000 : 0x8800;
         int maps = IsBitSet(lcdc, 3) ? 0x9C00 : 0x9800;
-        int yPos = scrollY + line;
+        int yPos = scrollY + scanLine;
     }
 }
 
-void Video::RenderWindow(int line)
+void Video::RenderWindow(int scanLine)
 {
     uint8 lcdc = memory->ReadByte(0xFF40);
 
@@ -105,11 +105,11 @@ void Video::RenderWindow(int line)
         int windowX = memory->ReadByte(0xFF4B) - 7;
         int tiles = IsBitSet(lcdc, 4) ? 0x8000 : 0x8800;
         int maps = IsBitSet(lcdc, 3) ? 0x9C00 : 0x9800;
-        int yPos = line - windowY;
+        int yPos = scanLine - windowY;
     }
 }
 
-void Video::RenderSprites(int line)
+void Video::RenderSprites(int scanLine)
 {
     uint8 lcdc = memory->ReadByte(0xFF40);
 
@@ -138,12 +138,12 @@ void Video::RenderSprites(int line)
             {
                 continue;
             }
-            else if (spriteY > line || (spriteY + spriteHeight) < line)
+            else if (spriteY > scanLine || (spriteY + spriteHeight) < scanLine)
             {
                 continue;
             }
 
-            int scanLine = yFlip ? spriteHeight - (line - spriteY) * 2 : (line - spriteY) * 2;
+            int line = yFlip ? spriteHeight - (scanLine - spriteY) * 2 : (scanLine - spriteY) * 2;
 
             uint16 tileAddress = 0x8000 + tileLocation * 16;
             uint8 data1 = memory->ReadByte(tileAddress + line);
@@ -157,14 +157,14 @@ void Video::RenderSprites(int line)
 
                 if (belowBG)
                 {
-                    if (frameBuffer[posX][line] != Color::WHITE)
+                    if (frameBuffer[posX][scanLine] != Color::WHITE)
                         continue;
                 }
 
                 uint8 palette = memory->ReadByte(paletteNumber);
                 Color color = GetColor(colorNum, palette);
 
-                frameBuffer[posX][line] = color;
+                frameBuffer[posX][scanLine] = color;
             }
         }
     }

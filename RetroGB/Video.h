@@ -25,10 +25,10 @@ public:
     uint8 ReadByte(uint16 address) const;
 
     void Run(uint8 cycles);
-    void ScanLine(int line);
-    void RenderBackground(int line);
-    void RenderWindow(int line);
-    void RenderSprites(int line);
+    void ScanLine(int scanLine);
+    void RenderBackground(int scanLine);
+    void RenderWindow(int scanLine);
+    void RenderSprites(int scanLine);
 private:
     Color GetColor(int colorNum, uint8 palette);
 
