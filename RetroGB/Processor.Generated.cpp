@@ -947,7 +947,6 @@ void Processor::CCF()
 /* LD B, B */
 void Processor::LD_B_B()
 {
-	B = B;
 }
 
 /* LD B, C */
@@ -1001,7 +1000,6 @@ void Processor::LD_C_B()
 /* LD C, C */
 void Processor::LD_C_C()
 {
-	C = C;
 }
 
 /* LD C, D */
@@ -1055,7 +1053,6 @@ void Processor::LD_D_C()
 /* LD D, D */
 void Processor::LD_D_D()
 {
-	D = D;
 }
 
 /* LD D, E */
@@ -1109,7 +1106,6 @@ void Processor::LD_E_D()
 /* LD E, E */
 void Processor::LD_E_E()
 {
-	E = E;
 }
 
 /* LD E, H */
@@ -1163,7 +1159,6 @@ void Processor::LD_H_E()
 /* LD H, H */
 void Processor::LD_H_H()
 {
-	H = H;
 }
 
 /* LD H, L */
@@ -1217,7 +1212,6 @@ void Processor::LD_L_H()
 /* LD L, L */
 void Processor::LD_L_L()
 {
-	L = L;
 }
 
 /* LD L, (HL) */
@@ -1326,7 +1320,6 @@ void Processor::LD_A_MEM_HL()
 /* LD A, A */
 void Processor::LD_A_A()
 {
-	A = A;
 }
 
 /* ADD A, B */

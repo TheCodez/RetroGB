@@ -115,12 +115,13 @@ namespace CpuGenerator
             {
                 if (operation == "LD")
                 {
-                    string first = GetStoreStub(firstOperand);
-                    string second = GetLoadStub(secondOperand);
+                    if (firstOperand != secondOperand)
+                    {
+                        string first = GetStoreStub(firstOperand);
+                        string second = GetLoadStub(secondOperand);
 
-                    string firstOp = string.Format(first, second);
-
-                    writer.WriteLine("\t" + firstOp);
+                        writer.WriteLine("\t" + string.Format(first, second));
+                    }
                 }
                 else
                 {
