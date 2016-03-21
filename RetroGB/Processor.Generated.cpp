@@ -538,22 +538,21 @@ void Processor::LD_MEM_BC_A()
 /* INC BC */
 void Processor::INC_BC()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	BC++;
 }
 
 /* INC B */
 void Processor::INC_B()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B++;
+	//TODO flags
 }
 
 /* DEC B */
 void Processor::DEC_B()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B--;
+	//TODO flags
 }
 
 /* LD B, n */
@@ -572,14 +571,14 @@ void Processor::RLCA()
 /* LD (nn), SP */
 void Processor::LD_MEM_nn_SP()
 {
-	memory->WriteByte(memory->ReadWord(PC++), SP);
+	memory->WriteWord(memory->ReadWord(PC++), SP);
 }
 
 /* ADD HL, BC */
 void Processor::ADD_HL_BC()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A += BC;
+	//TODO flags
 }
 
 /* LD A, (BC) */
@@ -591,22 +590,21 @@ void Processor::LD_A_MEM_BC()
 /* DEC BC */
 void Processor::DEC_BC()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	BC--;
 }
 
 /* INC C */
 void Processor::INC_C()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C++;
+	//TODO flags
 }
 
 /* DEC C */
 void Processor::DEC_C()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C--;
+	//TODO flags
 }
 
 /* LD C, n */
@@ -644,22 +642,21 @@ void Processor::LD_MEM_DE_A()
 /* INC DE */
 void Processor::INC_DE()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	DE++;
 }
 
 /* INC D */
 void Processor::INC_D()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D++;
+	//TODO flags
 }
 
 /* DEC D */
 void Processor::DEC_D()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D--;
+	//TODO flags
 }
 
 /* LD D, n */
@@ -685,8 +682,8 @@ void Processor::JR_n()
 /* ADD HL, DE */
 void Processor::ADD_HL_DE()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A += DE;
+	//TODO flags
 }
 
 /* LD A, (DE) */
@@ -698,22 +695,21 @@ void Processor::LD_A_MEM_DE()
 /* DEC DE */
 void Processor::DEC_DE()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	DE--;
 }
 
 /* INC E */
 void Processor::INC_E()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E++;
+	//TODO flags
 }
 
 /* DEC E */
 void Processor::DEC_E()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E--;
+	//TODO flags
 }
 
 /* LD E, n */
@@ -751,22 +747,21 @@ void Processor::LD_MEM_HLI_A()
 /* INC HL */
 void Processor::INC_HL()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	HL++;
 }
 
 /* INC H */
 void Processor::INC_H()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H++;
+	//TODO flags
 }
 
 /* DEC H */
 void Processor::DEC_H()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H--;
+	//TODO flags
 }
 
 /* LD H, n */
@@ -792,8 +787,8 @@ void Processor::JR_Z_n()
 /* ADD HL, HL */
 void Processor::ADD_HL_HL()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A += HL;
+	//TODO flags
 }
 
 /* LD A, (HLI) */
@@ -805,22 +800,21 @@ void Processor::LD_A_MEM_HLI()
 /* DEC HL */
 void Processor::DEC_HL()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	HL--;
 }
 
 /* INC L */
 void Processor::INC_L()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L++;
+	//TODO flags
 }
 
 /* DEC L */
 void Processor::DEC_L()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L--;
+	//TODO flags
 }
 
 /* LD L, n */
@@ -858,22 +852,21 @@ void Processor::LD_MEM_HLD_A()
 /* INC SP */
 void Processor::INC_SP()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	SP++;
 }
 
 /* INC (HL) */
 void Processor::INC_MEM_HL()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	(HL)++;
+	//TODO flags
 }
 
 /* DEC (HL) */
 void Processor::DEC_MEM_HL()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	(HL)--;
+	//TODO flags
 }
 
 /* LD (HL), n */
@@ -899,8 +892,8 @@ void Processor::JR_C_n()
 /* ADD HL, SP */
 void Processor::ADD_HL_SP()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A += SP;
+	//TODO flags
 }
 
 /* LD A, (HLD) */
@@ -912,22 +905,21 @@ void Processor::LD_A_MEM_HLD()
 /* DEC SP */
 void Processor::DEC_SP()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	SP--;
 }
 
 /* INC A */
 void Processor::INC_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A++;
+	//TODO flags
 }
 
 /* DEC A */
 void Processor::DEC_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A--;
+	//TODO flags
 }
 
 /* LDA, n */
@@ -1325,393 +1317,409 @@ void Processor::LD_A_A()
 /* ADD A, B */
 void Processor::ADD_A_B()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A += B;
+	//TODO flags
 }
 
 /* ADD A, C */
 void Processor::ADD_A_C()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A += C;
+	//TODO flags
 }
 
 /* ADD A, D */
 void Processor::ADD_A_D()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A += D;
+	//TODO flags
 }
 
 /* ADD A, E */
 void Processor::ADD_A_E()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A += E;
+	//TODO flags
 }
 
 /* ADD A, H */
 void Processor::ADD_A_H()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A += H;
+	//TODO flags
 }
 
 /* ADD A, L */
 void Processor::ADD_A_L()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A += L;
+	//TODO flags
 }
 
 /* ADD A, (HL) */
 void Processor::ADD_A_MEM_HL()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A += memory->ReadByte(HL);
+	//TODO flags
 }
 
 /* ADD A, A */
 void Processor::ADD_A_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A += A;
+	//TODO flags
 }
 
 /* ADC A, B */
 void Processor::ADC_A_B()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
+	A += (B + carry);
+	//TODO flags
 }
 
 /* ADC A, C */
 void Processor::ADC_A_C()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
+	A += (C + carry);
+	//TODO flags
 }
 
 /* ADC A, D */
 void Processor::ADC_A_D()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
+	A += (D + carry);
+	//TODO flags
 }
 
 /* ADC A, E */
 void Processor::ADC_A_E()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
+	A += (E + carry);
+	//TODO flags
 }
 
 /* ADC A, H */
 void Processor::ADC_A_H()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
+	A += (H + carry);
+	//TODO flags
 }
 
 /* ADC A, L */
 void Processor::ADC_A_L()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
+	A += (L + carry);
+	//TODO flags
 }
 
 /* ADC A, (HL) */
 void Processor::ADC_A_MEM_HL()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
+	A += (memory->ReadByte(HL) + carry);
+	//TODO flags
 }
 
 /* ADC A, A */
 void Processor::ADC_A_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
+	A += (A + carry);
+	//TODO flags
 }
 
 /* SUB B */
 void Processor::SUB_B()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A -= B;
+	//TODO flags
 }
 
 /* SUB C */
 void Processor::SUB_C()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A -= C;
+	//TODO flags
 }
 
 /* SUB D */
 void Processor::SUB_D()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A -= D;
+	//TODO flags
 }
 
 /* SUB E */
 void Processor::SUB_E()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A -= E;
+	//TODO flags
 }
 
 /* SUB H */
 void Processor::SUB_H()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A -= H;
+	//TODO flags
 }
 
 /* SUB L */
 void Processor::SUB_L()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A -= L;
+	//TODO flags
 }
 
 /* SUB (HL) */
 void Processor::SUB_MEM_HL()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A -= memory->ReadByte(HL);
+	//TODO flags
 }
 
 /* SUB A */
 void Processor::SUB_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A -= A;
+	//TODO flags
 }
 
 /* SBC A, B */
 void Processor::SBC_A_B()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
+	A -= (B + carry);
+	//TODO flags
 }
 
 /* SBC A, C */
 void Processor::SBC_A_C()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
+	A -= (C + carry);
+	//TODO flags
 }
 
 /* SBC A, D */
 void Processor::SBC_A_D()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
+	A -= (D + carry);
+	//TODO flags
 }
 
 /* SBC A, E */
 void Processor::SBC_A_E()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
+	A -= (E + carry);
+	//TODO flags
 }
 
 /* SBC A, H */
 void Processor::SBC_A_H()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
+	A -= (H + carry);
+	//TODO flags
 }
 
 /* SBC A, L */
 void Processor::SBC_A_L()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
+	A -= (L + carry);
+	//TODO flags
 }
 
 /* SBC A, (HL) */
 void Processor::SBC_A_MEM_HL()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
+	A -= (memory->ReadByte(HL) + carry);
+	//TODO flags
 }
 
 /* SBC A, A */
 void Processor::SBC_A_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
+	A -= (A + carry);
+	//TODO flags
 }
 
 /* AND B */
 void Processor::AND_B()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A &= B;
+	//TODO flags
 }
 
 /* AND C */
 void Processor::AND_C()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A &= C;
+	//TODO flags
 }
 
 /* AND D */
 void Processor::AND_D()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A &= D;
+	//TODO flags
 }
 
 /* AND E */
 void Processor::AND_E()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A &= E;
+	//TODO flags
 }
 
 /* AND H */
 void Processor::AND_H()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A &= H;
+	//TODO flags
 }
 
 /* AND L */
 void Processor::AND_L()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A &= L;
+	//TODO flags
 }
 
 /* AND (HL) */
 void Processor::AND_MEM_HL()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A &= memory->ReadByte(HL);
+	//TODO flags
 }
 
 /* AND A */
 void Processor::AND_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A &= A;
+	//TODO flags
 }
 
 /* XOR B */
 void Processor::XOR_B()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A ^= B;
+	//TODO flags
 }
 
 /* XOR C */
 void Processor::XOR_C()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A ^= C;
+	//TODO flags
 }
 
 /* XOR D */
 void Processor::XOR_D()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A ^= D;
+	//TODO flags
 }
 
 /* XOR E */
 void Processor::XOR_E()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A ^= E;
+	//TODO flags
 }
 
 /* XOR H */
 void Processor::XOR_H()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A ^= H;
+	//TODO flags
 }
 
 /* XOR L */
 void Processor::XOR_L()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A ^= L;
+	//TODO flags
 }
 
 /* XOR (HL) */
 void Processor::XOR_MEM_HL()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A ^= memory->ReadByte(HL);
+	//TODO flags
 }
 
 /* XOR A */
 void Processor::XOR_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A ^= A;
+	//TODO flags
 }
 
 /* OR B */
 void Processor::OR_B()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A |= B;
+	//TODO flags
 }
 
 /* OR C */
 void Processor::OR_C()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A |= C;
+	//TODO flags
 }
 
 /* OR D */
 void Processor::OR_D()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A |= D;
+	//TODO flags
 }
 
 /* OR E */
 void Processor::OR_E()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A |= E;
+	//TODO flags
 }
 
 /* OR H */
 void Processor::OR_H()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A |= H;
+	//TODO flags
 }
 
 /* OR L */
 void Processor::OR_L()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A |= L;
+	//TODO flags
 }
 
 /* OR (HL) */
 void Processor::OR_MEM_HL()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A |= memory->ReadByte(HL);
+	//TODO flags
 }
 
 /* OR A */
 void Processor::OR_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A |= A;
+	//TODO flags
 }
 
 /* CP B */
@@ -1815,8 +1823,8 @@ void Processor::PUSH_BC()
 /* ADD A, n */
 void Processor::ADD_A_n()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A += memory->ReadByte(PC++);
+	//TODO flags
 }
 
 /* RST  */
@@ -1864,8 +1872,9 @@ void Processor::CALL_nn()
 /* ADC A, n */
 void Processor::ADC_A_n()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
+	A += (memory->ReadByte(PC++) + carry);
+	//TODO flags
 }
 
 /* RST 0x08 */
@@ -1913,8 +1922,8 @@ void Processor::PUSH_DE()
 /* SUB n */
 void Processor::SUB_n()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A -= memory->ReadByte(PC++);
+	//TODO flags
 }
 
 /* RST 0x10 */
@@ -1955,8 +1964,9 @@ void Processor::CALL_C_nn()
 /* SBC A, n */
 void Processor::SBC_A_n()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
+	A -= (memory->ReadByte(PC++) + carry);
+	//TODO flags
 }
 
 /* RST 0x18 */
@@ -1969,7 +1979,7 @@ void Processor::RST_0x18()
 /* LD (0xFF00+n), A */
 void Processor::LD_MEM_0xFF00_n_A()
 {
-	memory->WriteByte(0xFF00 + memory->ReadWord(PC++), A);
+	memory->WriteWord(static_cast<uint16>(0xFF00 + memory->ReadWord(PC++)), A);
 }
 
 /* POP HL */
@@ -1995,8 +2005,8 @@ void Processor::PUSH_HL()
 /* AND n */
 void Processor::AND_n()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A &= memory->ReadByte(PC++);
+	//TODO flags
 }
 
 /* RST 0x20 */
@@ -2009,8 +2019,8 @@ void Processor::RST_0x20()
 /* ADD SP, n */
 void Processor::ADD_SP_n()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A += memory->ReadByte(PC++);
+	//TODO flags
 }
 
 /* JP (HL) */
@@ -2023,14 +2033,14 @@ void Processor::JP_MEM_HL()
 /* LD (nn), A */
 void Processor::LD_MEM_nn_A()
 {
-	memory->WriteByte(memory->ReadWord(PC++), A);
+	memory->WriteWord(memory->ReadWord(PC++), A);
 }
 
 /* XOR n */
 void Processor::XOR_n()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A ^= memory->ReadByte(PC++);
+	//TODO flags
 }
 
 /* RST 0x28 */
@@ -2076,8 +2086,8 @@ void Processor::PUSH_AF()
 /* OR n */
 void Processor::OR_n()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A |= memory->ReadByte(PC++);
+	//TODO flags
 }
 
 /* RST 0x30 */

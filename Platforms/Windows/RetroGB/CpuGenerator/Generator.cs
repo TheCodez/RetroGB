@@ -111,23 +111,56 @@ namespace CpuGenerator
             string firstOperand = opcode.FirstOperand;
             string secondOperand = opcode.SecondOperand;
 
-            if (operation != "NOP")
+            string first = GetStoreStub(firstOperand);
+            string second = GetLoadStub(secondOperand);
+
+            switch (operation)
             {
-                if (operation == "LD")
-                {
+                case "NOP":
+                    break;
+                case "LD":
                     if (firstOperand != secondOperand)
                     {
-                        string first = GetStoreStub(firstOperand);
-                        string second = GetLoadStub(secondOperand);
-
                         writer.WriteLine("\t" + string.Format(first, second));
                     }
-                }
-                else
-                {
+                    break;
+                case "INC":
+                    if (firstOperand == "BC" || firstOperand == "DE" || firstOperand == "HL" || firstOperand == "SP")
+                        WriteIncWord(writer, opcode);
+                    else
+                        WriteIncByte(writer, opcode);
+                    break;
+                case "DEC":
+                    if (firstOperand == "BC" || firstOperand == "DE" || firstOperand == "HL" || firstOperand == "SP")
+                        WriteDecWord(writer, opcode);
+                    else
+                        WriteDecByte(writer, opcode);
+                    break;
+                case "AND":
+                    WriteAnd(writer, opcode);
+                    break;
+                case "OR":
+                    WriteOr(writer, opcode);
+                    break;
+                case "XOR":
+                    WriteXor(writer, opcode);
+                    break;
+                case "ADD":
+                    WriteAdd(writer, opcode);
+                    break;
+                case "ADC":
+                    WriteAdc(writer, opcode);
+                    break;
+                case "SUB":
+                    WriteSub(writer, opcode);
+                    break;
+                case "SBC":
+                    WriteSbc(writer, opcode);
+                    break;
+                default:
                     writer.WriteLine("\t// Not implemented yet");
                     writer.WriteLine("\tUnknownOpcode();");
-                }
+                    break;
             }
         }
 
@@ -136,11 +169,11 @@ namespace CpuGenerator
             switch (operand)
             {
                 case "(0xFF00+n)":
-                    return "memory->WriteByte(0xFF00 + memory->ReadWord(PC++), {0});";
+                    return "memory->WriteWord(static_cast<uint16>(0xFF00 + memory->ReadWord(PC++)), {0});";
                 case "(0xFF00+C)":
                     return "memory->WriteByte(0xFF00 + C, {0});";
                 case "(nn)":
-                    return "memory->WriteByte(memory->ReadWord(PC++), {0});";
+                    return "memory->WriteWord(memory->ReadWord(PC++), {0});";
                 case "(BC)":
                 case "(DE)":
                 case "(HL)":
@@ -160,7 +193,6 @@ namespace CpuGenerator
                     }
                 default:
                     return operand + " = {0};";
-                    break;
             }
         }
 
@@ -195,7 +227,6 @@ namespace CpuGenerator
                     }
                 default:
                     return operand;
-                    break;
             }
         }
 
@@ -224,12 +255,85 @@ namespace CpuGenerator
             writer.WriteLine("\topcodesCB[0x{0:X2}] = std::bind(&Processor::{1}, this);", op, funcName);
         }
 
-#region Opcode Templates
-        
-        public void GenerateDAAMethod(TextWriter writer)
+        #region Opcode Templates
+
+        #region Inc, Dec
+        public void WriteIncByte(TextWriter writer, Opcode opcode)
+        {
+            writer.WriteLine("\t{0}++;", opcode.FirstOperand);
+            writer.WriteLine("\t//TODO flags");
+        }
+
+        public void WriteIncWord(TextWriter writer, Opcode opcode)
+        {
+            writer.WriteLine("\t{0}++;", opcode.FirstOperand);
+        }
+
+        public void WriteDecByte(TextWriter writer, Opcode opcode)
+        {
+            writer.WriteLine("\t{0}--;", opcode.FirstOperand);
+            writer.WriteLine("\t//TODO flags");
+        }
+
+        public void WriteDecWord(TextWriter writer, Opcode opcode)
+        {
+            writer.WriteLine("\t{0}--;", opcode.FirstOperand);
+        }
+        #endregion
+
+        public void WriteOr(TextWriter writer, Opcode opcode)
+        {
+            writer.WriteLine("\tA |= {0};", GetLoadStub(opcode.FirstOperand));
+            writer.WriteLine("\t//TODO flags");
+        }
+
+        public void WriteXor(TextWriter writer, Opcode opcode)
+        {
+            writer.WriteLine("\tA ^= {0};", GetLoadStub(opcode.FirstOperand));
+            writer.WriteLine("\t//TODO flags");
+        }
+
+        public void WriteAdd(TextWriter writer, Opcode opcode)
+        {
+            string operand = !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.SecondOperand : opcode.FirstOperand;
+            writer.WriteLine("\tA += {0};", GetLoadStub(operand));
+            writer.WriteLine("\t//TODO flags");
+        }
+
+        public void WriteAdc(TextWriter writer, Opcode opcode)
+        {
+            string operand = !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.SecondOperand : opcode.FirstOperand;
+            writer.WriteLine("\tuint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;");
+            writer.WriteLine("\tA += ({0} + carry);", GetLoadStub(operand));
+            writer.WriteLine("\t//TODO flags");
+        }
+
+        public void WriteSub(TextWriter writer, Opcode opcode)
+        {
+            string operand = !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.SecondOperand : opcode.FirstOperand;
+            writer.WriteLine("\tA -= {0};", GetLoadStub(operand));
+            writer.WriteLine("\t//TODO flags");
+        }
+
+        public void WriteSbc(TextWriter writer, Opcode opcode)
+        {
+            string operand = !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.SecondOperand : opcode.FirstOperand;
+            writer.WriteLine("\tuint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;");
+            writer.WriteLine("\tA -= ({0} + carry);", GetLoadStub(operand));
+            writer.WriteLine("\t//TODO flags");
+        }
+
+        public void WriteAnd(TextWriter writer, Opcode opcode)
+        {
+            writer.WriteLine("\tA &= {0};", GetLoadStub(opcode.FirstOperand));
+            writer.WriteLine("\t//TODO flags");
+        }
+
+        public void WriteDAA(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\t//Not implememented yet");
         }
-#endregion
+        
+        #endregion
     }
 }
