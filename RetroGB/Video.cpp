@@ -23,7 +23,7 @@ void Video::Reset(bool color)
     {
         for (int y = 0; y < SCREE_HEIGHT; y++)
         {
-            frameBuffer[x][y] = color ? Color::BLACK : Color::WHITE;
+            frameBuffer[x + y * SCREEN_WIDTH] = color ? Color::BLACK : Color::WHITE;
         }
     }
 }
@@ -76,7 +76,7 @@ void Video::ScanLine(int scanLine)
     {
         for (int x = 0; x < SCREEN_WIDTH; x++)
         {
-            frameBuffer[x][scanLine] = gameBoycolor ? Color::BLACK : Color::WHITE;
+            frameBuffer[x + scanLine * SCREEN_WIDTH] = gameBoycolor ? Color::BLACK : Color::WHITE;
         }
     }
 }
@@ -149,22 +149,22 @@ void Video::RenderSprites(int scanLine)
             uint8 data1 = memory->ReadByte(tileAddress + line);
             uint8 data2 = memory->ReadByte(tileAddress + line + 1);
 
-            for (int x = 0; x < 8; x++)
+            for (int pixelX = 0; pixelX < 8; pixelX++)
             {
-                int posX = spriteX + x;
-                int colorBit = xFlip ? 7 - x : x;
+                int posX = spriteX + pixelX;
+                int colorBit = xFlip ? 7 - pixelX : pixelX;
                 int colorNum = GetBitValue(data1, colorBit) | GetBitValue(data2, colorBit);
 
                 if (belowBG)
                 {
-                    if (frameBuffer[posX][scanLine] != Color::WHITE)
+                    if (frameBuffer[posX + scanLine * SCREEN_WIDTH] != Color::WHITE)
                         continue;
                 }
 
                 uint8 palette = memory->ReadByte(paletteNumber);
                 Color color = GetColor(colorNum, palette);
 
-                frameBuffer[posX][scanLine] = color;
+                frameBuffer[posX + scanLine * SCREEN_WIDTH] = color;
             }
         }
     }

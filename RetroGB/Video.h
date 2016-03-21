@@ -41,6 +41,6 @@ private:
     int modeCounter;
     int currLine;
 
-    Color frameBuffer[SCREEN_WIDTH][SCREE_HEIGHT];
+    Color frameBuffer[SCREEN_WIDTH * SCREE_HEIGHT];
 };
 
