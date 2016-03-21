@@ -1,5 +1,4 @@
 #include "Processor.h"
-#include "Memory.h"
 
 Processor::Processor(Memory* mem)
     : memory(mem)
@@ -72,5 +71,10 @@ bool Processor::IsFlagSet(uint8 flag)
 
 void Processor::UnknownOpcode()
 {
-    LOG("Unimplemented opcode: PC: 0x%d, Addr: 0x%d", PC, memory->ReadByte(PC));
+    LOG("Unimplemented opcode: PC: 0x%02X, Opode: 0x%02X", PC, memory->ReadByte(PC));
+}
+
+void Processor::InvalidOpcode()
+{
+    LOG("Unimplemented opcode: Opcode: 0x%02X", memory->ReadByte(PC));
 }

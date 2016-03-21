@@ -3,7 +3,7 @@
 #include "Definitions.h"
 #include <functional>
 
-class Memory;
+#include "Memory.h"
 
 class Processor
 {
@@ -23,6 +23,7 @@ private:
     bool IsFlagSet(uint8 flag);
 
     void UnknownOpcode();
+    void InvalidOpcode();
 
 private:
     Memory* memory;

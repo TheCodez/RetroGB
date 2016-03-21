@@ -205,6 +205,7 @@ void Processor::InitOpcodes()
 	opcodes[0xC8] = std::bind(&Processor::RET_Z, this);
 	opcodes[0xC9] = std::bind(&Processor::RET, this);
 	opcodes[0xCA] = std::bind(&Processor::JP_Z_nn, this);
+	opcodes[0xCB] = std::bind(&Processor::InvalidOpcode, this);
 	opcodes[0xCC] = std::bind(&Processor::CALL_Z_nn, this);
 	opcodes[0xCD] = std::bind(&Processor::CALL_nn, this);
 	opcodes[0xCE] = std::bind(&Processor::ADC_A_n, this);
@@ -212,6 +213,7 @@ void Processor::InitOpcodes()
 	opcodes[0xD0] = std::bind(&Processor::RET_NC, this);
 	opcodes[0xD1] = std::bind(&Processor::POP_DE, this);
 	opcodes[0xD2] = std::bind(&Processor::JP_NC_nn, this);
+	opcodes[0xD3] = std::bind(&Processor::InvalidOpcode, this);
 	opcodes[0xD4] = std::bind(&Processor::CALL_NC_nn, this);
 	opcodes[0xD5] = std::bind(&Processor::PUSH_DE, this);
 	opcodes[0xD6] = std::bind(&Processor::SUB_n, this);
@@ -219,24 +221,32 @@ void Processor::InitOpcodes()
 	opcodes[0xD8] = std::bind(&Processor::RET_C, this);
 	opcodes[0xD9] = std::bind(&Processor::RETI, this);
 	opcodes[0xDA] = std::bind(&Processor::JP_C_nn, this);
+	opcodes[0xDB] = std::bind(&Processor::InvalidOpcode, this);
 	opcodes[0xDC] = std::bind(&Processor::CALL_C_nn, this);
+	opcodes[0xDD] = std::bind(&Processor::InvalidOpcode, this);
 	opcodes[0xDE] = std::bind(&Processor::SBC_A_n, this);
 	opcodes[0xDF] = std::bind(&Processor::RST_0x18, this);
 	opcodes[0xE0] = std::bind(&Processor::LD_MEM_0xFF00_n_A, this);
 	opcodes[0xE1] = std::bind(&Processor::POP_HL, this);
 	opcodes[0xE2] = std::bind(&Processor::LD_MEM_0xFF00_C_A, this);
+	opcodes[0xE3] = std::bind(&Processor::InvalidOpcode, this);
+	opcodes[0xE4] = std::bind(&Processor::InvalidOpcode, this);
 	opcodes[0xE5] = std::bind(&Processor::PUSH_HL, this);
 	opcodes[0xE6] = std::bind(&Processor::AND_n, this);
 	opcodes[0xE7] = std::bind(&Processor::RST_0x20, this);
 	opcodes[0xE8] = std::bind(&Processor::ADD_SP_n, this);
 	opcodes[0xE9] = std::bind(&Processor::JP_MEM_HL, this);
 	opcodes[0xEA] = std::bind(&Processor::LD_MEM_nn_A, this);
+	opcodes[0xEB] = std::bind(&Processor::InvalidOpcode, this);
+	opcodes[0xEC] = std::bind(&Processor::InvalidOpcode, this);
+	opcodes[0xED] = std::bind(&Processor::InvalidOpcode, this);
 	opcodes[0xEE] = std::bind(&Processor::XOR_n, this);
 	opcodes[0xEF] = std::bind(&Processor::RST_0x28, this);
 	opcodes[0xF0] = std::bind(&Processor::LD_A_MEM_0xFF00_n, this);
 	opcodes[0xF1] = std::bind(&Processor::POP_AF, this);
 	opcodes[0xF2] = std::bind(&Processor::LD_A_MEM_0xFF00_C, this);
 	opcodes[0xF3] = std::bind(&Processor::DI, this);
+	opcodes[0xF4] = std::bind(&Processor::InvalidOpcode, this);
 	opcodes[0xF5] = std::bind(&Processor::PUSH_AF, this);
 	opcodes[0xF6] = std::bind(&Processor::OR_n, this);
 	opcodes[0xF7] = std::bind(&Processor::RST_0x30, this);
@@ -244,6 +254,8 @@ void Processor::InitOpcodes()
 	opcodes[0xF9] = std::bind(&Processor::LD_SP_HL, this);
 	opcodes[0xFA] = std::bind(&Processor::LD_A_MEM_nn, this);
 	opcodes[0xFB] = std::bind(&Processor::EI, this);
+	opcodes[0xFC] = std::bind(&Processor::InvalidOpcode, this);
+	opcodes[0xFD] = std::bind(&Processor::InvalidOpcode, this);
 	opcodes[0xFE] = std::bind(&Processor::CP_n, this);
 	opcodes[0xFF] = std::bind(&Processor::RST_0x38, this);
 
@@ -509,22 +521,18 @@ void Processor::InitOpcodes()
 /* NOP */
 void Processor::NOP()
 {
-	// Not implemented yet
-	UnknownOpcode();
 }
 
 /* LD BC, nn */
 void Processor::LD_BC_nn()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	BC = memory->ReadWord(PC++);
 }
 
 /* LD (BC), A */
 void Processor::LD_MEM_BC_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	memory->WriteByte(BC, A);
 }
 
 /* INC BC */
@@ -551,8 +559,7 @@ void Processor::DEC_B()
 /* LD B, n */
 void Processor::LD_B_n()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = memory->ReadByte(PC++);
 }
 
 /* RLCA */
@@ -565,8 +572,7 @@ void Processor::RLCA()
 /* LD (nn), SP */
 void Processor::LD_MEM_nn_SP()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	memory->WriteByte(memory->ReadWord(PC++), SP);
 }
 
 /* ADD HL, BC */
@@ -579,8 +585,7 @@ void Processor::ADD_HL_BC()
 /* LD A, (BC) */
 void Processor::LD_A_MEM_BC()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = memory->ReadByte(BC);
 }
 
 /* DEC BC */
@@ -607,8 +612,7 @@ void Processor::DEC_C()
 /* LD C, n */
 void Processor::LD_C_n()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = memory->ReadByte(PC++);
 }
 
 /* RRCA */
@@ -628,15 +632,13 @@ void Processor::STOP()
 /* LD DE, nn */
 void Processor::LD_DE_nn()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	DE = memory->ReadWord(PC++);
 }
 
 /* LD (DE), A */
 void Processor::LD_MEM_DE_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	memory->WriteByte(DE, A);
 }
 
 /* INC DE */
@@ -663,8 +665,7 @@ void Processor::DEC_D()
 /* LD D, n */
 void Processor::LD_D_n()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = memory->ReadByte(PC++);
 }
 
 /* RLA */
@@ -691,8 +692,7 @@ void Processor::ADD_HL_DE()
 /* LD A, (DE) */
 void Processor::LD_A_MEM_DE()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = memory->ReadByte(DE);
 }
 
 /* DEC DE */
@@ -719,8 +719,7 @@ void Processor::DEC_E()
 /* LD E, n */
 void Processor::LD_E_n()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = memory->ReadByte(PC++);
 }
 
 /* RRA */
@@ -740,15 +739,13 @@ void Processor::JR_NZ_n()
 /* LD HL, nn */
 void Processor::LD_HL_nn()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	HL = memory->ReadWord(PC++);
 }
 
 /* LD (HLI), A */
 void Processor::LD_MEM_HLI_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	memory->WriteByte(HL++, A);
 }
 
 /* INC HL */
@@ -775,8 +772,7 @@ void Processor::DEC_H()
 /* LD H, n */
 void Processor::LD_H_n()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = memory->ReadByte(PC++);
 }
 
 /* DAA */
@@ -803,8 +799,7 @@ void Processor::ADD_HL_HL()
 /* LD A, (HLI) */
 void Processor::LD_A_MEM_HLI()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = memory->ReadByte(HL++);
 }
 
 /* DEC HL */
@@ -831,8 +826,7 @@ void Processor::DEC_L()
 /* LD L, n */
 void Processor::LD_L_n()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = memory->ReadByte(PC++);
 }
 
 /* CPL */
@@ -852,15 +846,13 @@ void Processor::JR_NC_n()
 /* LD SP, nn */
 void Processor::LD_SP_nn()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	SP = memory->ReadWord(PC++);
 }
 
 /* LD (HLD), A */
 void Processor::LD_MEM_HLD_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	memory->WriteByte(HL--, A);
 }
 
 /* INC SP */
@@ -887,8 +879,7 @@ void Processor::DEC_MEM_HL()
 /* LD (HL), n */
 void Processor::LD_MEM_HL_n()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	memory->WriteByte(HL, memory->ReadByte(PC++));
 }
 
 /* SCF */
@@ -915,8 +906,7 @@ void Processor::ADD_HL_SP()
 /* LD A, (HLD) */
 void Processor::LD_A_MEM_HLD()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = memory->ReadByte(HL--);
 }
 
 /* DEC SP */
@@ -957,379 +947,325 @@ void Processor::CCF()
 /* LD B, B */
 void Processor::LD_B_B()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = B;
 }
 
 /* LD B, C */
 void Processor::LD_B_C()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = C;
 }
 
 /* LD B, D */
 void Processor::LD_B_D()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = D;
 }
 
 /* LD B, E */
 void Processor::LD_B_E()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = E;
 }
 
 /* LD B, H */
 void Processor::LD_B_H()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = H;
 }
 
 /* LD B, L */
 void Processor::LD_B_L()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = L;
 }
 
 /* LD B, (HL) */
 void Processor::LD_B_MEM_HL()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = memory->ReadByte(HL);
 }
 
 /* LD B, A */
 void Processor::LD_B_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = A;
 }
 
 /* LD C, B */
 void Processor::LD_C_B()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = B;
 }
 
 /* LD C, C */
 void Processor::LD_C_C()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = C;
 }
 
 /* LD C, D */
 void Processor::LD_C_D()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = D;
 }
 
 /* LD C, E */
 void Processor::LD_C_E()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = E;
 }
 
 /* LD C, H */
 void Processor::LD_C_H()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = H;
 }
 
 /* LD C, L */
 void Processor::LD_C_L()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = L;
 }
 
 /* LD C, (HL) */
 void Processor::LD_C_MEM_HL()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = memory->ReadByte(HL);
 }
 
 /* LD C, A */
 void Processor::LD_C_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = A;
 }
 
 /* LD D, B */
 void Processor::LD_D_B()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = B;
 }
 
 /* LD D, C */
 void Processor::LD_D_C()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = C;
 }
 
 /* LD D, D */
 void Processor::LD_D_D()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = D;
 }
 
 /* LD D, E */
 void Processor::LD_D_E()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = E;
 }
 
 /* LD D, H */
 void Processor::LD_D_H()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = H;
 }
 
 /* LD D, L */
 void Processor::LD_D_L()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = L;
 }
 
 /* LD D, (HL) */
 void Processor::LD_D_MEM_HL()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = memory->ReadByte(HL);
 }
 
 /* LD D, A */
 void Processor::LD_D_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = A;
 }
 
 /* LD E, B */
 void Processor::LD_E_B()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = B;
 }
 
 /* LD E, C */
 void Processor::LD_E_C()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = C;
 }
 
 /* LD E, D */
 void Processor::LD_E_D()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = D;
 }
 
 /* LD E, E */
 void Processor::LD_E_E()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = E;
 }
 
 /* LD E, H */
 void Processor::LD_E_H()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = H;
 }
 
 /* LD E, L */
 void Processor::LD_E_L()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = L;
 }
 
 /* LD E, (HL) */
 void Processor::LD_E_MEM_HL()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = memory->ReadByte(HL);
 }
 
 /* LD E, A */
 void Processor::LD_E_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = A;
 }
 
 /* LD H, B */
 void Processor::LD_H_B()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = B;
 }
 
 /* LD H, C */
 void Processor::LD_H_C()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = C;
 }
 
 /* LD H, D */
 void Processor::LD_H_D()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = D;
 }
 
 /* LD H, E */
 void Processor::LD_H_E()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = E;
 }
 
 /* LD H, H */
 void Processor::LD_H_H()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = H;
 }
 
 /* LD H, L */
 void Processor::LD_H_L()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = L;
 }
 
 /* LD H, (HL) */
 void Processor::LD_H_MEM_HL()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = memory->ReadByte(HL);
 }
 
 /* LD H, A */
 void Processor::LD_H_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = A;
 }
 
 /* LD L, B */
 void Processor::LD_L_B()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = B;
 }
 
 /* LD L, C */
 void Processor::LD_L_C()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = C;
 }
 
 /* LD L, D */
 void Processor::LD_L_D()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = D;
 }
 
 /* LD L, E */
 void Processor::LD_L_E()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = E;
 }
 
 /* LD L, H */
 void Processor::LD_L_H()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = H;
 }
 
 /* LD L, L */
 void Processor::LD_L_L()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = L;
 }
 
 /* LD L, (HL) */
 void Processor::LD_L_MEM_HL()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = memory->ReadByte(HL);
 }
 
 /* LD L, A */
 void Processor::LD_L_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = A;
 }
 
 /* LD (HL), B */
 void Processor::LD_MEM_HL_B()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	memory->WriteByte(HL, B);
 }
 
 /* LD (HL), C */
 void Processor::LD_MEM_HL_C()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	memory->WriteByte(HL, C);
 }
 
 /* LD (HL), D */
 void Processor::LD_MEM_HL_D()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	memory->WriteByte(HL, D);
 }
 
 /* LD (HL), E */
 void Processor::LD_MEM_HL_E()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	memory->WriteByte(HL, E);
 }
 
 /* LD (HL), H */
 void Processor::LD_MEM_HL_H()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	memory->WriteByte(HL, H);
 }
 
 /* LD (HL), L */
 void Processor::LD_MEM_HL_L()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	memory->WriteByte(HL, L);
 }
 
 /* HALT */
@@ -1342,64 +1278,55 @@ void Processor::HALT()
 /* LD (HL), A */
 void Processor::LD_MEM_HL_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	memory->WriteByte(HL, A);
 }
 
 /* LD A, B */
 void Processor::LD_A_B()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = B;
 }
 
 /* LD A, C */
 void Processor::LD_A_C()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = C;
 }
 
 /* LD A, D */
 void Processor::LD_A_D()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = D;
 }
 
 /* LD A, E */
 void Processor::LD_A_E()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = E;
 }
 
 /* LD A, H */
 void Processor::LD_A_H()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = H;
 }
 
 /* LD A, L */
 void Processor::LD_A_L()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = L;
 }
 
 /* LD A, (HL) */
 void Processor::LD_A_MEM_HL()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = memory->ReadByte(HL);
 }
 
 /* LD A, A */
 void Processor::LD_A_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = A;
 }
 
 /* ADD A, B */
@@ -2049,8 +1976,7 @@ void Processor::RST_0x18()
 /* LD (0xFF00+n), A */
 void Processor::LD_MEM_0xFF00_n_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	memory->WriteByte(0xFF00 + memory->ReadWord(PC++), A);
 }
 
 /* POP HL */
@@ -2063,8 +1989,7 @@ void Processor::POP_HL()
 /* LD (0xFF00+C), A */
 void Processor::LD_MEM_0xFF00_C_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	memory->WriteByte(0xFF00 + C, A);
 }
 
 /* PUSH HL */
@@ -2105,8 +2030,7 @@ void Processor::JP_MEM_HL()
 /* LD (nn), A */
 void Processor::LD_MEM_nn_A()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	memory->WriteByte(memory->ReadWord(PC++), A);
 }
 
 /* XOR n */
@@ -2126,8 +2050,7 @@ void Processor::RST_0x28()
 /* LD A, (0xFF00+n) */
 void Processor::LD_A_MEM_0xFF00_n()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = memory->ReadByte(0xFF00 + PC++);
 }
 
 /* POP AF */
@@ -2140,8 +2063,7 @@ void Processor::POP_AF()
 /* LD A, (0xFF00+C) */
 void Processor::LD_A_MEM_0xFF00_C()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = (0xFF00+C);
 }
 
 /* DI */
@@ -2175,22 +2097,19 @@ void Processor::RST_0x30()
 /* LD HL, SP */
 void Processor::LD_HL_SP()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	HL = SP;
 }
 
 /* LD SP, HL */
 void Processor::LD_SP_HL()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	SP = HL;
 }
 
 /* LD A, (nn) */
 void Processor::LD_A_MEM_nn()
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = memory->ReadByte(memory->ReadWord(PC++));
 }
 
 /* EI */

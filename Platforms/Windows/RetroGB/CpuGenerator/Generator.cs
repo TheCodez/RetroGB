@@ -33,6 +33,8 @@ namespace CpuGenerator
 
                 if ((line != "UNDEFINED") && (line != "CB_OPCODE"))
                     MapOpcodes(writer, i, line);
+                else
+                    MapInvalid(writer, i, line);
             }
 
             writer.WriteLine();
@@ -109,8 +111,91 @@ namespace CpuGenerator
             string firstOperand = opcode.FirstOperand;
             string secondOperand = opcode.SecondOperand;
 
-            writer.WriteLine("\t// Not implemented yet");
-            writer.WriteLine("\tUnknownOpcode();");
+            if (operation != "NOP")
+            {
+                if (operation == "LD")
+                {
+                    string first = GetStoreStub(firstOperand);
+                    string second = GetLoadStub(secondOperand);
+
+                    string firstOp = string.Format(first, second);
+
+                    writer.WriteLine("\t" + firstOp);
+                }
+                else
+                {
+                    writer.WriteLine("\t// Not implemented yet");
+                    writer.WriteLine("\tUnknownOpcode();");
+                }
+            }
+        }
+
+        private string GetStoreStub(string operand)
+        {
+            switch (operand)
+            {
+                case "(0xFF00+n)":
+                    return "memory->WriteByte(0xFF00 + memory->ReadWord(PC++), {0});";
+                case "(0xFF00+C)":
+                    return "memory->WriteByte(0xFF00 + C, {0});";
+                case "(nn)":
+                    return "memory->WriteByte(memory->ReadWord(PC++), {0});";
+                case "(BC)":
+                case "(DE)":
+                case "(HL)":
+                    {
+                        string op = operand.Replace("(", "").Replace(")", "");
+                        return "memory->WriteByte(" + op + ", {0});";
+                    }
+                case "(HLD)":
+                    {
+                        string op = operand.Replace("(", "").Replace(")", "").Replace("D", "");
+                        return "memory->WriteByte(" + op + "--, {0});";
+                    }
+                case "(HLI)":
+                    {
+                        string op = operand.Replace("(", "").Replace(")", "").Replace("I", "");
+                        return "memory->WriteByte(" + op + "++, {0});";
+                    }
+                default:
+                    return operand + " = {0};";
+                    break;
+            }
+        }
+
+        private string GetLoadStub(string operand)
+        {
+            switch (operand)
+            {
+                case "(0xFF00+n)":
+                    return "memory->ReadByte(0xFF00 + PC++)";
+                case "n":
+                    return "memory->ReadByte(PC++)";
+                case "nn":
+                    return "memory->ReadWord(PC++)";
+                case "(nn)":
+                    return "memory->ReadByte(memory->ReadWord(PC++))";
+                case "(BC)":
+                case "(DE)":
+                case "(HL)":
+                    {
+                        string op = operand.Replace("(", "").Replace(")", "");
+                        return "memory->ReadByte(" + op + ")";
+                    }
+                case "(HLD)":
+                    {
+                        string op = operand.Replace("(", "").Replace(")", "").Replace("D", "");
+                        return "memory->ReadByte(" + op + "--)";
+                    }
+                case "(HLI)":
+                    {
+                        string op = operand.Replace("(", "").Replace(")", "").Replace("I", "");
+                        return "memory->ReadByte(" + op + "++)";
+                    }
+                default:
+                    return operand;
+                    break;
+            }
         }
 
         public void MapOpcodes(TextWriter writer, int op, string line)
@@ -121,6 +206,11 @@ namespace CpuGenerator
             var funcName = opcode.ToFunctionName();
 
             writer.WriteLine("\topcodes[0x{0:X2}] = std::bind(&Processor::{1}, this);", op, funcName);
+        }
+
+        public void MapInvalid(TextWriter writer, int op, string line)
+        {
+            writer.WriteLine("\topcodes[0x{0:X2}] = std::bind(&Processor::InvalidOpcode, this);", op);
         }
 
         public void MapCBOpcodes(TextWriter writer, int op, string line)
