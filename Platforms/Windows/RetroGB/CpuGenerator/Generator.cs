@@ -75,7 +75,7 @@ namespace CpuGenerator
             ParseOpcode(line, out opcode);
 
             writer.WriteLine("/* {0} */", line.Replace(",", ", "));
-            writer.WriteLine("void Processor::{0}()", opcode.ToFunctionName());
+            writer.WriteLine("void Processor::{0}() // 0x{1:X2}", opcode.ToFunctionName(), op);
             writer.WriteLine("{");
 
             WriteOpcodeStub(writer, opcode);
@@ -157,9 +157,88 @@ namespace CpuGenerator
                 case "SBC":
                     WriteSbc(writer, opcode);
                     break;
+                case "DI":
+                    WriteDi(writer, opcode);
+                    break;
+                case "BIT":
+                    WriteBit(writer, opcode);
+                    break;
+                case "SET":
+                    if (secondOperand != "(HL)")
+                        WriteSet(writer, opcode);
+                    else
+                        WriteHLSet(writer, opcode);
+                    break;
+                case "RES":
+                    if (secondOperand != "(HL)")
+                        WriteRes(writer, opcode);
+                    else
+                        WriteHLRes(writer, opcode);
+                        break;
+                case "CALL":
+                        WriteCall(writer, opcode);
+                        break;
+                case "RET":
+                        WriteRet(writer, opcode);
+                        break;
+                case "RETI":
+                        WriteReti(writer, opcode);
+                        break;
+                case "PUSH":
+                        WritePush(writer, opcode);
+                        break;
+                case "POP":
+                        WritePop(writer, opcode);
+                        break;
+                case "JR":
+                        WriteJr(writer, opcode);
+                        break;
+                case "JP":
+                        WriteJp(writer, opcode);
+                        break;
+                case "DAA":
+                        WriteDaa(writer, opcode);
+                        break;
+                case "CCF":
+                        WriteCcf(writer, opcode);
+                        break;
+                case "SCF":
+                        WriteScf(writer, opcode);
+                        break;
+                case "CP":
+                        WriteCp(writer, opcode);
+                        break;
+                case "HALT":
+                        WriteHalt(writer, opcode);
+                        break;
+                case "RST":
+                        WriteRst(writer, opcode);
+                        break;
                 default:
                     writer.WriteLine("\t// Not implemented yet");
                     writer.WriteLine("\tUnknownOpcode();");
+                    break;
+            }
+        }
+
+        private string GetCondition(string operand)
+        {
+            switch (operand)
+            {
+                case "NZ":
+                    return "!IsFlagSet(FLAG_ZERO)";
+                    break;
+                case "Z":
+                    return "IsFlagSet(FLAG_ZERO)";
+                    break;
+                case "NC":
+                    return "!IsFlagSet(FLAG_CARRY)";
+                    break;
+                case "C":
+                    return "IsFlagSet(FLAG_CARRY)";
+                    break;
+                default:
+                    return "";
                     break;
             }
         }
@@ -169,7 +248,7 @@ namespace CpuGenerator
             switch (operand)
             {
                 case "(0xFF00+n)":
-                    return "memory->WriteWord(static_cast<uint16>(0xFF00 + memory->ReadWord(PC++)), {0});";
+                    return "memory->WriteWord(0xFF00 + memory->ReadWord(PC++), {0});";
                 case "(0xFF00+C)":
                     return "memory->WriteByte(0xFF00 + C, {0});";
                 case "(nn)":
@@ -202,6 +281,8 @@ namespace CpuGenerator
             {
                 case "(0xFF00+n)":
                     return "memory->ReadByte(0xFF00 + PC++)";
+                case "(0xFF00+C)":
+                    return "memory->ReadByte(0xFF00 + C)";
                 case "n":
                     return "memory->ReadByte(PC++)";
                 case "nn":
@@ -260,8 +341,13 @@ namespace CpuGenerator
         #region Inc, Dec
         public void WriteIncByte(TextWriter writer, Opcode opcode)
         {
-            writer.WriteLine("\t{0}++;", opcode.FirstOperand);
+            if (opcode.FirstOperand == "(HL)")
+                writer.WriteLine("\tmemory->WriteByte(HL, memory->ReadByte(HL++));");
+            else
+                writer.WriteLine("\t{0}++;", opcode.FirstOperand);
             writer.WriteLine("\t//TODO flags");
+            writer.WriteLine("\tDisableFlag(FLAG_SUB);");
+            writer.WriteLine("\tif (A == 0) EnableFlag(FLAG_ZERO);");
         }
 
         public void WriteIncWord(TextWriter writer, Opcode opcode)
@@ -271,8 +357,13 @@ namespace CpuGenerator
 
         public void WriteDecByte(TextWriter writer, Opcode opcode)
         {
-            writer.WriteLine("\t{0}--;", opcode.FirstOperand);
+            if (opcode.FirstOperand == "(HL)")
+                writer.WriteLine("\tmemory->WriteByte(HL, memory->ReadByte(HL--));");
+            else
+                writer.WriteLine("\t{0}++;", opcode.FirstOperand);
             writer.WriteLine("\t//TODO flags");
+            writer.WriteLine("\tEnableFlag(FLAG_SUB);");
+            writer.WriteLine("\tif (A == 0) EnableFlag(FLAG_ZERO);");
         }
 
         public void WriteDecWord(TextWriter writer, Opcode opcode)
@@ -284,56 +375,230 @@ namespace CpuGenerator
         public void WriteOr(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\tA |= {0};", GetLoadStub(opcode.FirstOperand));
-            writer.WriteLine("\t//TODO flags");
+            writer.WriteLine("\tClearFlags();");
+            writer.WriteLine("\tif (A == 0) EnableFlag(FLAG_ZERO);");
         }
 
         public void WriteXor(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\tA ^= {0};", GetLoadStub(opcode.FirstOperand));
-            writer.WriteLine("\t//TODO flags");
+            writer.WriteLine("\tClearFlags();");
+            writer.WriteLine("\tif (A == 0) EnableFlag(FLAG_ZERO);");
         }
 
         public void WriteAdd(TextWriter writer, Opcode opcode)
         {
-            string operand = !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.SecondOperand : opcode.FirstOperand;
-            writer.WriteLine("\tA += {0};", GetLoadStub(operand));
-            writer.WriteLine("\t//TODO flags");
+            string secOperand = !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.SecondOperand : opcode.FirstOperand;
+            writer.WriteLine("\t{0} += {1};", !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.FirstOperand : "A", GetLoadStub(secOperand));
+            writer.WriteLine("\tDisableFlag(FLAG_SUB);");
+            writer.WriteLine("\tif ({0} == 0) EnableFlag(FLAG_ZERO);", !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.FirstOperand : "A");
+            writer.WriteLine("\tif ({0} > 0xFF) EnableFlag(FLAG_CARRY);", !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.FirstOperand : "A");
         }
 
         public void WriteAdc(TextWriter writer, Opcode opcode)
         {
-            string operand = !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.SecondOperand : opcode.FirstOperand;
+            string secOperand = !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.SecondOperand : opcode.FirstOperand; 
             writer.WriteLine("\tuint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;");
-            writer.WriteLine("\tA += ({0} + carry);", GetLoadStub(operand));
-            writer.WriteLine("\t//TODO flags");
+            writer.WriteLine("\tA += ({1} + carry);", !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.FirstOperand : "A", GetLoadStub(secOperand));
+            writer.WriteLine("\tDisableFlag(FLAG_SUB);");
+            writer.WriteLine("\tif ({0} == 0) EnableFlag(FLAG_ZERO);", !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.FirstOperand : "A");
+            writer.WriteLine("\tif ({0} > 0xFF) EnableFlag(FLAG_CARRY);", !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.FirstOperand : "A");
         }
 
         public void WriteSub(TextWriter writer, Opcode opcode)
         {
-            string operand = !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.SecondOperand : opcode.FirstOperand;
-            writer.WriteLine("\tA -= {0};", GetLoadStub(operand));
-            writer.WriteLine("\t//TODO flags");
+            string secOperand = !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.SecondOperand : opcode.FirstOperand;
+            writer.WriteLine("\t{0} -= {1};", !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.FirstOperand : "A", GetLoadStub(secOperand));
+            writer.WriteLine("\tEnableFlag(FLAG_SUB);");
+            writer.WriteLine("\tif ({0} == 0) EnableFlag(FLAG_ZERO);", !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.FirstOperand : "A");
+            writer.WriteLine("\tif ({0} < 0) EnableFlag(FLAG_CARRY);", !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.FirstOperand : "A");
         }
 
         public void WriteSbc(TextWriter writer, Opcode opcode)
         {
-            string operand = !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.SecondOperand : opcode.FirstOperand;
+            string secOperand = !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.SecondOperand : opcode.FirstOperand;
             writer.WriteLine("\tuint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;");
-            writer.WriteLine("\tA -= ({0} + carry);", GetLoadStub(operand));
-            writer.WriteLine("\t//TODO flags");
+            writer.WriteLine("\t{0} -= ({1} + carry);", !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.FirstOperand : "A", GetLoadStub(secOperand));
+            writer.WriteLine("\tEnableFlag(FLAG_SUB);");
+            writer.WriteLine("\tif ({0} == 0) EnableFlag(FLAG_ZERO);", !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.FirstOperand : "A");
+            writer.WriteLine("\tif ({0} < 0) EnableFlag(FLAG_CARRY);", !string.IsNullOrEmpty(opcode.SecondOperand) ? opcode.FirstOperand : "A");
         }
 
         public void WriteAnd(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\tA &= {0};", GetLoadStub(opcode.FirstOperand));
-            writer.WriteLine("\t//TODO flags");
+            writer.WriteLine("\tClearFlags();");
+            writer.WriteLine("\tif (A == 0) EnableFlag(FLAG_ZERO);");
         }
 
-        public void WriteDAA(TextWriter writer, Opcode opcode)
+        public void WriteDaa(TextWriter writer, Opcode opcode)
         {
-            writer.WriteLine("\t//Not implememented yet");
+            writer.WriteLine("\tuint8 reg = A;\n");
+            writer.WriteLine("\tif ((reg & 0x0F) > 9 || IsFlagSet(FLAG_HALFCARRY))");
+            writer.WriteLine("\t{");
+            writer.WriteLine("\t\treg += 0x06;");
+            writer.WriteLine("\t}");
+            writer.WriteLine("\telse if ((reg & 0x9F) > 9 || IsFlagSet(FLAG_CARRY))");
+            writer.WriteLine("\t{");
+            writer.WriteLine("\t\treg += 0x60;");
+            writer.WriteLine("\t}\n");
+            writer.WriteLine("\tDisableFlag(FLAG_HALFCARRY);");
+            writer.WriteLine("\tif (reg == 0) EnableFlag(FLAG_ZERO);\n");
+            writer.WriteLine("\tA = reg;");
         }
-        
+
+        public void WriteDi(TextWriter writer, Opcode opcode)
+        {
+            writer.WriteLine("\time = false;");
+        }
+
+        public void WriteBit(TextWriter writer, Opcode opcode)
+        {
+            writer.WriteLine("\tif ((({0} >> {1}) & 0x01) == 0) EnableFlag(FLAG_ZERO);", GetLoadStub(opcode.SecondOperand), opcode.FirstOperand);
+            writer.WriteLine("\tDisableFlag(FLAG_SUB);");
+            writer.WriteLine("\tEnableFlag(FLAG_HALFCARRY);");
+        }
+
+        public void WriteSet(TextWriter writer, Opcode opcode)
+        {
+            writer.WriteLine("\t{0} = SetBit({1}, {2});", opcode.SecondOperand, opcode.SecondOperand, opcode.FirstOperand);
+        }
+
+        public void WriteRes(TextWriter writer, Opcode opcode)
+        {
+            writer.WriteLine("\t{0} = ClearBit({1}, {2});", opcode.SecondOperand, opcode.SecondOperand, opcode.FirstOperand);
+        }
+
+        public void WriteHLSet(TextWriter writer, Opcode opcode)
+        {
+            writer.WriteLine("\tuint8 result = SetBit(memory->ReadByte(HL), {0});", opcode.FirstOperand);
+            writer.WriteLine("\tmemory->WriteByte(HL, result);");
+        }
+
+        public void WriteHLRes(TextWriter writer, Opcode opcode)
+        {
+            writer.WriteLine("\tuint8 result = ClearBit(memory->ReadByte(HL), {0});", opcode.FirstOperand);
+            writer.WriteLine("\tmemory->WriteByte(HL, result);");
+        }
+
+        public void WriteCall(TextWriter writer, Opcode opcode)
+        {
+            string cond = GetCondition(opcode.FirstOperand);
+            string tabs = "\t";
+            if (!string.IsNullOrEmpty(cond))
+            {
+                tabs += "\t";
+                writer.WriteLine("\tif (" + cond + ")\n\t{");
+            }
+            writer.WriteLine(tabs + "SP -= 2;");
+            writer.WriteLine(tabs + "memory->WriteWord(SP, PC + 2);");
+            writer.WriteLine(tabs + "PC = memory->ReadWord(PC);");
+            if (cond != string.Empty)
+            {
+                writer.WriteLine("\t}");
+            }
+        }
+
+        public void WriteRet(TextWriter writer, Opcode opcode)
+        {
+            string cond = GetCondition(opcode.FirstOperand);
+            string tabs = "\t";
+            if (!string.IsNullOrEmpty(cond))
+            {
+                tabs += "\t";
+                writer.WriteLine("\tif (" + cond + ")\n\t{");
+            }
+            writer.WriteLine(tabs + "StackPop(PC);");
+            if (cond != string.Empty)
+            {
+                writer.WriteLine("\t}");
+            }
+        }
+
+        public void WriteReti(TextWriter writer, Opcode opcode)
+        {
+            WriteRet(writer, opcode);
+            writer.WriteLine("\time = true;");
+        }
+
+        public void WritePush(TextWriter writer, Opcode opcode)
+        {
+            writer.WriteLine("\tStackPush({0});", opcode.FirstOperand);
+        }
+
+        public void WritePop(TextWriter writer, Opcode opcode)
+        {
+            writer.WriteLine("\tStackPop({0});", opcode.FirstOperand);
+        }
+
+        public void WriteJr(TextWriter writer, Opcode opcode)
+        {
+            string cond = GetCondition(opcode.FirstOperand);
+            string tabs = "\t";
+            if (!string.IsNullOrEmpty(cond))
+            {
+                tabs += "\t";
+                writer.WriteLine("\tif (" + cond + ")\n\t{");
+            }
+
+            writer.WriteLine(tabs + "PC += memory->ReadWord(PC++);", opcode.FirstOperand);
+            if (cond != string.Empty)
+            {
+                writer.WriteLine("\t}");
+            }
+        }
+
+        public void WriteJp(TextWriter writer, Opcode opcode)
+        {
+            string cond = GetCondition(opcode.FirstOperand);
+            string tabs = "\t";
+            if (!string.IsNullOrEmpty(cond))
+            {
+                tabs += "\t";
+                writer.WriteLine("\tif (" + cond + ")\n\t{");
+            }
+
+            writer.WriteLine(tabs + "PC = memory->ReadWord(PC++);", opcode.FirstOperand);
+            if (cond != string.Empty)
+            {
+                writer.WriteLine("\t}");
+            }
+        }
+
+        public void WriteCcf(TextWriter writer, Opcode opcode)
+        {
+            writer.WriteLine("\tInvertFlag(FLAG_CARRY);");
+            writer.WriteLine("\tDisableFlag(FLAG_HALFCARRY);");
+            writer.WriteLine("\tDisableFlag(FLAG_SUB);");
+        }
+
+        public void WriteScf(TextWriter writer, Opcode opcode)
+        {
+            writer.WriteLine("\tEnableFlag(FLAG_CARRY);");
+            writer.WriteLine("\tDisableFlag(FLAG_HALFCARRY);");
+            writer.WriteLine("\tDisableFlag(FLAG_SUB);");
+        }
+
+        public void WriteCp(TextWriter writer, Opcode opcode)
+        {
+            writer.WriteLine("\tuint8 reg = A;");
+            writer.WriteLine("\treg -= {0};", GetLoadStub(opcode.FirstOperand));
+            writer.WriteLine("\tEnableFlag(FLAG_SUB);");
+            writer.WriteLine("\tif (reg == 0) EnableFlag(FLAG_ZERO);");
+            writer.WriteLine("\tif (reg < 0) EnableFlag(FLAG_CARRY);");
+        }
+
+        public void WriteHalt(TextWriter writer, Opcode opcode)
+        {
+            writer.WriteLine("\thalted = true;");
+        }
+
+        public void WriteRst(TextWriter writer, Opcode opcode)
+        {
+            writer.WriteLine("\tStackPush(PC);");
+            writer.WriteLine("\tPC = {0};", string.IsNullOrEmpty(opcode.FirstOperand) ? "0x00" : opcode.FirstOperand);
+        }
+
         #endregion
     }
 }

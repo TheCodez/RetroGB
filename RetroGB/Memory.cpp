@@ -3,6 +3,7 @@
 
 Memory::Memory()
 {
+    Reset();
 }
 
 
@@ -12,32 +13,92 @@ Memory::~Memory()
 
 void Memory::Reset()
 {
+    inBootRom = false;
+
+    // Default values
+    WriteByte(0xFF05, 0x00);
+    WriteByte(0xFF06, 0x00);
+    WriteByte(0xFF07, 0x00);
+    WriteByte(0xFF10, 0x80);
+    WriteByte(0xFF11, 0xBF);
+    WriteByte(0xFF12, 0xF3);
+    WriteByte(0xFF14, 0xBF);
+    WriteByte(0xFF16, 0x3F);
+    WriteByte(0xFF17, 0x00);
+    WriteByte(0xFF19, 0xBF);
+    WriteByte(0xFF1A, 0x7F);
+    WriteByte(0xFF1B, 0xFF);
+    WriteByte(0xFF1C, 0x9F);
+    WriteByte(0xFF1E, 0xBF);
+    WriteByte(0xFF20, 0xFF);
+    WriteByte(0xFF21, 0x00);
+    WriteByte(0xFF22, 0x00);
+    WriteByte(0xFF23, 0xBF);
+    WriteByte(0xFF24, 0x77);
+    WriteByte(0xFF25, 0xF3);
+    WriteByte(0xFF26, 0xF1);
+    WriteByte(0xFF40, 0x91);
+    WriteByte(0xFF42, 0x00);
+    WriteByte(0xFF43, 0x00);
+    WriteByte(0xFF45, 0x00);
+    WriteByte(0xFF47, 0xFC);
+    WriteByte(0xFF48, 0xFF);
+    WriteByte(0xFF49, 0xFF);
+    WriteByte(0xFF4A, 0x00);
+    WriteByte(0xFF4B, 0x00);
+    WriteByte(0xFFFF, 0x00);
 
 }
 
 void Memory::LoadRom(uint8* r)
 {
-    if (rom != r)
+    for (int i = 0; i < 0x8000; i++)
     {
-        rom = r;
+        rom[i] = r[i];
     }
 }
 
 void Memory::WriteByte(uint16 address, uint8 value)
 {
-    switch (address & 0xF000)
+    if (address >= 0x8000 && address <= 0x9FFF)
     {
-    case 0x0000:
-        break;
-    case 0x1000:
-    case 0x2000:
-    case 0x3000:
-        break;
-    case 0x4000:
-    case 0x5000:
-    case 0x6000:
-    case 0x7000:
-        break;
+        vram[address - 0x8000] = value;
+    }
+    else if (address >= 0xA000 && address <= 0xBFFF)
+    {
+        eram[address - 0xA000] = value;
+    }
+    else if (address >= 0xC000 && address <= 0xCFFF)
+    {
+        wram[address - 0xC000] = value;
+    }
+    else if (address >= 0xD000 && address <= 0xDFFF)
+    {
+        wram[address - 0xD000] = value;
+    }
+    else if (address >= 0xE000 && address <= 0xFDFF)
+    {
+        wram[address - 0xE000] = value;
+    }
+    else if (address >= 0xFE00 && address <= 0xFE9F)
+    {
+        oam[address - 0xFE00] = value;
+    }
+    else if (address >= 0xFF00 && address <= 0xFF7F)
+    {
+        io[address - 0xFF00] = value;
+    }
+    else if (address >= 0xFF80 && address <= 0xFFFE)
+    {
+        hram[address - 0xFF80] = value;
+    }
+    else if (address == 0xFFFF)
+    {
+        interruptEnable = value;
+    }
+    else if (address == 0xFF0F)
+    {
+        interruptFlag = value;
     }
 }
 
@@ -47,30 +108,57 @@ void Memory::WriteWord(uint16 address, uint16 value)
     WriteByte(address + 1, value >> 8);
 }
 
-uint8 Memory::ReadByte(uint16 address) const
+uint8 Memory::ReadByte(uint16 address)
 {
-    switch (address & 0xF000)
+    if (address <= 0x7FFF)
     {
-    case 0x0000:
-        if (address < 0x0100)
-            return bootRomDMG[address];
-        else
-            return rom[address];
-    case 0x1000:
-    case 0x2000:
-    case 0x3000:
-        return rom[address];
-    case 0x4000:
-    case 0x5000:
-    case 0x6000:
-    case 0x7000:
         return rom[address];
     }
+    else if (address >= 0x8000 && address <= 0x9FFF)
+    {
+        return vram[address - 0x8000];
+    }
+    else if (address >= 0xA000 && address <= 0xBFFF)
+    {
+        return eram[address - 0xA000];
+    }
+    else if (address >= 0xC000 && address <= 0xCFFF)
+    {
+        return wram[address - 0xC000];
+    }
+    else if (address >= 0xD000 && address <= 0xDFFF)
+    {
+        return wram[address - 0xD000];
+    }
+    else if (address >= 0xE000 && address <= 0xFDFF)
+    {
+        return wram[address - 0xE000];
+    }
+    else if (address >= 0xFE00 && address <= 0xFE9F)
+    {
+        return oam[address - 0xFE00];
+    }
+    else if (address >= 0xFF00 && address <= 0xFF7F)
+    {
+        return io[address - 0xFF00];
+    }
+    else if (address >= 0xFF80 && address <= 0xFFFE)
+    {
+        return hram[address - 0xFF80];
+    }
+    else if (address == 0xFFFF)
+    {
+        return interruptEnable;
+    }
+    else if (address == 0xFF0F)
+    {
+        return interruptFlag;
+    }
 
-    return 0x00;
+    return 0;
 }
 
-uint16 Memory::ReadWord(uint16 address) const
+uint16 Memory::ReadWord(uint16 address)
 {
     return (uint16)(ReadByte(address) | (ReadByte(address + 1) << 8));
 }

@@ -16,14 +16,14 @@ typedef uint16_t uint16;
 #define FLAG_CARRY 0x10
 #define FLAG_NONE 0x00
 
-inline void SetBit(uint8 value, uint8 bit)
+inline uint8 SetBit(uint8 value, uint8 bit)
 {
-    value |= 0x01 << bit;
+    return value |= 0x01 << bit;
 }
 
-inline void ClearBit(uint8 value, uint8 bit)
+inline uint8 ClearBit(uint8 value, uint8 bit)
 {
-    value &= ~(0x01 << bit);
+    return value &= ~(0x01 << bit);
 }
 
 inline bool IsBitSet(uint8 value, uint8 bit)
@@ -34,14 +34,6 @@ inline bool IsBitSet(uint8 value, uint8 bit)
 inline bool GetBitValue(uint8 value, uint8 bit)
 {
     return (value & (0x01 << bit)) ? 1 : 0;
-}
-
-inline bool StringReplace(std::string& str, const std::string& from, const std::string& to) {
-    size_t start_pos = str.find(from);
-    if (start_pos == std::string::npos)
-        return false;
-    str.replace(start_pos, from.length(), to);
-    return true;
 }
 
 #ifdef _DEBUG

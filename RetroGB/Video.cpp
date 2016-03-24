@@ -28,21 +28,6 @@ void Video::Reset(bool color)
     }
 }
 
-void Video::WriteByte(uint16 address, uint8 value)
-{
-    switch (address & 0xF000)
-    {
-    case 0x8000:
-    case 0x9000:
-        vram[address & 0x1FFFF] = value;
-        break;
-    }
-}
-
-uint8 Video::ReadByte(uint16 address) const
-{
-    return 0;
-}
 void Video::Run(uint8 cycles)
 {
     modeCounter += cycles;
@@ -50,14 +35,40 @@ void Video::Run(uint8 cycles)
     switch (mode)
     {
     case Mode::HBlank:
-        mode = Mode::Oam;
-        currLine++;
+        if (modeCounter >= 204)
+        {
+            modeCounter = 0;
+            currLine++;
+
+            if (currLine == 143)
+            {
+                mode = Mode::VBlank;
+            }
+        }
         break;
     case Mode::VBlank:
+        if (modeCounter >= 4560)
+        {
+            modeCounter = 0;
+            mode = Mode::HBlank;
+            currLine++;
+        }
         break;
     case Mode::Oam:
+        if (modeCounter >= 80)
+        {
+            modeCounter = 0;
+            mode = Mode::Vram;
+        }
         break;
     case Mode::Vram:
+        if (modeCounter >= 172)
+        {
+            modeCounter = 0;
+            mode = Mode::VBlank;
+
+            ScanLine(currLine);
+        }
         break;
     }
 }
@@ -163,6 +174,9 @@ void Video::RenderSprites(int scanLine)
 
                 uint8 palette = memory->ReadByte(paletteNumber);
                 Color color = GetColor(colorNum, palette);
+
+                if (color == Color::WHITE)
+                    continue;
 
                 frameBuffer[posX + scanLine * SCREEN_WIDTH] = color;
             }

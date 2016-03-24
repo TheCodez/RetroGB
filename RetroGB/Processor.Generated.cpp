@@ -519,3414 +519,3576 @@ void Processor::InitOpcodes()
 }
 
 /* NOP */
-void Processor::NOP()
+void Processor::NOP() // 0x00
 {
 }
 
 /* LD BC, nn */
-void Processor::LD_BC_nn()
+void Processor::LD_BC_nn() // 0x01
 {
 	BC = memory->ReadWord(PC++);
 }
 
 /* LD (BC), A */
-void Processor::LD_MEM_BC_A()
+void Processor::LD_MEM_BC_A() // 0x02
 {
 	memory->WriteByte(BC, A);
 }
 
 /* INC BC */
-void Processor::INC_BC()
+void Processor::INC_BC() // 0x03
 {
 	BC++;
 }
 
 /* INC B */
-void Processor::INC_B()
+void Processor::INC_B() // 0x04
 {
 	B++;
 	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* DEC B */
-void Processor::DEC_B()
+void Processor::DEC_B() // 0x05
 {
-	B--;
+	B++;
 	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* LD B, n */
-void Processor::LD_B_n()
+void Processor::LD_B_n() // 0x06
 {
 	B = memory->ReadByte(PC++);
 }
 
 /* RLCA */
-void Processor::RLCA()
+void Processor::RLCA() // 0x07
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* LD (nn), SP */
-void Processor::LD_MEM_nn_SP()
+void Processor::LD_MEM_nn_SP() // 0x08
 {
 	memory->WriteWord(memory->ReadWord(PC++), SP);
 }
 
 /* ADD HL, BC */
-void Processor::ADD_HL_BC()
+void Processor::ADD_HL_BC() // 0x09
 {
-	A += BC;
-	//TODO flags
+	HL += BC;
+	DisableFlag(FLAG_SUB);
+	if (HL == 0) EnableFlag(FLAG_ZERO);
+	if (HL > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* LD A, (BC) */
-void Processor::LD_A_MEM_BC()
+void Processor::LD_A_MEM_BC() // 0x0A
 {
 	A = memory->ReadByte(BC);
 }
 
 /* DEC BC */
-void Processor::DEC_BC()
+void Processor::DEC_BC() // 0x0B
 {
 	BC--;
 }
 
 /* INC C */
-void Processor::INC_C()
+void Processor::INC_C() // 0x0C
 {
 	C++;
 	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* DEC C */
-void Processor::DEC_C()
+void Processor::DEC_C() // 0x0D
 {
-	C--;
+	C++;
 	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* LD C, n */
-void Processor::LD_C_n()
+void Processor::LD_C_n() // 0x0E
 {
 	C = memory->ReadByte(PC++);
 }
 
 /* RRCA */
-void Processor::RRCA()
+void Processor::RRCA() // 0x0F
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* STOP */
-void Processor::STOP()
+void Processor::STOP() // 0x10
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* LD DE, nn */
-void Processor::LD_DE_nn()
+void Processor::LD_DE_nn() // 0x11
 {
 	DE = memory->ReadWord(PC++);
 }
 
 /* LD (DE), A */
-void Processor::LD_MEM_DE_A()
+void Processor::LD_MEM_DE_A() // 0x12
 {
 	memory->WriteByte(DE, A);
 }
 
 /* INC DE */
-void Processor::INC_DE()
+void Processor::INC_DE() // 0x13
 {
 	DE++;
 }
 
 /* INC D */
-void Processor::INC_D()
+void Processor::INC_D() // 0x14
 {
 	D++;
 	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* DEC D */
-void Processor::DEC_D()
+void Processor::DEC_D() // 0x15
 {
-	D--;
+	D++;
 	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* LD D, n */
-void Processor::LD_D_n()
+void Processor::LD_D_n() // 0x16
 {
 	D = memory->ReadByte(PC++);
 }
 
 /* RLA */
-void Processor::RLA()
+void Processor::RLA() // 0x17
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* JR n */
-void Processor::JR_n()
+void Processor::JR_n() // 0x18
 {
-	// Not implemented yet
-	UnknownOpcode();
+	PC += memory->ReadWord(PC++);
 }
 
 /* ADD HL, DE */
-void Processor::ADD_HL_DE()
+void Processor::ADD_HL_DE() // 0x19
 {
-	A += DE;
-	//TODO flags
+	HL += DE;
+	DisableFlag(FLAG_SUB);
+	if (HL == 0) EnableFlag(FLAG_ZERO);
+	if (HL > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* LD A, (DE) */
-void Processor::LD_A_MEM_DE()
+void Processor::LD_A_MEM_DE() // 0x1A
 {
 	A = memory->ReadByte(DE);
 }
 
 /* DEC DE */
-void Processor::DEC_DE()
+void Processor::DEC_DE() // 0x1B
 {
 	DE--;
 }
 
 /* INC E */
-void Processor::INC_E()
+void Processor::INC_E() // 0x1C
 {
 	E++;
 	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* DEC E */
-void Processor::DEC_E()
+void Processor::DEC_E() // 0x1D
 {
-	E--;
+	E++;
 	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* LD E, n */
-void Processor::LD_E_n()
+void Processor::LD_E_n() // 0x1E
 {
 	E = memory->ReadByte(PC++);
 }
 
 /* RRA */
-void Processor::RRA()
+void Processor::RRA() // 0x1F
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* JR NZ, n */
-void Processor::JR_NZ_n()
+void Processor::JR_NZ_n() // 0x20
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (!IsFlagSet(FLAG_ZERO))
+	{
+		PC += memory->ReadWord(PC++);
+	}
 }
 
 /* LD HL, nn */
-void Processor::LD_HL_nn()
+void Processor::LD_HL_nn() // 0x21
 {
 	HL = memory->ReadWord(PC++);
 }
 
 /* LD (HLI), A */
-void Processor::LD_MEM_HLI_A()
+void Processor::LD_MEM_HLI_A() // 0x22
 {
 	memory->WriteByte(HL++, A);
 }
 
 /* INC HL */
-void Processor::INC_HL()
+void Processor::INC_HL() // 0x23
 {
 	HL++;
 }
 
 /* INC H */
-void Processor::INC_H()
+void Processor::INC_H() // 0x24
 {
 	H++;
 	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* DEC H */
-void Processor::DEC_H()
+void Processor::DEC_H() // 0x25
 {
-	H--;
+	H++;
 	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* LD H, n */
-void Processor::LD_H_n()
+void Processor::LD_H_n() // 0x26
 {
 	H = memory->ReadByte(PC++);
 }
 
 /* DAA */
-void Processor::DAA()
+void Processor::DAA() // 0x27
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 reg = A;
+
+	if ((reg & 0x0F) > 9 || IsFlagSet(FLAG_HALFCARRY))
+	{
+		reg += 0x06;
+	}
+	else if ((reg & 0x9F) > 9 || IsFlagSet(FLAG_CARRY))
+	{
+		reg += 0x60;
+	}
+
+	DisableFlag(FLAG_HALFCARRY);
+	if (reg == 0) EnableFlag(FLAG_ZERO);
+
+	A = reg;
 }
 
 /* JR Z, n */
-void Processor::JR_Z_n()
+void Processor::JR_Z_n() // 0x28
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (IsFlagSet(FLAG_ZERO))
+	{
+		PC += memory->ReadWord(PC++);
+	}
 }
 
 /* ADD HL, HL */
-void Processor::ADD_HL_HL()
+void Processor::ADD_HL_HL() // 0x29
 {
-	A += HL;
-	//TODO flags
+	HL += HL;
+	DisableFlag(FLAG_SUB);
+	if (HL == 0) EnableFlag(FLAG_ZERO);
+	if (HL > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* LD A, (HLI) */
-void Processor::LD_A_MEM_HLI()
+void Processor::LD_A_MEM_HLI() // 0x2A
 {
 	A = memory->ReadByte(HL++);
 }
 
 /* DEC HL */
-void Processor::DEC_HL()
+void Processor::DEC_HL() // 0x2B
 {
 	HL--;
 }
 
 /* INC L */
-void Processor::INC_L()
+void Processor::INC_L() // 0x2C
 {
 	L++;
 	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* DEC L */
-void Processor::DEC_L()
+void Processor::DEC_L() // 0x2D
 {
-	L--;
+	L++;
 	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* LD L, n */
-void Processor::LD_L_n()
+void Processor::LD_L_n() // 0x2E
 {
 	L = memory->ReadByte(PC++);
 }
 
 /* CPL */
-void Processor::CPL()
+void Processor::CPL() // 0x2F
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* JR NC, n */
-void Processor::JR_NC_n()
+void Processor::JR_NC_n() // 0x30
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (!IsFlagSet(FLAG_CARRY))
+	{
+		PC += memory->ReadWord(PC++);
+	}
 }
 
 /* LD SP, nn */
-void Processor::LD_SP_nn()
+void Processor::LD_SP_nn() // 0x31
 {
 	SP = memory->ReadWord(PC++);
 }
 
 /* LD (HLD), A */
-void Processor::LD_MEM_HLD_A()
+void Processor::LD_MEM_HLD_A() // 0x32
 {
 	memory->WriteByte(HL--, A);
 }
 
 /* INC SP */
-void Processor::INC_SP()
+void Processor::INC_SP() // 0x33
 {
 	SP++;
 }
 
 /* INC (HL) */
-void Processor::INC_MEM_HL()
+void Processor::INC_MEM_HL() // 0x34
 {
-	(HL)++;
+	memory->WriteByte(HL, memory->ReadByte(HL++));
 	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* DEC (HL) */
-void Processor::DEC_MEM_HL()
+void Processor::DEC_MEM_HL() // 0x35
 {
-	(HL)--;
+	memory->WriteByte(HL, memory->ReadByte(HL--));
 	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* LD (HL), n */
-void Processor::LD_MEM_HL_n()
+void Processor::LD_MEM_HL_n() // 0x36
 {
 	memory->WriteByte(HL, memory->ReadByte(PC++));
 }
 
 /* SCF */
-void Processor::SCF()
+void Processor::SCF() // 0x37
 {
-	// Not implemented yet
-	UnknownOpcode();
+	EnableFlag(FLAG_CARRY);
+	DisableFlag(FLAG_HALFCARRY);
+	DisableFlag(FLAG_SUB);
 }
 
 /* JR C, n */
-void Processor::JR_C_n()
+void Processor::JR_C_n() // 0x38
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (IsFlagSet(FLAG_CARRY))
+	{
+		PC += memory->ReadWord(PC++);
+	}
 }
 
 /* ADD HL, SP */
-void Processor::ADD_HL_SP()
+void Processor::ADD_HL_SP() // 0x39
 {
-	A += SP;
-	//TODO flags
+	HL += SP;
+	DisableFlag(FLAG_SUB);
+	if (HL == 0) EnableFlag(FLAG_ZERO);
+	if (HL > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* LD A, (HLD) */
-void Processor::LD_A_MEM_HLD()
+void Processor::LD_A_MEM_HLD() // 0x3A
 {
 	A = memory->ReadByte(HL--);
 }
 
 /* DEC SP */
-void Processor::DEC_SP()
+void Processor::DEC_SP() // 0x3B
 {
 	SP--;
 }
 
 /* INC A */
-void Processor::INC_A()
+void Processor::INC_A() // 0x3C
 {
 	A++;
 	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* DEC A */
-void Processor::DEC_A()
+void Processor::DEC_A() // 0x3D
 {
-	A--;
+	A++;
 	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* LDA, n */
-void Processor::LDA_n()
+void Processor::LDA_n() // 0x3E
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* CCF */
-void Processor::CCF()
+void Processor::CCF() // 0x3F
 {
-	// Not implemented yet
-	UnknownOpcode();
+	InvertFlag(FLAG_CARRY);
+	DisableFlag(FLAG_HALFCARRY);
+	DisableFlag(FLAG_SUB);
 }
 
 /* LD B, B */
-void Processor::LD_B_B()
+void Processor::LD_B_B() // 0x40
 {
 }
 
 /* LD B, C */
-void Processor::LD_B_C()
+void Processor::LD_B_C() // 0x41
 {
 	B = C;
 }
 
 /* LD B, D */
-void Processor::LD_B_D()
+void Processor::LD_B_D() // 0x42
 {
 	B = D;
 }
 
 /* LD B, E */
-void Processor::LD_B_E()
+void Processor::LD_B_E() // 0x43
 {
 	B = E;
 }
 
 /* LD B, H */
-void Processor::LD_B_H()
+void Processor::LD_B_H() // 0x44
 {
 	B = H;
 }
 
 /* LD B, L */
-void Processor::LD_B_L()
+void Processor::LD_B_L() // 0x45
 {
 	B = L;
 }
 
 /* LD B, (HL) */
-void Processor::LD_B_MEM_HL()
+void Processor::LD_B_MEM_HL() // 0x46
 {
 	B = memory->ReadByte(HL);
 }
 
 /* LD B, A */
-void Processor::LD_B_A()
+void Processor::LD_B_A() // 0x47
 {
 	B = A;
 }
 
 /* LD C, B */
-void Processor::LD_C_B()
+void Processor::LD_C_B() // 0x48
 {
 	C = B;
 }
 
 /* LD C, C */
-void Processor::LD_C_C()
+void Processor::LD_C_C() // 0x49
 {
 }
 
 /* LD C, D */
-void Processor::LD_C_D()
+void Processor::LD_C_D() // 0x4A
 {
 	C = D;
 }
 
 /* LD C, E */
-void Processor::LD_C_E()
+void Processor::LD_C_E() // 0x4B
 {
 	C = E;
 }
 
 /* LD C, H */
-void Processor::LD_C_H()
+void Processor::LD_C_H() // 0x4C
 {
 	C = H;
 }
 
 /* LD C, L */
-void Processor::LD_C_L()
+void Processor::LD_C_L() // 0x4D
 {
 	C = L;
 }
 
 /* LD C, (HL) */
-void Processor::LD_C_MEM_HL()
+void Processor::LD_C_MEM_HL() // 0x4E
 {
 	C = memory->ReadByte(HL);
 }
 
 /* LD C, A */
-void Processor::LD_C_A()
+void Processor::LD_C_A() // 0x4F
 {
 	C = A;
 }
 
 /* LD D, B */
-void Processor::LD_D_B()
+void Processor::LD_D_B() // 0x50
 {
 	D = B;
 }
 
 /* LD D, C */
-void Processor::LD_D_C()
+void Processor::LD_D_C() // 0x51
 {
 	D = C;
 }
 
 /* LD D, D */
-void Processor::LD_D_D()
+void Processor::LD_D_D() // 0x52
 {
 }
 
 /* LD D, E */
-void Processor::LD_D_E()
+void Processor::LD_D_E() // 0x53
 {
 	D = E;
 }
 
 /* LD D, H */
-void Processor::LD_D_H()
+void Processor::LD_D_H() // 0x54
 {
 	D = H;
 }
 
 /* LD D, L */
-void Processor::LD_D_L()
+void Processor::LD_D_L() // 0x55
 {
 	D = L;
 }
 
 /* LD D, (HL) */
-void Processor::LD_D_MEM_HL()
+void Processor::LD_D_MEM_HL() // 0x56
 {
 	D = memory->ReadByte(HL);
 }
 
 /* LD D, A */
-void Processor::LD_D_A()
+void Processor::LD_D_A() // 0x57
 {
 	D = A;
 }
 
 /* LD E, B */
-void Processor::LD_E_B()
+void Processor::LD_E_B() // 0x58
 {
 	E = B;
 }
 
 /* LD E, C */
-void Processor::LD_E_C()
+void Processor::LD_E_C() // 0x59
 {
 	E = C;
 }
 
 /* LD E, D */
-void Processor::LD_E_D()
+void Processor::LD_E_D() // 0x5A
 {
 	E = D;
 }
 
 /* LD E, E */
-void Processor::LD_E_E()
+void Processor::LD_E_E() // 0x5B
 {
 }
 
 /* LD E, H */
-void Processor::LD_E_H()
+void Processor::LD_E_H() // 0x5C
 {
 	E = H;
 }
 
 /* LD E, L */
-void Processor::LD_E_L()
+void Processor::LD_E_L() // 0x5D
 {
 	E = L;
 }
 
 /* LD E, (HL) */
-void Processor::LD_E_MEM_HL()
+void Processor::LD_E_MEM_HL() // 0x5E
 {
 	E = memory->ReadByte(HL);
 }
 
 /* LD E, A */
-void Processor::LD_E_A()
+void Processor::LD_E_A() // 0x5F
 {
 	E = A;
 }
 
 /* LD H, B */
-void Processor::LD_H_B()
+void Processor::LD_H_B() // 0x60
 {
 	H = B;
 }
 
 /* LD H, C */
-void Processor::LD_H_C()
+void Processor::LD_H_C() // 0x61
 {
 	H = C;
 }
 
 /* LD H, D */
-void Processor::LD_H_D()
+void Processor::LD_H_D() // 0x62
 {
 	H = D;
 }
 
 /* LD H, E */
-void Processor::LD_H_E()
+void Processor::LD_H_E() // 0x63
 {
 	H = E;
 }
 
 /* LD H, H */
-void Processor::LD_H_H()
+void Processor::LD_H_H() // 0x64
 {
 }
 
 /* LD H, L */
-void Processor::LD_H_L()
+void Processor::LD_H_L() // 0x65
 {
 	H = L;
 }
 
 /* LD H, (HL) */
-void Processor::LD_H_MEM_HL()
+void Processor::LD_H_MEM_HL() // 0x66
 {
 	H = memory->ReadByte(HL);
 }
 
 /* LD H, A */
-void Processor::LD_H_A()
+void Processor::LD_H_A() // 0x67
 {
 	H = A;
 }
 
 /* LD L, B */
-void Processor::LD_L_B()
+void Processor::LD_L_B() // 0x68
 {
 	L = B;
 }
 
 /* LD L, C */
-void Processor::LD_L_C()
+void Processor::LD_L_C() // 0x69
 {
 	L = C;
 }
 
 /* LD L, D */
-void Processor::LD_L_D()
+void Processor::LD_L_D() // 0x6A
 {
 	L = D;
 }
 
 /* LD L, E */
-void Processor::LD_L_E()
+void Processor::LD_L_E() // 0x6B
 {
 	L = E;
 }
 
 /* LD L, H */
-void Processor::LD_L_H()
+void Processor::LD_L_H() // 0x6C
 {
 	L = H;
 }
 
 /* LD L, L */
-void Processor::LD_L_L()
+void Processor::LD_L_L() // 0x6D
 {
 }
 
 /* LD L, (HL) */
-void Processor::LD_L_MEM_HL()
+void Processor::LD_L_MEM_HL() // 0x6E
 {
 	L = memory->ReadByte(HL);
 }
 
 /* LD L, A */
-void Processor::LD_L_A()
+void Processor::LD_L_A() // 0x6F
 {
 	L = A;
 }
 
 /* LD (HL), B */
-void Processor::LD_MEM_HL_B()
+void Processor::LD_MEM_HL_B() // 0x70
 {
 	memory->WriteByte(HL, B);
 }
 
 /* LD (HL), C */
-void Processor::LD_MEM_HL_C()
+void Processor::LD_MEM_HL_C() // 0x71
 {
 	memory->WriteByte(HL, C);
 }
 
 /* LD (HL), D */
-void Processor::LD_MEM_HL_D()
+void Processor::LD_MEM_HL_D() // 0x72
 {
 	memory->WriteByte(HL, D);
 }
 
 /* LD (HL), E */
-void Processor::LD_MEM_HL_E()
+void Processor::LD_MEM_HL_E() // 0x73
 {
 	memory->WriteByte(HL, E);
 }
 
 /* LD (HL), H */
-void Processor::LD_MEM_HL_H()
+void Processor::LD_MEM_HL_H() // 0x74
 {
 	memory->WriteByte(HL, H);
 }
 
 /* LD (HL), L */
-void Processor::LD_MEM_HL_L()
+void Processor::LD_MEM_HL_L() // 0x75
 {
 	memory->WriteByte(HL, L);
 }
 
 /* HALT */
-void Processor::HALT()
+void Processor::HALT() // 0x76
 {
-	// Not implemented yet
-	UnknownOpcode();
+	halted = true;
 }
 
 /* LD (HL), A */
-void Processor::LD_MEM_HL_A()
+void Processor::LD_MEM_HL_A() // 0x77
 {
 	memory->WriteByte(HL, A);
 }
 
 /* LD A, B */
-void Processor::LD_A_B()
+void Processor::LD_A_B() // 0x78
 {
 	A = B;
 }
 
 /* LD A, C */
-void Processor::LD_A_C()
+void Processor::LD_A_C() // 0x79
 {
 	A = C;
 }
 
 /* LD A, D */
-void Processor::LD_A_D()
+void Processor::LD_A_D() // 0x7A
 {
 	A = D;
 }
 
 /* LD A, E */
-void Processor::LD_A_E()
+void Processor::LD_A_E() // 0x7B
 {
 	A = E;
 }
 
 /* LD A, H */
-void Processor::LD_A_H()
+void Processor::LD_A_H() // 0x7C
 {
 	A = H;
 }
 
 /* LD A, L */
-void Processor::LD_A_L()
+void Processor::LD_A_L() // 0x7D
 {
 	A = L;
 }
 
 /* LD A, (HL) */
-void Processor::LD_A_MEM_HL()
+void Processor::LD_A_MEM_HL() // 0x7E
 {
 	A = memory->ReadByte(HL);
 }
 
 /* LD A, A */
-void Processor::LD_A_A()
+void Processor::LD_A_A() // 0x7F
 {
 }
 
 /* ADD A, B */
-void Processor::ADD_A_B()
+void Processor::ADD_A_B() // 0x80
 {
 	A += B;
-	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* ADD A, C */
-void Processor::ADD_A_C()
+void Processor::ADD_A_C() // 0x81
 {
 	A += C;
-	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* ADD A, D */
-void Processor::ADD_A_D()
+void Processor::ADD_A_D() // 0x82
 {
 	A += D;
-	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* ADD A, E */
-void Processor::ADD_A_E()
+void Processor::ADD_A_E() // 0x83
 {
 	A += E;
-	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* ADD A, H */
-void Processor::ADD_A_H()
+void Processor::ADD_A_H() // 0x84
 {
 	A += H;
-	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* ADD A, L */
-void Processor::ADD_A_L()
+void Processor::ADD_A_L() // 0x85
 {
 	A += L;
-	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* ADD A, (HL) */
-void Processor::ADD_A_MEM_HL()
+void Processor::ADD_A_MEM_HL() // 0x86
 {
 	A += memory->ReadByte(HL);
-	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* ADD A, A */
-void Processor::ADD_A_A()
+void Processor::ADD_A_A() // 0x87
 {
 	A += A;
-	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* ADC A, B */
-void Processor::ADC_A_B()
+void Processor::ADC_A_B() // 0x88
 {
 	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
 	A += (B + carry);
-	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* ADC A, C */
-void Processor::ADC_A_C()
+void Processor::ADC_A_C() // 0x89
 {
 	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
 	A += (C + carry);
-	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* ADC A, D */
-void Processor::ADC_A_D()
+void Processor::ADC_A_D() // 0x8A
 {
 	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
 	A += (D + carry);
-	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* ADC A, E */
-void Processor::ADC_A_E()
+void Processor::ADC_A_E() // 0x8B
 {
 	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
 	A += (E + carry);
-	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* ADC A, H */
-void Processor::ADC_A_H()
+void Processor::ADC_A_H() // 0x8C
 {
 	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
 	A += (H + carry);
-	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* ADC A, L */
-void Processor::ADC_A_L()
+void Processor::ADC_A_L() // 0x8D
 {
 	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
 	A += (L + carry);
-	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* ADC A, (HL) */
-void Processor::ADC_A_MEM_HL()
+void Processor::ADC_A_MEM_HL() // 0x8E
 {
 	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
 	A += (memory->ReadByte(HL) + carry);
-	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* ADC A, A */
-void Processor::ADC_A_A()
+void Processor::ADC_A_A() // 0x8F
 {
 	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
 	A += (A + carry);
-	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* SUB B */
-void Processor::SUB_B()
+void Processor::SUB_B() // 0x90
 {
 	A -= B;
-	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* SUB C */
-void Processor::SUB_C()
+void Processor::SUB_C() // 0x91
 {
 	A -= C;
-	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* SUB D */
-void Processor::SUB_D()
+void Processor::SUB_D() // 0x92
 {
 	A -= D;
-	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* SUB E */
-void Processor::SUB_E()
+void Processor::SUB_E() // 0x93
 {
 	A -= E;
-	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* SUB H */
-void Processor::SUB_H()
+void Processor::SUB_H() // 0x94
 {
 	A -= H;
-	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* SUB L */
-void Processor::SUB_L()
+void Processor::SUB_L() // 0x95
 {
 	A -= L;
-	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* SUB (HL) */
-void Processor::SUB_MEM_HL()
+void Processor::SUB_MEM_HL() // 0x96
 {
 	A -= memory->ReadByte(HL);
-	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* SUB A */
-void Processor::SUB_A()
+void Processor::SUB_A() // 0x97
 {
 	A -= A;
-	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* SBC A, B */
-void Processor::SBC_A_B()
+void Processor::SBC_A_B() // 0x98
 {
 	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
 	A -= (B + carry);
-	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* SBC A, C */
-void Processor::SBC_A_C()
+void Processor::SBC_A_C() // 0x99
 {
 	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
 	A -= (C + carry);
-	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* SBC A, D */
-void Processor::SBC_A_D()
+void Processor::SBC_A_D() // 0x9A
 {
 	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
 	A -= (D + carry);
-	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* SBC A, E */
-void Processor::SBC_A_E()
+void Processor::SBC_A_E() // 0x9B
 {
 	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
 	A -= (E + carry);
-	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* SBC A, H */
-void Processor::SBC_A_H()
+void Processor::SBC_A_H() // 0x9C
 {
 	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
 	A -= (H + carry);
-	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* SBC A, L */
-void Processor::SBC_A_L()
+void Processor::SBC_A_L() // 0x9D
 {
 	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
 	A -= (L + carry);
-	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* SBC A, (HL) */
-void Processor::SBC_A_MEM_HL()
+void Processor::SBC_A_MEM_HL() // 0x9E
 {
 	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
 	A -= (memory->ReadByte(HL) + carry);
-	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* SBC A, A */
-void Processor::SBC_A_A()
+void Processor::SBC_A_A() // 0x9F
 {
 	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
 	A -= (A + carry);
-	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* AND B */
-void Processor::AND_B()
+void Processor::AND_B() // 0xA0
 {
 	A &= B;
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* AND C */
-void Processor::AND_C()
+void Processor::AND_C() // 0xA1
 {
 	A &= C;
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* AND D */
-void Processor::AND_D()
+void Processor::AND_D() // 0xA2
 {
 	A &= D;
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* AND E */
-void Processor::AND_E()
+void Processor::AND_E() // 0xA3
 {
 	A &= E;
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* AND H */
-void Processor::AND_H()
+void Processor::AND_H() // 0xA4
 {
 	A &= H;
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* AND L */
-void Processor::AND_L()
+void Processor::AND_L() // 0xA5
 {
 	A &= L;
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* AND (HL) */
-void Processor::AND_MEM_HL()
+void Processor::AND_MEM_HL() // 0xA6
 {
 	A &= memory->ReadByte(HL);
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* AND A */
-void Processor::AND_A()
+void Processor::AND_A() // 0xA7
 {
 	A &= A;
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* XOR B */
-void Processor::XOR_B()
+void Processor::XOR_B() // 0xA8
 {
 	A ^= B;
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* XOR C */
-void Processor::XOR_C()
+void Processor::XOR_C() // 0xA9
 {
 	A ^= C;
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* XOR D */
-void Processor::XOR_D()
+void Processor::XOR_D() // 0xAA
 {
 	A ^= D;
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* XOR E */
-void Processor::XOR_E()
+void Processor::XOR_E() // 0xAB
 {
 	A ^= E;
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* XOR H */
-void Processor::XOR_H()
+void Processor::XOR_H() // 0xAC
 {
 	A ^= H;
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* XOR L */
-void Processor::XOR_L()
+void Processor::XOR_L() // 0xAD
 {
 	A ^= L;
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* XOR (HL) */
-void Processor::XOR_MEM_HL()
+void Processor::XOR_MEM_HL() // 0xAE
 {
 	A ^= memory->ReadByte(HL);
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* XOR A */
-void Processor::XOR_A()
+void Processor::XOR_A() // 0xAF
 {
 	A ^= A;
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* OR B */
-void Processor::OR_B()
+void Processor::OR_B() // 0xB0
 {
 	A |= B;
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* OR C */
-void Processor::OR_C()
+void Processor::OR_C() // 0xB1
 {
 	A |= C;
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* OR D */
-void Processor::OR_D()
+void Processor::OR_D() // 0xB2
 {
 	A |= D;
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* OR E */
-void Processor::OR_E()
+void Processor::OR_E() // 0xB3
 {
 	A |= E;
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* OR H */
-void Processor::OR_H()
+void Processor::OR_H() // 0xB4
 {
 	A |= H;
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* OR L */
-void Processor::OR_L()
+void Processor::OR_L() // 0xB5
 {
 	A |= L;
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* OR (HL) */
-void Processor::OR_MEM_HL()
+void Processor::OR_MEM_HL() // 0xB6
 {
 	A |= memory->ReadByte(HL);
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* OR A */
-void Processor::OR_A()
+void Processor::OR_A() // 0xB7
 {
 	A |= A;
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* CP B */
-void Processor::CP_B()
+void Processor::CP_B() // 0xB8
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 reg = A;
+	reg -= B;
+	EnableFlag(FLAG_SUB);
+	if (reg == 0) EnableFlag(FLAG_ZERO);
+	if (reg < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* CP C */
-void Processor::CP_C()
+void Processor::CP_C() // 0xB9
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 reg = A;
+	reg -= C;
+	EnableFlag(FLAG_SUB);
+	if (reg == 0) EnableFlag(FLAG_ZERO);
+	if (reg < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* CP D */
-void Processor::CP_D()
+void Processor::CP_D() // 0xBA
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 reg = A;
+	reg -= D;
+	EnableFlag(FLAG_SUB);
+	if (reg == 0) EnableFlag(FLAG_ZERO);
+	if (reg < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* CP E */
-void Processor::CP_E()
+void Processor::CP_E() // 0xBB
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 reg = A;
+	reg -= E;
+	EnableFlag(FLAG_SUB);
+	if (reg == 0) EnableFlag(FLAG_ZERO);
+	if (reg < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* CP H */
-void Processor::CP_H()
+void Processor::CP_H() // 0xBC
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 reg = A;
+	reg -= H;
+	EnableFlag(FLAG_SUB);
+	if (reg == 0) EnableFlag(FLAG_ZERO);
+	if (reg < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* CP L */
-void Processor::CP_L()
+void Processor::CP_L() // 0xBD
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 reg = A;
+	reg -= L;
+	EnableFlag(FLAG_SUB);
+	if (reg == 0) EnableFlag(FLAG_ZERO);
+	if (reg < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* CP (HL) */
-void Processor::CP_MEM_HL()
+void Processor::CP_MEM_HL() // 0xBE
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 reg = A;
+	reg -= memory->ReadByte(HL);
+	EnableFlag(FLAG_SUB);
+	if (reg == 0) EnableFlag(FLAG_ZERO);
+	if (reg < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* CP A */
-void Processor::CP_A()
+void Processor::CP_A() // 0xBF
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 reg = A;
+	reg -= A;
+	EnableFlag(FLAG_SUB);
+	if (reg == 0) EnableFlag(FLAG_ZERO);
+	if (reg < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* RET NZ */
-void Processor::RET_NZ()
+void Processor::RET_NZ() // 0xC0
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (!IsFlagSet(FLAG_ZERO))
+	{
+		StackPop(PC);
+	}
 }
 
 /* POP BC */
-void Processor::POP_BC()
+void Processor::POP_BC() // 0xC1
 {
-	// Not implemented yet
-	UnknownOpcode();
+	StackPop(BC);
 }
 
 /* JP NZ, nn */
-void Processor::JP_NZ_nn()
+void Processor::JP_NZ_nn() // 0xC2
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (!IsFlagSet(FLAG_ZERO))
+	{
+		PC = memory->ReadWord(PC++);
+	}
 }
 
 /* JP nn */
-void Processor::JP_nn()
+void Processor::JP_nn() // 0xC3
 {
-	// Not implemented yet
-	UnknownOpcode();
+	PC = memory->ReadWord(PC++);
 }
 
 /* CALL NZ, nn */
-void Processor::CALL_NZ_nn()
+void Processor::CALL_NZ_nn() // 0xC4
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (!IsFlagSet(FLAG_ZERO))
+	{
+		SP -= 2;
+		memory->WriteWord(SP, PC + 2);
+		PC = memory->ReadWord(PC);
+	}
 }
 
 /* PUSH BC */
-void Processor::PUSH_BC()
+void Processor::PUSH_BC() // 0xC5
 {
-	// Not implemented yet
-	UnknownOpcode();
+	StackPush(BC);
 }
 
 /* ADD A, n */
-void Processor::ADD_A_n()
+void Processor::ADD_A_n() // 0xC6
 {
 	A += memory->ReadByte(PC++);
-	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* RST  */
-void Processor::RST()
+void Processor::RST() // 0xC7
 {
-	// Not implemented yet
-	UnknownOpcode();
+	StackPush(PC);
+	PC = 0x00;
 }
 
 /* RET Z */
-void Processor::RET_Z()
+void Processor::RET_Z() // 0xC8
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (IsFlagSet(FLAG_ZERO))
+	{
+		StackPop(PC);
+	}
 }
 
 /* RET */
-void Processor::RET()
+void Processor::RET() // 0xC9
 {
-	// Not implemented yet
-	UnknownOpcode();
+	StackPop(PC);
 }
 
 /* JP Z, nn */
-void Processor::JP_Z_nn()
+void Processor::JP_Z_nn() // 0xCA
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (IsFlagSet(FLAG_ZERO))
+	{
+		PC = memory->ReadWord(PC++);
+	}
 }
 
 /* CALL Z, nn */
-void Processor::CALL_Z_nn()
+void Processor::CALL_Z_nn() // 0xCC
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (IsFlagSet(FLAG_ZERO))
+	{
+		SP -= 2;
+		memory->WriteWord(SP, PC + 2);
+		PC = memory->ReadWord(PC);
+	}
 }
 
 /* CALL nn */
-void Processor::CALL_nn()
+void Processor::CALL_nn() // 0xCD
 {
-	// Not implemented yet
-	UnknownOpcode();
+	SP -= 2;
+	memory->WriteWord(SP, PC + 2);
+	PC = memory->ReadWord(PC);
 }
 
 /* ADC A, n */
-void Processor::ADC_A_n()
+void Processor::ADC_A_n() // 0xCE
 {
 	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
 	A += (memory->ReadByte(PC++) + carry);
-	//TODO flags
+	DisableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* RST 0x08 */
-void Processor::RST_0x08()
+void Processor::RST_0x08() // 0xCF
 {
-	// Not implemented yet
-	UnknownOpcode();
+	StackPush(PC);
+	PC = 0x08;
 }
 
 /* RET NC */
-void Processor::RET_NC()
+void Processor::RET_NC() // 0xD0
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (!IsFlagSet(FLAG_CARRY))
+	{
+		StackPop(PC);
+	}
 }
 
 /* POP DE */
-void Processor::POP_DE()
+void Processor::POP_DE() // 0xD1
 {
-	// Not implemented yet
-	UnknownOpcode();
+	StackPop(DE);
 }
 
 /* JP NC, nn */
-void Processor::JP_NC_nn()
+void Processor::JP_NC_nn() // 0xD2
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (!IsFlagSet(FLAG_CARRY))
+	{
+		PC = memory->ReadWord(PC++);
+	}
 }
 
 /* CALL NC, nn */
-void Processor::CALL_NC_nn()
+void Processor::CALL_NC_nn() // 0xD4
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (!IsFlagSet(FLAG_CARRY))
+	{
+		SP -= 2;
+		memory->WriteWord(SP, PC + 2);
+		PC = memory->ReadWord(PC);
+	}
 }
 
 /* PUSH DE */
-void Processor::PUSH_DE()
+void Processor::PUSH_DE() // 0xD5
 {
-	// Not implemented yet
-	UnknownOpcode();
+	StackPush(DE);
 }
 
 /* SUB n */
-void Processor::SUB_n()
+void Processor::SUB_n() // 0xD6
 {
 	A -= memory->ReadByte(PC++);
-	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* RST 0x10 */
-void Processor::RST_0x10()
+void Processor::RST_0x10() // 0xD7
 {
-	// Not implemented yet
-	UnknownOpcode();
+	StackPush(PC);
+	PC = 0x10;
 }
 
 /* RET C */
-void Processor::RET_C()
+void Processor::RET_C() // 0xD8
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (IsFlagSet(FLAG_CARRY))
+	{
+		StackPop(PC);
+	}
 }
 
 /* RETI */
-void Processor::RETI()
+void Processor::RETI() // 0xD9
 {
-	// Not implemented yet
-	UnknownOpcode();
+	StackPop(PC);
+	ime = true;
 }
 
 /* JP C, nn */
-void Processor::JP_C_nn()
+void Processor::JP_C_nn() // 0xDA
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (IsFlagSet(FLAG_CARRY))
+	{
+		PC = memory->ReadWord(PC++);
+	}
 }
 
 /* CALL C, nn */
-void Processor::CALL_C_nn()
+void Processor::CALL_C_nn() // 0xDC
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (IsFlagSet(FLAG_CARRY))
+	{
+		SP -= 2;
+		memory->WriteWord(SP, PC + 2);
+		PC = memory->ReadWord(PC);
+	}
 }
 
 /* SBC A, n */
-void Processor::SBC_A_n()
+void Processor::SBC_A_n() // 0xDE
 {
 	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
 	A -= (memory->ReadByte(PC++) + carry);
-	//TODO flags
+	EnableFlag(FLAG_SUB);
+	if (A == 0) EnableFlag(FLAG_ZERO);
+	if (A < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* RST 0x18 */
-void Processor::RST_0x18()
+void Processor::RST_0x18() // 0xDF
 {
-	// Not implemented yet
-	UnknownOpcode();
+	StackPush(PC);
+	PC = 0x18;
 }
 
 /* LD (0xFF00+n), A */
-void Processor::LD_MEM_0xFF00_n_A()
+void Processor::LD_MEM_0xFF00_n_A() // 0xE0
 {
-	memory->WriteWord(static_cast<uint16>(0xFF00 + memory->ReadWord(PC++)), A);
+	memory->WriteWord(0xFF00 + memory->ReadWord(PC++), A);
 }
 
 /* POP HL */
-void Processor::POP_HL()
+void Processor::POP_HL() // 0xE1
 {
-	// Not implemented yet
-	UnknownOpcode();
+	StackPop(HL);
 }
 
 /* LD (0xFF00+C), A */
-void Processor::LD_MEM_0xFF00_C_A()
+void Processor::LD_MEM_0xFF00_C_A() // 0xE2
 {
 	memory->WriteByte(0xFF00 + C, A);
 }
 
 /* PUSH HL */
-void Processor::PUSH_HL()
+void Processor::PUSH_HL() // 0xE5
 {
-	// Not implemented yet
-	UnknownOpcode();
+	StackPush(HL);
 }
 
 /* AND n */
-void Processor::AND_n()
+void Processor::AND_n() // 0xE6
 {
 	A &= memory->ReadByte(PC++);
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* RST 0x20 */
-void Processor::RST_0x20()
+void Processor::RST_0x20() // 0xE7
 {
-	// Not implemented yet
-	UnknownOpcode();
+	StackPush(PC);
+	PC = 0x20;
 }
 
 /* ADD SP, n */
-void Processor::ADD_SP_n()
+void Processor::ADD_SP_n() // 0xE8
 {
-	A += memory->ReadByte(PC++);
-	//TODO flags
+	SP += memory->ReadByte(PC++);
+	DisableFlag(FLAG_SUB);
+	if (SP == 0) EnableFlag(FLAG_ZERO);
+	if (SP > 0xFF) EnableFlag(FLAG_CARRY);
 }
 
 /* JP (HL) */
-void Processor::JP_MEM_HL()
+void Processor::JP_MEM_HL() // 0xE9
 {
-	// Not implemented yet
-	UnknownOpcode();
+	PC = memory->ReadWord(PC++);
 }
 
 /* LD (nn), A */
-void Processor::LD_MEM_nn_A()
+void Processor::LD_MEM_nn_A() // 0xEA
 {
 	memory->WriteWord(memory->ReadWord(PC++), A);
 }
 
 /* XOR n */
-void Processor::XOR_n()
+void Processor::XOR_n() // 0xEE
 {
 	A ^= memory->ReadByte(PC++);
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* RST 0x28 */
-void Processor::RST_0x28()
+void Processor::RST_0x28() // 0xEF
 {
-	// Not implemented yet
-	UnknownOpcode();
+	StackPush(PC);
+	PC = 0x28;
 }
 
 /* LD A, (0xFF00+n) */
-void Processor::LD_A_MEM_0xFF00_n()
+void Processor::LD_A_MEM_0xFF00_n() // 0xF0
 {
 	A = memory->ReadByte(0xFF00 + PC++);
 }
 
 /* POP AF */
-void Processor::POP_AF()
+void Processor::POP_AF() // 0xF1
 {
-	// Not implemented yet
-	UnknownOpcode();
+	StackPop(AF);
 }
 
 /* LD A, (0xFF00+C) */
-void Processor::LD_A_MEM_0xFF00_C()
+void Processor::LD_A_MEM_0xFF00_C() // 0xF2
 {
-	A = (0xFF00+C);
+	A = memory->ReadByte(0xFF00 + C);
 }
 
 /* DI */
-void Processor::DI()
+void Processor::DI() // 0xF3
 {
-	// Not implemented yet
-	UnknownOpcode();
+	ime = false;
 }
 
 /* PUSH AF */
-void Processor::PUSH_AF()
+void Processor::PUSH_AF() // 0xF5
 {
-	// Not implemented yet
-	UnknownOpcode();
+	StackPush(AF);
 }
 
 /* OR n */
-void Processor::OR_n()
+void Processor::OR_n() // 0xF6
 {
 	A |= memory->ReadByte(PC++);
-	//TODO flags
+	ClearFlags();
+	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
 /* RST 0x30 */
-void Processor::RST_0x30()
+void Processor::RST_0x30() // 0xF7
 {
-	// Not implemented yet
-	UnknownOpcode();
+	StackPush(PC);
+	PC = 0x30;
 }
 
 /* LD HL, SP */
-void Processor::LD_HL_SP()
+void Processor::LD_HL_SP() // 0xF8
 {
 	HL = SP;
 }
 
 /* LD SP, HL */
-void Processor::LD_SP_HL()
+void Processor::LD_SP_HL() // 0xF9
 {
 	SP = HL;
 }
 
 /* LD A, (nn) */
-void Processor::LD_A_MEM_nn()
+void Processor::LD_A_MEM_nn() // 0xFA
 {
 	A = memory->ReadByte(memory->ReadWord(PC++));
 }
 
 /* EI */
-void Processor::EI()
+void Processor::EI() // 0xFB
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* CP n */
-void Processor::CP_n()
+void Processor::CP_n() // 0xFE
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 reg = A;
+	reg -= memory->ReadByte(PC++);
+	EnableFlag(FLAG_SUB);
+	if (reg == 0) EnableFlag(FLAG_ZERO);
+	if (reg < 0) EnableFlag(FLAG_CARRY);
 }
 
 /* RST 0x38 */
-void Processor::RST_0x38()
+void Processor::RST_0x38() // 0xFF
 {
-	// Not implemented yet
-	UnknownOpcode();
+	StackPush(PC);
+	PC = 0x38;
 }
 
 // CB Obcodes
 
 /* RLC B */
-void Processor::RLC_B()
+void Processor::RLC_B() // 0x00
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RLC C */
-void Processor::RLC_C()
+void Processor::RLC_C() // 0x01
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RLC D */
-void Processor::RLC_D()
+void Processor::RLC_D() // 0x02
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RLC E */
-void Processor::RLC_E()
+void Processor::RLC_E() // 0x03
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RLC H */
-void Processor::RLC_H()
+void Processor::RLC_H() // 0x04
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RLC L */
-void Processor::RLC_L()
+void Processor::RLC_L() // 0x05
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RLC (HL) */
-void Processor::RLC_MEM_HL()
+void Processor::RLC_MEM_HL() // 0x06
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RLC A */
-void Processor::RLC_A()
+void Processor::RLC_A() // 0x07
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RRC B */
-void Processor::RRC_B()
+void Processor::RRC_B() // 0x08
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RRC C */
-void Processor::RRC_C()
+void Processor::RRC_C() // 0x09
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RRC D */
-void Processor::RRC_D()
+void Processor::RRC_D() // 0x0A
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RRC E */
-void Processor::RRC_E()
+void Processor::RRC_E() // 0x0B
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RRC H */
-void Processor::RRC_H()
+void Processor::RRC_H() // 0x0C
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RRC L */
-void Processor::RRC_L()
+void Processor::RRC_L() // 0x0D
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RRC (HL) */
-void Processor::RRC_MEM_HL()
+void Processor::RRC_MEM_HL() // 0x0E
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RRC A */
-void Processor::RRC_A()
+void Processor::RRC_A() // 0x0F
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RL B */
-void Processor::RL_B()
+void Processor::RL_B() // 0x10
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RL C */
-void Processor::RL_C()
+void Processor::RL_C() // 0x11
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RL D */
-void Processor::RL_D()
+void Processor::RL_D() // 0x12
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RL E */
-void Processor::RL_E()
+void Processor::RL_E() // 0x13
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RL H */
-void Processor::RL_H()
+void Processor::RL_H() // 0x14
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RL L  */
-void Processor::RL_L()
+void Processor::RL_L() // 0x15
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RL (HL) */
-void Processor::RL_MEM_HL()
+void Processor::RL_MEM_HL() // 0x16
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RL A */
-void Processor::RL_A()
+void Processor::RL_A() // 0x17
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RR B */
-void Processor::RR_B()
+void Processor::RR_B() // 0x18
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RR C */
-void Processor::RR_C()
+void Processor::RR_C() // 0x19
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RR D */
-void Processor::RR_D()
+void Processor::RR_D() // 0x1A
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RR E */
-void Processor::RR_E()
+void Processor::RR_E() // 0x1B
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RR H */
-void Processor::RR_H()
+void Processor::RR_H() // 0x1C
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RR L */
-void Processor::RR_L()
+void Processor::RR_L() // 0x1D
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RR (HL) */
-void Processor::RR_MEM_HL()
+void Processor::RR_MEM_HL() // 0x1E
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* RR A */
-void Processor::RR_A()
+void Processor::RR_A() // 0x1F
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SLA B */
-void Processor::SLA_B()
+void Processor::SLA_B() // 0x20
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SLA C */
-void Processor::SLA_C()
+void Processor::SLA_C() // 0x21
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SLA D */
-void Processor::SLA_D()
+void Processor::SLA_D() // 0x22
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SLA E */
-void Processor::SLA_E()
+void Processor::SLA_E() // 0x23
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SLA H */
-void Processor::SLA_H()
+void Processor::SLA_H() // 0x24
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SLA L */
-void Processor::SLA_L()
+void Processor::SLA_L() // 0x25
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SLA (HL) */
-void Processor::SLA_MEM_HL()
+void Processor::SLA_MEM_HL() // 0x26
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SLA A */
-void Processor::SLA_A()
+void Processor::SLA_A() // 0x27
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SRA B */
-void Processor::SRA_B()
+void Processor::SRA_B() // 0x28
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SRA C */
-void Processor::SRA_C()
+void Processor::SRA_C() // 0x29
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SRA D */
-void Processor::SRA_D()
+void Processor::SRA_D() // 0x2A
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SRA E */
-void Processor::SRA_E()
+void Processor::SRA_E() // 0x2B
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SRA H */
-void Processor::SRA_H()
+void Processor::SRA_H() // 0x2C
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SRA L */
-void Processor::SRA_L()
+void Processor::SRA_L() // 0x2D
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SRA (HL) */
-void Processor::SRA_MEM_HL()
+void Processor::SRA_MEM_HL() // 0x2E
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SRA A */
-void Processor::SRA_A()
+void Processor::SRA_A() // 0x2F
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SWAP B */
-void Processor::SWAP_B()
+void Processor::SWAP_B() // 0x30
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SWAP C */
-void Processor::SWAP_C()
+void Processor::SWAP_C() // 0x31
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SWAP D */
-void Processor::SWAP_D()
+void Processor::SWAP_D() // 0x32
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SWAP E */
-void Processor::SWAP_E()
+void Processor::SWAP_E() // 0x33
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SWAP H */
-void Processor::SWAP_H()
+void Processor::SWAP_H() // 0x34
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SWAP L */
-void Processor::SWAP_L()
+void Processor::SWAP_L() // 0x35
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SWAP (HL) */
-void Processor::SWAP_MEM_HL()
+void Processor::SWAP_MEM_HL() // 0x36
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SWAP A */
-void Processor::SWAP_A()
+void Processor::SWAP_A() // 0x37
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SRL B */
-void Processor::SRL_B()
+void Processor::SRL_B() // 0x38
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SRL C */
-void Processor::SRL_C()
+void Processor::SRL_C() // 0x39
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SRL D */
-void Processor::SRL_D()
+void Processor::SRL_D() // 0x3A
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SRL E */
-void Processor::SRL_E()
+void Processor::SRL_E() // 0x3B
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SRL H */
-void Processor::SRL_H()
+void Processor::SRL_H() // 0x3C
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SRL L */
-void Processor::SRL_L()
+void Processor::SRL_L() // 0x3D
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SRL (HL) */
-void Processor::SRL_MEM_HL()
+void Processor::SRL_MEM_HL() // 0x3E
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* SRL A */
-void Processor::SRL_A()
+void Processor::SRL_A() // 0x3F
 {
 	// Not implemented yet
 	UnknownOpcode();
 }
 
 /* BIT 0 B */
-void Processor::BIT_0_B()
+void Processor::BIT_0_B() // 0x40
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((B >> 0) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 0 C */
-void Processor::BIT_0_C()
+void Processor::BIT_0_C() // 0x41
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((C >> 0) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 0 D */
-void Processor::BIT_0_D()
+void Processor::BIT_0_D() // 0x42
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((D >> 0) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 0 E */
-void Processor::BIT_0_E()
+void Processor::BIT_0_E() // 0x43
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((E >> 0) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 0 H */
-void Processor::BIT_0_H()
+void Processor::BIT_0_H() // 0x44
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((H >> 0) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 0 L */
-void Processor::BIT_0_L()
+void Processor::BIT_0_L() // 0x45
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((L >> 0) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 0 (HL) */
-void Processor::BIT_0_MEM_HL()
+void Processor::BIT_0_MEM_HL() // 0x46
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((memory->ReadByte(HL) >> 0) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 0 A */
-void Processor::BIT_0_A()
+void Processor::BIT_0_A() // 0x47
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((A >> 0) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 1 B */
-void Processor::BIT_1_B()
+void Processor::BIT_1_B() // 0x48
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((B >> 1) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 1 C */
-void Processor::BIT_1_C()
+void Processor::BIT_1_C() // 0x49
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((C >> 1) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 1 D */
-void Processor::BIT_1_D()
+void Processor::BIT_1_D() // 0x4A
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((D >> 1) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 1 E */
-void Processor::BIT_1_E()
+void Processor::BIT_1_E() // 0x4B
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((E >> 1) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 1 H */
-void Processor::BIT_1_H()
+void Processor::BIT_1_H() // 0x4C
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((H >> 1) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 1 L */
-void Processor::BIT_1_L()
+void Processor::BIT_1_L() // 0x4D
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((L >> 1) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 1 (HL) */
-void Processor::BIT_1_MEM_HL()
+void Processor::BIT_1_MEM_HL() // 0x4E
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((memory->ReadByte(HL) >> 1) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 1 A */
-void Processor::BIT_1_A()
+void Processor::BIT_1_A() // 0x4F
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((A >> 1) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 2 B */
-void Processor::BIT_2_B()
+void Processor::BIT_2_B() // 0x50
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((B >> 2) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 2 C */
-void Processor::BIT_2_C()
+void Processor::BIT_2_C() // 0x51
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((C >> 2) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 2 D */
-void Processor::BIT_2_D()
+void Processor::BIT_2_D() // 0x52
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((D >> 2) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 2 E */
-void Processor::BIT_2_E()
+void Processor::BIT_2_E() // 0x53
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((E >> 2) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 2 H */
-void Processor::BIT_2_H()
+void Processor::BIT_2_H() // 0x54
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((H >> 2) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 2 L */
-void Processor::BIT_2_L()
+void Processor::BIT_2_L() // 0x55
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((L >> 2) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 2 (HL) */
-void Processor::BIT_2_MEM_HL()
+void Processor::BIT_2_MEM_HL() // 0x56
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((memory->ReadByte(HL) >> 2) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 2 A */
-void Processor::BIT_2_A()
+void Processor::BIT_2_A() // 0x57
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((A >> 2) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 3 B */
-void Processor::BIT_3_B()
+void Processor::BIT_3_B() // 0x58
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((B >> 3) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 3 C */
-void Processor::BIT_3_C()
+void Processor::BIT_3_C() // 0x59
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((C >> 3) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 3 D */
-void Processor::BIT_3_D()
+void Processor::BIT_3_D() // 0x5A
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((D >> 3) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 3 E */
-void Processor::BIT_3_E()
+void Processor::BIT_3_E() // 0x5B
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((E >> 3) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 3 H */
-void Processor::BIT_3_H()
+void Processor::BIT_3_H() // 0x5C
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((H >> 3) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 3 L */
-void Processor::BIT_3_L()
+void Processor::BIT_3_L() // 0x5D
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((L >> 3) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 3 (HL) */
-void Processor::BIT_3_MEM_HL()
+void Processor::BIT_3_MEM_HL() // 0x5E
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((memory->ReadByte(HL) >> 3) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 3 A */
-void Processor::BIT_3_A()
+void Processor::BIT_3_A() // 0x5F
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((A >> 3) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 4 B */
-void Processor::BIT_4_B()
+void Processor::BIT_4_B() // 0x60
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((B >> 4) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 4 C */
-void Processor::BIT_4_C()
+void Processor::BIT_4_C() // 0x61
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((C >> 4) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 4 D */
-void Processor::BIT_4_D()
+void Processor::BIT_4_D() // 0x62
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((D >> 4) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 4 E */
-void Processor::BIT_4_E()
+void Processor::BIT_4_E() // 0x63
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((E >> 4) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 4 H */
-void Processor::BIT_4_H()
+void Processor::BIT_4_H() // 0x64
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((H >> 4) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 4 L */
-void Processor::BIT_4_L()
+void Processor::BIT_4_L() // 0x65
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((L >> 4) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 4 (HL) */
-void Processor::BIT_4_MEM_HL()
+void Processor::BIT_4_MEM_HL() // 0x66
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((memory->ReadByte(HL) >> 4) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 4 A */
-void Processor::BIT_4_A()
+void Processor::BIT_4_A() // 0x67
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((A >> 4) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 5 B */
-void Processor::BIT_5_B()
+void Processor::BIT_5_B() // 0x68
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((B >> 5) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 5 C */
-void Processor::BIT_5_C()
+void Processor::BIT_5_C() // 0x69
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((C >> 5) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 5 D */
-void Processor::BIT_5_D()
+void Processor::BIT_5_D() // 0x6A
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((D >> 5) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 5 E */
-void Processor::BIT_5_E()
+void Processor::BIT_5_E() // 0x6B
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((E >> 5) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 5 H */
-void Processor::BIT_5_H()
+void Processor::BIT_5_H() // 0x6C
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((H >> 5) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 5 L */
-void Processor::BIT_5_L()
+void Processor::BIT_5_L() // 0x6D
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((L >> 5) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 5 (HL) */
-void Processor::BIT_5_MEM_HL()
+void Processor::BIT_5_MEM_HL() // 0x6E
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((memory->ReadByte(HL) >> 5) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 5 A */
-void Processor::BIT_5_A()
+void Processor::BIT_5_A() // 0x6F
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((A >> 5) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 6 B */
-void Processor::BIT_6_B()
+void Processor::BIT_6_B() // 0x70
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((B >> 6) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 6 C */
-void Processor::BIT_6_C()
+void Processor::BIT_6_C() // 0x71
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((C >> 6) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 6 D */
-void Processor::BIT_6_D()
+void Processor::BIT_6_D() // 0x72
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((D >> 6) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 6 E */
-void Processor::BIT_6_E()
+void Processor::BIT_6_E() // 0x73
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((E >> 6) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 6 H */
-void Processor::BIT_6_H()
+void Processor::BIT_6_H() // 0x74
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((H >> 6) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 6 L */
-void Processor::BIT_6_L()
+void Processor::BIT_6_L() // 0x75
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((L >> 6) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 6 (HL) */
-void Processor::BIT_6_MEM_HL()
+void Processor::BIT_6_MEM_HL() // 0x76
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((memory->ReadByte(HL) >> 6) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 6 A */
-void Processor::BIT_6_A()
+void Processor::BIT_6_A() // 0x77
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((A >> 6) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 7 B */
-void Processor::BIT_7_B()
+void Processor::BIT_7_B() // 0x78
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((B >> 7) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 7 C */
-void Processor::BIT_7_C()
+void Processor::BIT_7_C() // 0x79
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((C >> 7) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 7 D */
-void Processor::BIT_7_D()
+void Processor::BIT_7_D() // 0x7A
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((D >> 7) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 7 E */
-void Processor::BIT_7_E()
+void Processor::BIT_7_E() // 0x7B
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((E >> 7) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 7 H */
-void Processor::BIT_7_H()
+void Processor::BIT_7_H() // 0x7C
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((H >> 7) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 7 L */
-void Processor::BIT_7_L()
+void Processor::BIT_7_L() // 0x7D
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((L >> 7) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 7 (HL) */
-void Processor::BIT_7_MEM_HL()
+void Processor::BIT_7_MEM_HL() // 0x7E
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((memory->ReadByte(HL) >> 7) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* BIT 7 A */
-void Processor::BIT_7_A()
+void Processor::BIT_7_A() // 0x7F
 {
-	// Not implemented yet
-	UnknownOpcode();
+	if (((A >> 7) & 0x01) == 0) EnableFlag(FLAG_ZERO);
+	DisableFlag(FLAG_SUB);
+	EnableFlag(FLAG_HALFCARRY);
 }
 
 /* RES 0 B */
-void Processor::RES_0_B()
+void Processor::RES_0_B() // 0x80
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = ClearBit(B, 0);
 }
 
 /* RES 0 C */
-void Processor::RES_0_C()
+void Processor::RES_0_C() // 0x81
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = ClearBit(C, 0);
 }
 
 /* RES 0 D */
-void Processor::RES_0_D()
+void Processor::RES_0_D() // 0x82
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = ClearBit(D, 0);
 }
 
 /* RES 0 E */
-void Processor::RES_0_E()
+void Processor::RES_0_E() // 0x83
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = ClearBit(E, 0);
 }
 
 /* RES 0 H */
-void Processor::RES_0_H()
+void Processor::RES_0_H() // 0x84
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = ClearBit(H, 0);
 }
 
 /* RES 0 L */
-void Processor::RES_0_L()
+void Processor::RES_0_L() // 0x85
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = ClearBit(L, 0);
 }
 
 /* RES 0 (HL) */
-void Processor::RES_0_MEM_HL()
+void Processor::RES_0_MEM_HL() // 0x86
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 result = ClearBit(memory->ReadByte(HL), 0);
+	memory->WriteByte(HL, result);
 }
 
 /* RES 0 A */
-void Processor::RES_0_A()
+void Processor::RES_0_A() // 0x87
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = ClearBit(A, 0);
 }
 
 /* RES 1 B */
-void Processor::RES_1_B()
+void Processor::RES_1_B() // 0x88
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = ClearBit(B, 1);
 }
 
 /* RES 1 C */
-void Processor::RES_1_C()
+void Processor::RES_1_C() // 0x89
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = ClearBit(C, 1);
 }
 
 /* RES 1 D */
-void Processor::RES_1_D()
+void Processor::RES_1_D() // 0x8A
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = ClearBit(D, 1);
 }
 
 /* RES 1 E */
-void Processor::RES_1_E()
+void Processor::RES_1_E() // 0x8B
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = ClearBit(E, 1);
 }
 
 /* RES 1 H */
-void Processor::RES_1_H()
+void Processor::RES_1_H() // 0x8C
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = ClearBit(H, 1);
 }
 
 /* RES 1 L */
-void Processor::RES_1_L()
+void Processor::RES_1_L() // 0x8D
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = ClearBit(L, 1);
 }
 
 /* RES 1 (HL) */
-void Processor::RES_1_MEM_HL()
+void Processor::RES_1_MEM_HL() // 0x8E
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 result = ClearBit(memory->ReadByte(HL), 1);
+	memory->WriteByte(HL, result);
 }
 
 /* RES 1 A */
-void Processor::RES_1_A()
+void Processor::RES_1_A() // 0x8F
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = ClearBit(A, 1);
 }
 
 /* RES 2 B */
-void Processor::RES_2_B()
+void Processor::RES_2_B() // 0x90
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = ClearBit(B, 2);
 }
 
 /* RES 2 C */
-void Processor::RES_2_C()
+void Processor::RES_2_C() // 0x91
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = ClearBit(C, 2);
 }
 
 /* RES 2 D */
-void Processor::RES_2_D()
+void Processor::RES_2_D() // 0x92
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = ClearBit(D, 2);
 }
 
 /* RES 2 E */
-void Processor::RES_2_E()
+void Processor::RES_2_E() // 0x93
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = ClearBit(E, 2);
 }
 
 /* RES 2 H */
-void Processor::RES_2_H()
+void Processor::RES_2_H() // 0x94
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = ClearBit(H, 2);
 }
 
 /* RES 2 L */
-void Processor::RES_2_L()
+void Processor::RES_2_L() // 0x95
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = ClearBit(L, 2);
 }
 
 /* RES 2 (HL) */
-void Processor::RES_2_MEM_HL()
+void Processor::RES_2_MEM_HL() // 0x96
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 result = ClearBit(memory->ReadByte(HL), 2);
+	memory->WriteByte(HL, result);
 }
 
 /* RES 2 A */
-void Processor::RES_2_A()
+void Processor::RES_2_A() // 0x97
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = ClearBit(A, 2);
 }
 
 /* RES 3 B */
-void Processor::RES_3_B()
+void Processor::RES_3_B() // 0x98
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = ClearBit(B, 3);
 }
 
 /* RES 3 C */
-void Processor::RES_3_C()
+void Processor::RES_3_C() // 0x99
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = ClearBit(C, 3);
 }
 
 /* RES 3 D */
-void Processor::RES_3_D()
+void Processor::RES_3_D() // 0x9A
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = ClearBit(D, 3);
 }
 
 /* RES 3 E */
-void Processor::RES_3_E()
+void Processor::RES_3_E() // 0x9B
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = ClearBit(E, 3);
 }
 
 /* RES 3 H */
-void Processor::RES_3_H()
+void Processor::RES_3_H() // 0x9C
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = ClearBit(H, 3);
 }
 
 /* RES 3 L */
-void Processor::RES_3_L()
+void Processor::RES_3_L() // 0x9D
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = ClearBit(L, 3);
 }
 
 /* RES 3 (HL) */
-void Processor::RES_3_MEM_HL()
+void Processor::RES_3_MEM_HL() // 0x9E
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 result = ClearBit(memory->ReadByte(HL), 3);
+	memory->WriteByte(HL, result);
 }
 
 /* RES 3 A */
-void Processor::RES_3_A()
+void Processor::RES_3_A() // 0x9F
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = ClearBit(A, 3);
 }
 
 /* RES 4 B */
-void Processor::RES_4_B()
+void Processor::RES_4_B() // 0xA0
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = ClearBit(B, 4);
 }
 
 /* RES 4 C */
-void Processor::RES_4_C()
+void Processor::RES_4_C() // 0xA1
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = ClearBit(C, 4);
 }
 
 /* RES 4 D */
-void Processor::RES_4_D()
+void Processor::RES_4_D() // 0xA2
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = ClearBit(D, 4);
 }
 
 /* RES 4 E */
-void Processor::RES_4_E()
+void Processor::RES_4_E() // 0xA3
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = ClearBit(E, 4);
 }
 
 /* RES 4 H */
-void Processor::RES_4_H()
+void Processor::RES_4_H() // 0xA4
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = ClearBit(H, 4);
 }
 
 /* RES 4 L */
-void Processor::RES_4_L()
+void Processor::RES_4_L() // 0xA5
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = ClearBit(L, 4);
 }
 
 /* RES 4 (HL) */
-void Processor::RES_4_MEM_HL()
+void Processor::RES_4_MEM_HL() // 0xA6
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 result = ClearBit(memory->ReadByte(HL), 4);
+	memory->WriteByte(HL, result);
 }
 
 /* RES 4 A */
-void Processor::RES_4_A()
+void Processor::RES_4_A() // 0xA7
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = ClearBit(A, 4);
 }
 
 /* RES 5 B */
-void Processor::RES_5_B()
+void Processor::RES_5_B() // 0xA8
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = ClearBit(B, 5);
 }
 
 /* RES 5 C */
-void Processor::RES_5_C()
+void Processor::RES_5_C() // 0xA9
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = ClearBit(C, 5);
 }
 
 /* RES 5 D */
-void Processor::RES_5_D()
+void Processor::RES_5_D() // 0xAA
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = ClearBit(D, 5);
 }
 
 /* RES 5 E */
-void Processor::RES_5_E()
+void Processor::RES_5_E() // 0xAB
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = ClearBit(E, 5);
 }
 
 /* RES 5 H */
-void Processor::RES_5_H()
+void Processor::RES_5_H() // 0xAC
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = ClearBit(H, 5);
 }
 
 /* RES 5 L */
-void Processor::RES_5_L()
+void Processor::RES_5_L() // 0xAD
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = ClearBit(L, 5);
 }
 
 /* RES 5 (HL) */
-void Processor::RES_5_MEM_HL()
+void Processor::RES_5_MEM_HL() // 0xAE
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 result = ClearBit(memory->ReadByte(HL), 5);
+	memory->WriteByte(HL, result);
 }
 
 /* RES 5 A */
-void Processor::RES_5_A()
+void Processor::RES_5_A() // 0xAF
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = ClearBit(A, 5);
 }
 
 /* RES 6 B */
-void Processor::RES_6_B()
+void Processor::RES_6_B() // 0xB0
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = ClearBit(B, 6);
 }
 
 /* RES 6 C */
-void Processor::RES_6_C()
+void Processor::RES_6_C() // 0xB1
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = ClearBit(C, 6);
 }
 
 /* RES 6 D */
-void Processor::RES_6_D()
+void Processor::RES_6_D() // 0xB2
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = ClearBit(D, 6);
 }
 
 /* RES 6 E */
-void Processor::RES_6_E()
+void Processor::RES_6_E() // 0xB3
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = ClearBit(E, 6);
 }
 
 /* RES 6 H */
-void Processor::RES_6_H()
+void Processor::RES_6_H() // 0xB4
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = ClearBit(H, 6);
 }
 
 /* RES 6 L */
-void Processor::RES_6_L()
+void Processor::RES_6_L() // 0xB5
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = ClearBit(L, 6);
 }
 
 /* RES 6 (HL) */
-void Processor::RES_6_MEM_HL()
+void Processor::RES_6_MEM_HL() // 0xB6
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 result = ClearBit(memory->ReadByte(HL), 6);
+	memory->WriteByte(HL, result);
 }
 
 /* RES 6 A */
-void Processor::RES_6_A()
+void Processor::RES_6_A() // 0xB7
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = ClearBit(A, 6);
 }
 
 /* RES 7 B */
-void Processor::RES_7_B()
+void Processor::RES_7_B() // 0xB8
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = ClearBit(B, 7);
 }
 
 /* RES 7 C */
-void Processor::RES_7_C()
+void Processor::RES_7_C() // 0xB9
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = ClearBit(C, 7);
 }
 
 /* RES 7 D */
-void Processor::RES_7_D()
+void Processor::RES_7_D() // 0xBA
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = ClearBit(D, 7);
 }
 
 /* RES 7 E */
-void Processor::RES_7_E()
+void Processor::RES_7_E() // 0xBB
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = ClearBit(E, 7);
 }
 
 /* RES 7 H */
-void Processor::RES_7_H()
+void Processor::RES_7_H() // 0xBC
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = ClearBit(H, 7);
 }
 
 /* RES 7 L */
-void Processor::RES_7_L()
+void Processor::RES_7_L() // 0xBD
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = ClearBit(L, 7);
 }
 
 /* RES 7 (HL) */
-void Processor::RES_7_MEM_HL()
+void Processor::RES_7_MEM_HL() // 0xBE
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 result = ClearBit(memory->ReadByte(HL), 7);
+	memory->WriteByte(HL, result);
 }
 
 /* RES 7 A */
-void Processor::RES_7_A()
+void Processor::RES_7_A() // 0xBF
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = ClearBit(A, 7);
 }
 
 /* SET 0 B */
-void Processor::SET_0_B()
+void Processor::SET_0_B() // 0xC0
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = SetBit(B, 0);
 }
 
 /* SET 0 C */
-void Processor::SET_0_C()
+void Processor::SET_0_C() // 0xC1
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = SetBit(C, 0);
 }
 
 /* SET 0 D */
-void Processor::SET_0_D()
+void Processor::SET_0_D() // 0xC2
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = SetBit(D, 0);
 }
 
 /* SET 0 E */
-void Processor::SET_0_E()
+void Processor::SET_0_E() // 0xC3
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = SetBit(E, 0);
 }
 
 /* SET 0 H */
-void Processor::SET_0_H()
+void Processor::SET_0_H() // 0xC4
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = SetBit(H, 0);
 }
 
 /* SET 0 L */
-void Processor::SET_0_L()
+void Processor::SET_0_L() // 0xC5
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = SetBit(L, 0);
 }
 
 /* SET 0 (HL) */
-void Processor::SET_0_MEM_HL()
+void Processor::SET_0_MEM_HL() // 0xC6
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 result = SetBit(memory->ReadByte(HL), 0);
+	memory->WriteByte(HL, result);
 }
 
 /* SET 0 A */
-void Processor::SET_0_A()
+void Processor::SET_0_A() // 0xC7
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = SetBit(A, 0);
 }
 
 /* SET 1 B */
-void Processor::SET_1_B()
+void Processor::SET_1_B() // 0xC8
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = SetBit(B, 1);
 }
 
 /* SET 1 C */
-void Processor::SET_1_C()
+void Processor::SET_1_C() // 0xC9
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = SetBit(C, 1);
 }
 
 /* SET 1 D */
-void Processor::SET_1_D()
+void Processor::SET_1_D() // 0xCA
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = SetBit(D, 1);
 }
 
 /* SET 1 E */
-void Processor::SET_1_E()
+void Processor::SET_1_E() // 0xCB
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = SetBit(E, 1);
 }
 
 /* SET 1 H */
-void Processor::SET_1_H()
+void Processor::SET_1_H() // 0xCC
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = SetBit(H, 1);
 }
 
 /* SET 1 L */
-void Processor::SET_1_L()
+void Processor::SET_1_L() // 0xCD
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = SetBit(L, 1);
 }
 
 /* SET 1 (HL) */
-void Processor::SET_1_MEM_HL()
+void Processor::SET_1_MEM_HL() // 0xCE
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 result = SetBit(memory->ReadByte(HL), 1);
+	memory->WriteByte(HL, result);
 }
 
 /* SET 1 A */
-void Processor::SET_1_A()
+void Processor::SET_1_A() // 0xCF
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = SetBit(A, 1);
 }
 
 /* SET 2 B */
-void Processor::SET_2_B()
+void Processor::SET_2_B() // 0xD0
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = SetBit(B, 2);
 }
 
 /* SET 2 C */
-void Processor::SET_2_C()
+void Processor::SET_2_C() // 0xD1
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = SetBit(C, 2);
 }
 
 /* SET 2 D */
-void Processor::SET_2_D()
+void Processor::SET_2_D() // 0xD2
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = SetBit(D, 2);
 }
 
 /* SET 2 E */
-void Processor::SET_2_E()
+void Processor::SET_2_E() // 0xD3
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = SetBit(E, 2);
 }
 
 /* SET 2 H */
-void Processor::SET_2_H()
+void Processor::SET_2_H() // 0xD4
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = SetBit(H, 2);
 }
 
 /* SET 2 L */
-void Processor::SET_2_L()
+void Processor::SET_2_L() // 0xD5
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = SetBit(L, 2);
 }
 
 /* SET 2 (HL) */
-void Processor::SET_2_MEM_HL()
+void Processor::SET_2_MEM_HL() // 0xD6
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 result = SetBit(memory->ReadByte(HL), 2);
+	memory->WriteByte(HL, result);
 }
 
 /* SET 2 A */
-void Processor::SET_2_A()
+void Processor::SET_2_A() // 0xD7
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = SetBit(A, 2);
 }
 
 /* SET 3 B */
-void Processor::SET_3_B()
+void Processor::SET_3_B() // 0xD8
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = SetBit(B, 3);
 }
 
 /* SET 3 C */
-void Processor::SET_3_C()
+void Processor::SET_3_C() // 0xD9
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = SetBit(C, 3);
 }
 
 /* SET 3 D */
-void Processor::SET_3_D()
+void Processor::SET_3_D() // 0xDA
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = SetBit(D, 3);
 }
 
 /* SET 3 E */
-void Processor::SET_3_E()
+void Processor::SET_3_E() // 0xDB
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = SetBit(E, 3);
 }
 
 /* SET 3 H */
-void Processor::SET_3_H()
+void Processor::SET_3_H() // 0xDC
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = SetBit(H, 3);
 }
 
 /* SET 3 L */
-void Processor::SET_3_L()
+void Processor::SET_3_L() // 0xDD
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = SetBit(L, 3);
 }
 
 /* SET 3 (HL) */
-void Processor::SET_3_MEM_HL()
+void Processor::SET_3_MEM_HL() // 0xDE
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 result = SetBit(memory->ReadByte(HL), 3);
+	memory->WriteByte(HL, result);
 }
 
 /* SET 3 A */
-void Processor::SET_3_A()
+void Processor::SET_3_A() // 0xDF
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = SetBit(A, 3);
 }
 
 /* SET 4 B */
-void Processor::SET_4_B()
+void Processor::SET_4_B() // 0xE0
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = SetBit(B, 4);
 }
 
 /* SET 4 C */
-void Processor::SET_4_C()
+void Processor::SET_4_C() // 0xE1
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = SetBit(C, 4);
 }
 
 /* SET 4 D */
-void Processor::SET_4_D()
+void Processor::SET_4_D() // 0xE2
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = SetBit(D, 4);
 }
 
 /* SET 4 E */
-void Processor::SET_4_E()
+void Processor::SET_4_E() // 0xE3
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = SetBit(E, 4);
 }
 
 /* SET 4 H */
-void Processor::SET_4_H()
+void Processor::SET_4_H() // 0xE4
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = SetBit(H, 4);
 }
 
 /* SET 4 L */
-void Processor::SET_4_L()
+void Processor::SET_4_L() // 0xE5
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = SetBit(L, 4);
 }
 
 /* SET 4 (HL) */
-void Processor::SET_4_MEM_HL()
+void Processor::SET_4_MEM_HL() // 0xE6
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 result = SetBit(memory->ReadByte(HL), 4);
+	memory->WriteByte(HL, result);
 }
 
 /* SET 4 A */
-void Processor::SET_4_A()
+void Processor::SET_4_A() // 0xE7
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = SetBit(A, 4);
 }
 
 /* SET 5 B */
-void Processor::SET_5_B()
+void Processor::SET_5_B() // 0xE8
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = SetBit(B, 5);
 }
 
 /* SET 5 C */
-void Processor::SET_5_C()
+void Processor::SET_5_C() // 0xE9
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = SetBit(C, 5);
 }
 
 /* SET 5 D */
-void Processor::SET_5_D()
+void Processor::SET_5_D() // 0xEA
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = SetBit(D, 5);
 }
 
 /* SET 5 E */
-void Processor::SET_5_E()
+void Processor::SET_5_E() // 0xEB
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = SetBit(E, 5);
 }
 
 /* SET 5 H */
-void Processor::SET_5_H()
+void Processor::SET_5_H() // 0xEC
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = SetBit(H, 5);
 }
 
 /* SET 5 L */
-void Processor::SET_5_L()
+void Processor::SET_5_L() // 0xED
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = SetBit(L, 5);
 }
 
 /* SET 5 (HL) */
-void Processor::SET_5_MEM_HL()
+void Processor::SET_5_MEM_HL() // 0xEE
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 result = SetBit(memory->ReadByte(HL), 5);
+	memory->WriteByte(HL, result);
 }
 
 /* SET 5 A */
-void Processor::SET_5_A()
+void Processor::SET_5_A() // 0xEF
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = SetBit(A, 5);
 }
 
 /* SET 6 B */
-void Processor::SET_6_B()
+void Processor::SET_6_B() // 0xF0
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = SetBit(B, 6);
 }
 
 /* SET 6 C */
-void Processor::SET_6_C()
+void Processor::SET_6_C() // 0xF1
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = SetBit(C, 6);
 }
 
 /* SET 6 D */
-void Processor::SET_6_D()
+void Processor::SET_6_D() // 0xF2
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = SetBit(D, 6);
 }
 
 /* SET 6 E */
-void Processor::SET_6_E()
+void Processor::SET_6_E() // 0xF3
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = SetBit(E, 6);
 }
 
 /* SET 6 H */
-void Processor::SET_6_H()
+void Processor::SET_6_H() // 0xF4
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = SetBit(H, 6);
 }
 
 /* SET 6 L */
-void Processor::SET_6_L()
+void Processor::SET_6_L() // 0xF5
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = SetBit(L, 6);
 }
 
 /* SET 6 (HL) */
-void Processor::SET_6_MEM_HL()
+void Processor::SET_6_MEM_HL() // 0xF6
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 result = SetBit(memory->ReadByte(HL), 6);
+	memory->WriteByte(HL, result);
 }
 
 /* SET 6 A */
-void Processor::SET_6_A()
+void Processor::SET_6_A() // 0xF7
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = SetBit(A, 6);
 }
 
 /* SET 7 B */
-void Processor::SET_7_B()
+void Processor::SET_7_B() // 0xF8
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = SetBit(B, 7);
 }
 
 /* SET 7 C */
-void Processor::SET_7_C()
+void Processor::SET_7_C() // 0xF9
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = SetBit(C, 7);
 }
 
 /* SET 7 D */
-void Processor::SET_7_D()
+void Processor::SET_7_D() // 0xFA
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = SetBit(D, 7);
 }
 
 /* SET 7 E */
-void Processor::SET_7_E()
+void Processor::SET_7_E() // 0xFB
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = SetBit(E, 7);
 }
 
 /* SET 7 H */
-void Processor::SET_7_H()
+void Processor::SET_7_H() // 0xFC
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = SetBit(H, 7);
 }
 
 /* SET 7 L */
-void Processor::SET_7_L()
+void Processor::SET_7_L() // 0xFD
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = SetBit(L, 7);
 }
 
 /* SET 7 (HL) */
-void Processor::SET_7_MEM_HL()
+void Processor::SET_7_MEM_HL() // 0xFE
 {
-	// Not implemented yet
-	UnknownOpcode();
+	uint8 result = SetBit(memory->ReadByte(HL), 7);
+	memory->WriteByte(HL, result);
 }
 
 /* SET 7 A */
-void Processor::SET_7_A()
+void Processor::SET_7_A() // 0xFF
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = SetBit(A, 7);
 }
 

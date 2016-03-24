@@ -30,7 +30,7 @@ void Gameboy::Run()
         {
             uint8 cycles = processor->Run();
             video->Run(cycles);
-            Sleep(400); // to see whats going on
+            Sleep(600); // to see whats going on
         }
     }
 }

@@ -5,6 +5,15 @@
 
 #include "Memory.h"
 
+enum Interrupts
+{
+    VBlank = 0x01,
+    LCDSTAT = 0x02,
+    Timer = 0x04,
+    Serial = 0x08,
+    Joypad = 0x10
+};
+
 class Processor
 {
 public:
@@ -13,24 +22,30 @@ public:
 
     uint8 Run();
     void Reset(bool color = false);
-    void InitOpcodes();
-
+    void RequestInterrupt(Interrupts interrupt);
 private:
+    void InitOpcodes();
+    void HandleInterrupts();
     void SetFlag(uint8 flag);
     void EnableFlag(uint8 flag);
     void DisableFlag(uint8 flag);
-    void ClearFlags(uint8 flag);
+    void InvertFlag(uint8 flag);
+    void ClearFlags();
     bool IsFlagSet(uint8 flag);
 
     void UnknownOpcode();
     void InvalidOpcode();
+    void StackPush(uint16& reg);
+    void StackPop(uint16& reg);
 
 private:
     Memory* memory;
     std::function<void()> opcodes[256];
     std::function<void()> opcodesCB[256];
 
+    uint8 clockCycles;
     bool ime;
+    bool halted;
     uint16 PC;
     uint16 SP;
 
