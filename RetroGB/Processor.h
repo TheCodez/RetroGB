@@ -5,6 +5,47 @@
 
 #include "Memory.h"
 
+
+const uint8 opcodeCycles[256] = 
+{
+    1, 3, 2, 2, 1, 1, 2, 1, 5, 2, 2, 2, 1, 1, 2, 1,
+    1, 3, 2, 2, 1, 1, 2, 1, 3, 2, 2, 2, 1, 1, 2, 1,
+    2, 3, 2, 2, 1, 1, 2, 1, 2, 2, 2, 2, 1, 1, 2, 1,
+    2, 3, 2, 2, 3, 3, 3, 1, 2, 2, 2, 2, 1, 1, 2, 1,
+    1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+    1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+    1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+    2, 2, 2, 2, 2, 2, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1,
+    1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+    1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+    1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+    1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+    2, 3, 3, 4, 3, 4, 2, 4, 2, 4, 3, 0, 3, 6, 2, 4,
+    2, 3, 3, 0, 3, 4, 2, 4, 2, 4, 3, 0, 3, 0, 2, 4,
+    3, 3, 2, 0, 0, 4, 2, 4, 4, 1, 4, 0, 0, 0, 2, 4,
+    3, 3, 2, 1, 0, 4, 2, 4, 3, 2, 4, 1, 0, 0, 2, 4
+};
+
+const uint8 opcodeCBCycles[256] = 
+{
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+    2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
+    2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
+    2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
+    2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+    2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2
+};
+
 enum Interrupts
 {
     VBlank = 0x01,
@@ -20,7 +61,7 @@ public:
     Processor(Memory* mem);
     ~Processor();
 
-    uint8 Run();
+    int Run();
     void Reset(bool color = false);
     void RequestInterrupt(Interrupts interrupt);
 private:
@@ -38,12 +79,12 @@ private:
     void StackPush(uint16& reg);
     void StackPop(uint16& reg);
 
-private:
+public:
     Memory* memory;
     std::function<void()> opcodes[256];
     std::function<void()> opcodesCB[256];
 
-    uint8 clockCycles;
+    int clockCycles;
     bool ime;
     bool halted;
     uint16 PC;
@@ -51,32 +92,32 @@ private:
 
     union {
         struct {
-            uint8 A;
             uint8 F;
+            uint8 A;
         };
         uint16 AF;
     };
 
     union {
         struct {
-            uint8 B;
             uint8 C;
+            uint8 B;
         };
         uint16 BC;
     };
 
     union {
         struct {
-            uint8 D;
             uint8 E;
+            uint8 D;
         };
         uint16 DE;
     };
 
     union {
         struct {
-            uint8 H;
             uint8 L;
+            uint8 H;
         };
         uint16 HL;
     };
@@ -143,7 +184,7 @@ private:
     void DEC_SP();
     void INC_A();
     void DEC_A();
-    void LDA_n();
+    void LD_A_n();
     void CCF();
     void LD_B_B();
     void LD_B_C();
@@ -287,44 +328,44 @@ private:
     void CALL_Z_nn();
     void CALL_nn();
     void ADC_A_n();
-    void RST_0x08();
+    void RST_0x0008();
     void RET_NC();
     void POP_DE();
     void JP_NC_nn();
     void CALL_NC_nn();
     void PUSH_DE();
     void SUB_n();
-    void RST_0x10();
+    void RST_0x0010();
     void RET_C();
     void RETI();
     void JP_C_nn();
     void CALL_C_nn();
     void SBC_A_n();
-    void RST_0x18();
+    void RST_0x0018();
     void LD_MEM_0xFF00_n_A();
     void POP_HL();
     void LD_MEM_0xFF00_C_A();
     void PUSH_HL();
     void AND_n();
-    void RST_0x20();
+    void RST_0x0020();
     void ADD_SP_n();
     void JP_MEM_HL();
     void LD_MEM_nn_A();
     void XOR_n();
-    void RST_0x28();
+    void RST_0x0028();
     void LD_A_MEM_0xFF00_n();
     void POP_AF();
     void LD_A_MEM_0xFF00_C();
     void DI();
     void PUSH_AF();
     void OR_n();
-    void RST_0x30();
-    void LD_HL_SP();
+    void RST_0x0030();
+    void LD_HL_SP_n();
     void LD_SP_HL();
     void LD_A_MEM_nn();
     void EI();
     void CP_n();
-    void RST_0x38();
+    void RST_0x0038();
 
     // CB Obcodes
     void RLC_B();
@@ -583,6 +624,5 @@ private:
     void SET_7_L();
     void SET_7_MEM_HL();
     void SET_7_A();
-
 };
 
