@@ -15,9 +15,6 @@ Memory::~Memory()
 
 void Memory::Save()
 {
-    FILE *f = fopen("tile0.bin", "wb");
-    fwrite(vram, 16, 1, f);
-    fclose(f);
 }
 
 void Memory::Reset()
