@@ -17,6 +17,11 @@ public:
     uint8 ReadByte(uint16 address);
     uint16 ReadWord(uint16 address);
 
+    void WriteIO(uint16 address, uint8 value);
+    uint8 ReadIO(uint16 address);
+
+    void Save();
+
 private:
     uint8 rom[0x8000];
     uint8 eram[0x2000];

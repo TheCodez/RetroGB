@@ -44,7 +44,7 @@ int Processor::Run()
         int h = IsFlagSet(FLAG_HALFCARRY);
         int z = IsFlagSet(FLAG_ZERO);
 
-        //LOG("PC:%02X, OP:%02X, AF:%04X, BC:%04X, DE:%04X, HL:%04X, SP:%04X, Z:%d, N:%d, H:%d, C:%d", PC, opcode, AF, BC, DE, HL, SP, z, n, h, c);
+        //LOG_LINE("PC:%02X, OP:%02X, AF:%04X, BC:%04X, DE:%04X, HL:%04X, SP:%04X, Z:%d, N:%d, H:%d, C:%d", PC, opcode, AF, BC, DE, HL, SP, z, n, h, c);
 
         PC++;
 
@@ -150,12 +150,12 @@ bool Processor::IsFlagSet(uint8 flag)
 
 void Processor::UnknownOpcode()
 {
-    LOG("Unimplemented opcode: PC: 0x%02X, Opode: 0x%02X", PC, memory->ReadByte(PC));
+    //LOG_LINE("Unimplemented opcode: PC: 0x%02X, Opode: 0x%02X", PC, memory->ReadByte(PC));
 }
 
 void Processor::InvalidOpcode()
 {
-    LOG("Invalid opcode: Opcode: 0x%02X", memory->ReadByte(PC));
+    LOG_LINE("Invalid opcode: Opcode: 0x%02X", memory->ReadByte(PC));
 }
 
 void Processor::StackPush(uint16& reg)

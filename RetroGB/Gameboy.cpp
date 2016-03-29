@@ -4,6 +4,7 @@
 #include "Video.h"
 #include "Cartridge.h"
 #include <Windows.h>
+#include "Color.h"
 
 Gameboy::Gameboy()
 {
@@ -24,14 +25,24 @@ Gameboy::~Gameboy()
 
 void Gameboy::Run()
 {
-    while (true)
+    if (cartridge->IsROMLoaded())
     {
-        if (cartridge->IsROMLoaded())
+        int cycles = 0;
+        const int targetCycles = 70224;
+
+        while (cycles < targetCycles)
         {
-            uint8 cycles = processor->Run();
+            cycles += processor->Run();
             video->Run(cycles);
-            Sleep(600); // to see whats going on
         }
+    }
+}
+
+void Gameboy::Step()
+{
+    if (cartridge->IsROMLoaded())
+    {
+        processor->Run();
     }
 }
 
@@ -54,4 +65,9 @@ bool Gameboy::LoadRom(const std::string& fileName)
     }
 
     return false;
+}
+
+Color* Gameboy::GetFrameBuffer() const 
+{
+    return video->GetFrameBuffer();
 }

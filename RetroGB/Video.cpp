@@ -5,31 +5,32 @@
 Video::Video(Memory* mem, Processor* cpu)
     : memory(mem), processor(cpu)
 {
+    frameBuffer = new Color[SCREEN_WIDTH * SCREEN_HEIGHT];;
     Reset();
 }
 
 
 Video::~Video()
 {
+    delete[] frameBuffer;
 }
 
 void Video::Reset(bool color)
 {
     gameBoycolor = color;
-
+    modeCounter = 0;
     mode = Mode::HBlank;
 
-    for (int x = 0; x < SCREEN_WIDTH; x++)
+    for (int i = 0; i < (SCREEN_WIDTH * SCREEN_HEIGHT); i++)
     {
-        for (int y = 0; y < SCREE_HEIGHT; y++)
-        {
-            frameBuffer[x + y * SCREEN_WIDTH] = color ? Color::BLACK : Color::WHITE;
-        }
+        frameBuffer[i] = color ? Color::BLACK : Color::WHITE;
     }
 }
 
-void Video::Run(uint8 cycles)
+bool Video::Run(int cycles)
 {
+    bool vblank = false;
+
     modeCounter += cycles;
 
     switch (mode)
@@ -38,20 +39,55 @@ void Video::Run(uint8 cycles)
         if (modeCounter >= 204)
         {
             modeCounter = 0;
-            currLine++;
-
-            if (currLine == 143)
+            if (currLine == 144)
             {
                 mode = Mode::VBlank;
+                processor->RequestInterrupt(Interrupts::VBlank);
+
+                uint8 stat = memory->ReadByte(0xFF41);
+                if (IsBitSet(stat, 4))
+                {
+                    processor->RequestInterrupt(Interrupts::LCDSTAT);
+                }
+
+                //vblank = true;
+            }
+            else
+            {
+                mode = Mode::Oam;
+
+                uint8 stat = memory->ReadByte(0xFF41);
+                if (IsBitSet(stat, 5))
+                {
+                    processor->RequestInterrupt(Interrupts::LCDSTAT);
+                }
             }
         }
         break;
     case Mode::VBlank:
         if (modeCounter >= 4560)
         {
-            modeCounter = 0;
-            mode = Mode::HBlank;
             currLine++;
+            memory->WriteByte(0xFF44, currLine);
+
+            if (currLine >= 144) 
+            {
+            }
+            else
+            {
+                vblank = true;
+                mode = Mode::Oam;
+                CompareLYToLYC();
+
+                uint8 stat = memory->ReadByte(0xFF41);
+
+                if (IsBitSet(stat, 5))
+                {
+                    processor->RequestInterrupt(Interrupts::LCDSTAT);
+                }
+            }
+
+            modeCounter = 0;
         }
         break;
     case Mode::Oam:
@@ -62,19 +98,48 @@ void Video::Run(uint8 cycles)
         }
         break;
     case Mode::Vram:
+        ScanLine(currLine);
+
         if (modeCounter >= 172)
         {
             modeCounter = 0;
-            mode = Mode::VBlank;
+            mode = Mode::HBlank;
 
-            ScanLine(currLine);
+            processor->RequestInterrupt(Interrupts::LCDSTAT);
         }
         break;
     }
+
+    return vblank;
+}
+
+void Video::CompareLYToLYC()
+{
+    uint8 stat = memory->ReadByte(0xFF41);
+    uint8 lyc = memory->ReadByte(0xFF45);
+
+    if (lyc == currLine)
+    {
+        SetBit(stat, 2);
+
+        if (IsBitSet(stat, 6))
+        {
+            processor->RequestInterrupt(Interrupts::LCDSTAT);
+        }
+    }
+    else
+    {
+        ClearBit(stat, 2);
+    }
+
+    memory->WriteByte(0xFF41, stat);
 }
 
 void Video::ScanLine(int scanLine)
 {
+    if (!frameBuffer)
+        return;
+
     uint8 lcdc = memory->ReadByte(0xFF40);
     
     if (IsBitSet(lcdc, 7))
@@ -87,7 +152,7 @@ void Video::ScanLine(int scanLine)
     {
         for (int x = 0; x < SCREEN_WIDTH; x++)
         {
-            frameBuffer[x + scanLine * SCREEN_WIDTH] = gameBoycolor ? Color::BLACK : Color::WHITE;
+            //frameBuffer[x + scanLine * SCREEN_WIDTH] = gameBoycolor ? Color::BLACK : Color::WHITE;
         }
     }
 }
@@ -103,12 +168,29 @@ void Video::RenderBackground(int scanLine)
         int tiles = IsBitSet(lcdc, 4) ? 0x8000 : 0x8800;
         int maps = IsBitSet(lcdc, 3) ? 0x9C00 : 0x9800;
         int yPos = scrollY + scanLine;
+
+        for (int x = 0; x < 32; x++)
+        {
+            if (tiles == 0x8800)
+            {
+
+            }
+            else
+            {
+
+            }
+
+            //uint8 palette = memory->ReadByte(paletteNumber);
+            //Color color = GetColor(colorNum, palette);
+
+            //frameBuffer[posX + scanLine * SCREEN_WIDTH] = color;
+        }
     }
 }
 
 void Video::RenderWindow(int scanLine)
 {
-    uint8 lcdc = memory->ReadByte(0xFF40);
+    uint8 lcdc = memory->ReadIO(0xFF40);
 
     if (IsBitSet(lcdc, 5))
     {
@@ -156,25 +238,25 @@ void Video::RenderSprites(int scanLine)
 
             int line = yFlip ? spriteHeight - (scanLine - spriteY) * 2 : (scanLine - spriteY) * 2;
 
-            uint16 tileAddress = 0x8000 + tileLocation * 16;
-            uint8 data1 = memory->ReadByte(tileAddress + line);
-            uint8 data2 = memory->ReadByte(tileAddress + line + 1);
+            int tileAddress = 0x8000 + (tileLocation * 16) + line;
+            uint8 data1 = memory->ReadByte(tileAddress);
+            uint8 data2 = memory->ReadByte(tileAddress + 1);
 
             for (int pixelX = 0; pixelX < 8; pixelX++)
             {
                 int posX = spriteX + pixelX;
                 int colorBit = xFlip ? 7 - pixelX : pixelX;
-                int colorNum = GetBitValue(data1, colorBit) | GetBitValue(data2, colorBit);
+                int colorNum = GetBitValue(data1, colorBit) | (GetBitValue(data2, colorBit) * 2);
 
-                if (belowBG)
+                if (belowBG && frameBuffer[posX + scanLine * SCREEN_WIDTH] != Color::WHITE)
                 {
-                    if (frameBuffer[posX + scanLine * SCREEN_WIDTH] != Color::WHITE)
-                        continue;
+                    continue;
                 }
 
                 uint8 palette = memory->ReadByte(paletteNumber);
                 Color color = GetColor(colorNum, palette);
 
+                // whites indicates transparent for sprites
                 if (color == Color::WHITE)
                     continue;
 
@@ -186,29 +268,14 @@ void Video::RenderSprites(int scanLine)
 
 Color Video::GetColor(int colorNum, uint8 palette)
 {
-    //                  White,        Light grey,                Dark grey,              Black
-    Color colors[4] = { Color::WHITE, Color(170, 170, 170, 255), Color(85, 85, 85, 255), Color::BLACK };
+    Color colors[4] = {
+        Color::WHITE,
+        Color(170, 170, 170, 255),
+        Color(85, 85, 85, 255),
+        Color::BLACK
+    };
 
-    int color = 0;
-    int high, low = 0;
-
-    switch (colorNum)
-    {
-    case 3:
-        high = 7; low = 6;
-        break;
-    case 2:
-        high = 5; low = 4;
-        break;
-    case 1:
-        high = 3; low = 2;
-        break;
-    case 0:
-        high = 1; low = 0;
-        break;
-    }
-
-    color = GetBitValue(palette, high) | GetBitValue(palette, low);
+    int color = (palette >> (colorNum * 2)) & 3;
 
     return colors[color];
 }

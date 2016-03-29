@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace CpuGenerator
 {
+    // TODO Cleanup and finish generator
     class Generator
     {
         public Generator()

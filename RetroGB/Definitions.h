@@ -39,12 +39,14 @@ inline uint8 GetBitValue(uint8 value, uint8 bit)
 }
 
 #ifdef _DEBUG
-#define LOG(msg, ...) (LogLine(msg, ##__VA_ARGS__))
+#define LOG_LINE(msg, ...) (LogLine(true, msg, ##__VA_ARGS__))
+#define LOG(msg, ...) (LogLine(false,msg, ##__VA_ARGS__))
 #else
+#define LOG_LINE(msg, ...)  
 #define LOG(msg, ...)  
 #endif
 
-inline void LogLine(const char* msg, ...)
+inline void LogLine(bool newLine, const char* msg, ...)
 {
     char buf[512];
 
@@ -53,5 +55,8 @@ inline void LogLine(const char* msg, ...)
     vsprintf_s(buf, msg, args);
     va_end(args);
 
-    printf("%s\n", buf);
+    if (newLine)
+        printf("%s\n", buf);
+    else
+        printf("%s", buf);
 }

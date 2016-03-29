@@ -22,13 +22,16 @@ public:
 
     void Reset(bool color = false);
 
-    void Run(uint8 cycles);
+    bool Run(int cycles);
     void ScanLine(int scanLine);
     void RenderBackground(int scanLine);
     void RenderWindow(int scanLine);
     void RenderSprites(int scanLine);
+
+    Color* GetFrameBuffer() const { return frameBuffer; }
 private:
     Color GetColor(int colorNum, uint8 palette);
+    void CompareLYToLYC();
 
 private:
     Memory* memory;
@@ -38,6 +41,6 @@ private:
     int modeCounter;
     int currLine;
 
-    Color frameBuffer[SCREEN_WIDTH * SCREE_HEIGHT];
+    Color* frameBuffer;
 };
 

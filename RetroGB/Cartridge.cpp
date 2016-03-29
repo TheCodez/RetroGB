@@ -3,6 +3,7 @@
 #include <fstream>
 
 Cartridge::Cartridge()
+    : rom(nullptr)
 {
 }
 
@@ -68,16 +69,16 @@ bool Cartridge::LoadRom(const std::string& fileName)
         version = rom[0x014C];
         oldLicenseeCode = rom[0x014B];
 
-        LOG("Title: %s", title.c_str());
-        LOG("Licensee Code: %d", licenseeCode);
-        LOG("Gameboy Color: %s", colorGameboy ? "true" : "false");
-        LOG("Super Gameboy: %s", superGameboy ? "true" : "false");
-        LOG("Cartridge Type: %d", cartridgeType);
-        LOG("ROM Size: %d", romSize);
-        LOG("RAM Size: %d", ramSize);
-        LOG("Japanese: %s", japanese ? "true" : "false");
-        LOG("Version: %d", version);
-        LOG("Old Licensee Code: %d", oldLicenseeCode);
+        LOG_LINE("Title: %s", title.c_str());
+        LOG_LINE("Licensee Code: %d", licenseeCode);
+        LOG_LINE("Gameboy Color: %s", colorGameboy ? "true" : "false");
+        LOG_LINE("Super Gameboy: %s", superGameboy ? "true" : "false");
+        LOG_LINE("Cartridge Type: %d", cartridgeType);
+        LOG_LINE("ROM Size: %d", romSize);
+        LOG_LINE("RAM Size: %d", ramSize);
+        LOG_LINE("Japanese: %s", japanese ? "true" : "false");
+        LOG_LINE("Version: %d", version);
+        LOG_LINE("Old Licensee Code: %d", oldLicenseeCode);
         
         return true;
     }
