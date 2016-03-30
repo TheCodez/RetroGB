@@ -23,7 +23,7 @@ inline void SetBit(uint8& value, uint8 bit)
     value |= 0x01 << bit;
 }
 
-inline void ClearBit(uint8& value, uint8 bit)
+inline void ResetBit(uint8& value, uint8 bit)
 {
     value &= ~(0x01 << bit);
 }

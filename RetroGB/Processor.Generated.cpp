@@ -1547,7 +1547,7 @@ void Processor::SBC_A_A() // 0x9F
 void Processor::AND_B() // 0xA0
 {
 	A &= B;
-	ClearFlags();
+	SetFlag(FLAG_HALFCARRY);
 	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
@@ -1555,7 +1555,7 @@ void Processor::AND_B() // 0xA0
 void Processor::AND_C() // 0xA1
 {
 	A &= C;
-	ClearFlags();
+	SetFlag(FLAG_HALFCARRY);
 	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
@@ -1563,7 +1563,7 @@ void Processor::AND_C() // 0xA1
 void Processor::AND_D() // 0xA2
 {
 	A &= D;
-	ClearFlags();
+	SetFlag(FLAG_HALFCARRY);
 	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
@@ -1571,7 +1571,7 @@ void Processor::AND_D() // 0xA2
 void Processor::AND_E() // 0xA3
 {
 	A &= E;
-	ClearFlags();
+	SetFlag(FLAG_HALFCARRY);
 	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
@@ -1579,7 +1579,7 @@ void Processor::AND_E() // 0xA3
 void Processor::AND_H() // 0xA4
 {
 	A &= H;
-	ClearFlags();
+	SetFlag(FLAG_HALFCARRY);
 	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
@@ -1587,7 +1587,7 @@ void Processor::AND_H() // 0xA4
 void Processor::AND_L() // 0xA5
 {
 	A &= L;
-	ClearFlags();
+	SetFlag(FLAG_HALFCARRY);
 	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
@@ -1595,7 +1595,7 @@ void Processor::AND_L() // 0xA5
 void Processor::AND_MEM_HL() // 0xA6
 {
 	A &= memory->ReadByte(HL);
-	ClearFlags();
+	SetFlag(FLAG_HALFCARRY);
 	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
@@ -1603,7 +1603,7 @@ void Processor::AND_MEM_HL() // 0xA6
 void Processor::AND_A() // 0xA7
 {
 	A &= A;
-	ClearFlags();
+	SetFlag(FLAG_HALFCARRY);
 	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
@@ -1738,81 +1738,73 @@ void Processor::OR_A() // 0xB7
 /* CP B */
 void Processor::CP_B() // 0xB8
 {
-	uint8 reg = A;
-	reg -= B;
 	SetFlag(FLAG_SUB);
-	if (reg == 0) EnableFlag(FLAG_ZERO);
-	if (reg < 0) EnableFlag(FLAG_CARRY);
+	if (A < B) EnableFlag(FLAG_CARRY);
+	if (A == B) EnableFlag(FLAG_ZERO);
+	if (((A - B) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
 }
 
 /* CP C */
 void Processor::CP_C() // 0xB9
 {
-	uint8 reg = A;
-	reg -= C;
 	SetFlag(FLAG_SUB);
-	if (reg == 0) EnableFlag(FLAG_ZERO);
-	if (reg < 0) EnableFlag(FLAG_CARRY);
+	if (A < C) EnableFlag(FLAG_CARRY);
+	if (A == C) EnableFlag(FLAG_ZERO);
+	if (((A - C) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
 }
 
 /* CP D */
 void Processor::CP_D() // 0xBA
 {
-	uint8 reg = A;
-	reg -= D;
 	SetFlag(FLAG_SUB);
-	if (reg == 0) EnableFlag(FLAG_ZERO);
-	if (reg < 0) EnableFlag(FLAG_CARRY);
+	if (A < D) EnableFlag(FLAG_CARRY);
+	if (A == D) EnableFlag(FLAG_ZERO);
+	if (((A - D) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
 }
 
 /* CP E */
 void Processor::CP_E() // 0xBB
 {
-	uint8 reg = A;
-	reg -= E;
 	SetFlag(FLAG_SUB);
-	if (reg == 0) EnableFlag(FLAG_ZERO);
-	if (reg < 0) EnableFlag(FLAG_CARRY);
+	if (A < E) EnableFlag(FLAG_CARRY);
+	if (A == E) EnableFlag(FLAG_ZERO);
+	if (((A - E) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
 }
 
 /* CP H */
 void Processor::CP_H() // 0xBC
 {
-	uint8 reg = A;
-	reg -= H;
 	SetFlag(FLAG_SUB);
-	if (reg == 0) EnableFlag(FLAG_ZERO);
-	if (reg < 0) EnableFlag(FLAG_CARRY);
+	if (A < H) EnableFlag(FLAG_CARRY);
+	if (A == H) EnableFlag(FLAG_ZERO);
+	if (((A - H) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
 }
 
 /* CP L */
 void Processor::CP_L() // 0xBD
 {
-	uint8 reg = A;
-	reg -= L;
 	SetFlag(FLAG_SUB);
-	if (reg == 0) EnableFlag(FLAG_ZERO);
-	if (reg < 0) EnableFlag(FLAG_CARRY);
+	if (A < L) EnableFlag(FLAG_CARRY);
+	if (A == L) EnableFlag(FLAG_ZERO);
+	if (((A - L) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
 }
 
 /* CP (HL) */
 void Processor::CP_MEM_HL() // 0xBE
 {
-	uint8 reg = A;
-	reg -= memory->ReadByte(HL);
 	SetFlag(FLAG_SUB);
-	if (reg == 0) EnableFlag(FLAG_ZERO);
-	if (reg < 0) EnableFlag(FLAG_CARRY);
+	if (A < memory->ReadByte(HL)) EnableFlag(FLAG_CARRY);
+	if (A == memory->ReadByte(HL)) EnableFlag(FLAG_ZERO);
+	if (((A - memory->ReadByte(HL)) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
 }
 
 /* CP A */
 void Processor::CP_A() // 0xBF
 {
-	uint8 reg = A;
-	reg -= A;
 	SetFlag(FLAG_SUB);
-	if (reg == 0) EnableFlag(FLAG_ZERO);
-	if (reg < 0) EnableFlag(FLAG_CARRY);
+	if (A < A) EnableFlag(FLAG_CARRY);
+	if (A == A) EnableFlag(FLAG_ZERO);
+	if (((A - A) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
 }
 
 /* RET NZ */
@@ -2099,7 +2091,7 @@ void Processor::PUSH_HL() // 0xE5
 void Processor::AND_n() // 0xE6
 {
 	A &= memory->ReadByte(PC++);
-	ClearFlags();
+	SetFlag(FLAG_HALFCARRY);
 	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
@@ -2223,11 +2215,10 @@ void Processor::EI() // 0xFB
 /* CP n */
 void Processor::CP_n() // 0xFE
 {
-	uint8 reg = A;
-	reg -= memory->ReadByte(PC++);
 	SetFlag(FLAG_SUB);
-	if (reg == 0) EnableFlag(FLAG_ZERO);
-	if (reg < 0) EnableFlag(FLAG_CARRY);
+	if (A < memory->ReadByte(PC++)) EnableFlag(FLAG_CARRY);
+	if (A == memory->ReadByte(PC++)) EnableFlag(FLAG_ZERO);
+	if (((A - memory->ReadByte(PC++)) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
 }
 
 /* RST 0x0038 */
@@ -2531,6 +2522,7 @@ void Processor::SRA_A() // 0x2F
 void Processor::SWAP_B() // 0x30
 {
 	B = ((B >> 4) & 0x0F) | ((B << 4) & 0xF0);
+	ClearFlags();
 	if (B == 0) EnableFlag(FLAG_ZERO);
 }
 
@@ -2538,6 +2530,7 @@ void Processor::SWAP_B() // 0x30
 void Processor::SWAP_C() // 0x31
 {
 	C = ((C >> 4) & 0x0F) | ((C << 4) & 0xF0);
+	ClearFlags();
 	if (C == 0) EnableFlag(FLAG_ZERO);
 }
 
@@ -2545,6 +2538,7 @@ void Processor::SWAP_C() // 0x31
 void Processor::SWAP_D() // 0x32
 {
 	D = ((D >> 4) & 0x0F) | ((D << 4) & 0xF0);
+	ClearFlags();
 	if (D == 0) EnableFlag(FLAG_ZERO);
 }
 
@@ -2552,6 +2546,7 @@ void Processor::SWAP_D() // 0x32
 void Processor::SWAP_E() // 0x33
 {
 	E = ((E >> 4) & 0x0F) | ((E << 4) & 0xF0);
+	ClearFlags();
 	if (E == 0) EnableFlag(FLAG_ZERO);
 }
 
@@ -2559,6 +2554,7 @@ void Processor::SWAP_E() // 0x33
 void Processor::SWAP_H() // 0x34
 {
 	H = ((H >> 4) & 0x0F) | ((H << 4) & 0xF0);
+	ClearFlags();
 	if (H == 0) EnableFlag(FLAG_ZERO);
 }
 
@@ -2566,6 +2562,7 @@ void Processor::SWAP_H() // 0x34
 void Processor::SWAP_L() // 0x35
 {
 	L = ((L >> 4) & 0x0F) | ((L << 4) & 0xF0);
+	ClearFlags();
 	if (L == 0) EnableFlag(FLAG_ZERO);
 }
 
@@ -2574,6 +2571,7 @@ void Processor::SWAP_MEM_HL() // 0x36
 {
 	uint8 val = memory->ReadByte(HL);
 	memory->WriteByte(HL, ((val >> 4) & 0x0F) | ((val << 4) & 0xF0));
+	ClearFlags();
 	if (memory->ReadByte(HL) == 0) EnableFlag(FLAG_ZERO);
 }
 
@@ -2581,6 +2579,7 @@ void Processor::SWAP_MEM_HL() // 0x36
 void Processor::SWAP_A() // 0x37
 {
 	A = ((A >> 4) & 0x0F) | ((A << 4) & 0xF0);
+	ClearFlags();
 	if (A == 0) EnableFlag(FLAG_ZERO);
 }
 
@@ -3211,401 +3210,401 @@ void Processor::BIT_7_A() // 0x7F
 /* RES 0 B */
 void Processor::RES_0_B() // 0x80
 {
-	ClearBit(B, 0);
+	ResetBit(B, 0);
 }
 
 /* RES 0 C */
 void Processor::RES_0_C() // 0x81
 {
-	ClearBit(C, 0);
+	ResetBit(C, 0);
 }
 
 /* RES 0 D */
 void Processor::RES_0_D() // 0x82
 {
-	ClearBit(D, 0);
+	ResetBit(D, 0);
 }
 
 /* RES 0 E */
 void Processor::RES_0_E() // 0x83
 {
-	ClearBit(E, 0);
+	ResetBit(E, 0);
 }
 
 /* RES 0 H */
 void Processor::RES_0_H() // 0x84
 {
-	ClearBit(H, 0);
+	ResetBit(H, 0);
 }
 
 /* RES 0 L */
 void Processor::RES_0_L() // 0x85
 {
-	ClearBit(L, 0);
+	ResetBit(L, 0);
 }
 
 /* RES 0 (HL) */
 void Processor::RES_0_MEM_HL() // 0x86
 {
 	uint8 result = memory->ReadByte(HL);
-	ClearBit(result, 0);
+	ResetBit(result, 0);
 	memory->WriteByte(HL, result);
 }
 
 /* RES 0 A */
 void Processor::RES_0_A() // 0x87
 {
-	ClearBit(A, 0);
+	ResetBit(A, 0);
 }
 
 /* RES 1 B */
 void Processor::RES_1_B() // 0x88
 {
-	ClearBit(B, 1);
+	ResetBit(B, 1);
 }
 
 /* RES 1 C */
 void Processor::RES_1_C() // 0x89
 {
-	ClearBit(C, 1);
+	ResetBit(C, 1);
 }
 
 /* RES 1 D */
 void Processor::RES_1_D() // 0x8A
 {
-	ClearBit(D, 1);
+	ResetBit(D, 1);
 }
 
 /* RES 1 E */
 void Processor::RES_1_E() // 0x8B
 {
-	ClearBit(E, 1);
+	ResetBit(E, 1);
 }
 
 /* RES 1 H */
 void Processor::RES_1_H() // 0x8C
 {
-	ClearBit(H, 1);
+	ResetBit(H, 1);
 }
 
 /* RES 1 L */
 void Processor::RES_1_L() // 0x8D
 {
-	ClearBit(L, 1);
+	ResetBit(L, 1);
 }
 
 /* RES 1 (HL) */
 void Processor::RES_1_MEM_HL() // 0x8E
 {
 	uint8 result = memory->ReadByte(HL);
-	ClearBit(result, 1);
+	ResetBit(result, 1);
 	memory->WriteByte(HL, result);
 }
 
 /* RES 1 A */
 void Processor::RES_1_A() // 0x8F
 {
-	ClearBit(A, 1);
+	ResetBit(A, 1);
 }
 
 /* RES 2 B */
 void Processor::RES_2_B() // 0x90
 {
-	ClearBit(B, 2);
+	ResetBit(B, 2);
 }
 
 /* RES 2 C */
 void Processor::RES_2_C() // 0x91
 {
-	ClearBit(C, 2);
+	ResetBit(C, 2);
 }
 
 /* RES 2 D */
 void Processor::RES_2_D() // 0x92
 {
-	ClearBit(D, 2);
+	ResetBit(D, 2);
 }
 
 /* RES 2 E */
 void Processor::RES_2_E() // 0x93
 {
-	ClearBit(E, 2);
+	ResetBit(E, 2);
 }
 
 /* RES 2 H */
 void Processor::RES_2_H() // 0x94
 {
-	ClearBit(H, 2);
+	ResetBit(H, 2);
 }
 
 /* RES 2 L */
 void Processor::RES_2_L() // 0x95
 {
-	ClearBit(L, 2);
+	ResetBit(L, 2);
 }
 
 /* RES 2 (HL) */
 void Processor::RES_2_MEM_HL() // 0x96
 {
 	uint8 result = memory->ReadByte(HL);
-	ClearBit(result, 2);
+	ResetBit(result, 2);
 	memory->WriteByte(HL, result);
 }
 
 /* RES 2 A */
 void Processor::RES_2_A() // 0x97
 {
-	ClearBit(A, 2);
+	ResetBit(A, 2);
 }
 
 /* RES 3 B */
 void Processor::RES_3_B() // 0x98
 {
-	ClearBit(B, 3);
+	ResetBit(B, 3);
 }
 
 /* RES 3 C */
 void Processor::RES_3_C() // 0x99
 {
-	ClearBit(C, 3);
+	ResetBit(C, 3);
 }
 
 /* RES 3 D */
 void Processor::RES_3_D() // 0x9A
 {
-	ClearBit(D, 3);
+	ResetBit(D, 3);
 }
 
 /* RES 3 E */
 void Processor::RES_3_E() // 0x9B
 {
-	ClearBit(E, 3);
+	ResetBit(E, 3);
 }
 
 /* RES 3 H */
 void Processor::RES_3_H() // 0x9C
 {
-	ClearBit(H, 3);
+	ResetBit(H, 3);
 }
 
 /* RES 3 L */
 void Processor::RES_3_L() // 0x9D
 {
-	ClearBit(L, 3);
+	ResetBit(L, 3);
 }
 
 /* RES 3 (HL) */
 void Processor::RES_3_MEM_HL() // 0x9E
 {
 	uint8 result = memory->ReadByte(HL);
-	ClearBit(result, 3);
+	ResetBit(result, 3);
 	memory->WriteByte(HL, result);
 }
 
 /* RES 3 A */
 void Processor::RES_3_A() // 0x9F
 {
-	ClearBit(A, 3);
+	ResetBit(A, 3);
 }
 
 /* RES 4 B */
 void Processor::RES_4_B() // 0xA0
 {
-	ClearBit(B, 4);
+	ResetBit(B, 4);
 }
 
 /* RES 4 C */
 void Processor::RES_4_C() // 0xA1
 {
-	ClearBit(C, 4);
+	ResetBit(C, 4);
 }
 
 /* RES 4 D */
 void Processor::RES_4_D() // 0xA2
 {
-	ClearBit(D, 4);
+	ResetBit(D, 4);
 }
 
 /* RES 4 E */
 void Processor::RES_4_E() // 0xA3
 {
-	ClearBit(E, 4);
+	ResetBit(E, 4);
 }
 
 /* RES 4 H */
 void Processor::RES_4_H() // 0xA4
 {
-	ClearBit(H, 4);
+	ResetBit(H, 4);
 }
 
 /* RES 4 L */
 void Processor::RES_4_L() // 0xA5
 {
-	ClearBit(L, 4);
+	ResetBit(L, 4);
 }
 
 /* RES 4 (HL) */
 void Processor::RES_4_MEM_HL() // 0xA6
 {
 	uint8 result = memory->ReadByte(HL);
-	ClearBit(result, 4);
+	ResetBit(result, 4);
 	memory->WriteByte(HL, result);
 }
 
 /* RES 4 A */
 void Processor::RES_4_A() // 0xA7
 {
-	ClearBit(A, 4);
+	ResetBit(A, 4);
 }
 
 /* RES 5 B */
 void Processor::RES_5_B() // 0xA8
 {
-	ClearBit(B, 5);
+	ResetBit(B, 5);
 }
 
 /* RES 5 C */
 void Processor::RES_5_C() // 0xA9
 {
-	ClearBit(C, 5);
+	ResetBit(C, 5);
 }
 
 /* RES 5 D */
 void Processor::RES_5_D() // 0xAA
 {
-	ClearBit(D, 5);
+	ResetBit(D, 5);
 }
 
 /* RES 5 E */
 void Processor::RES_5_E() // 0xAB
 {
-	ClearBit(E, 5);
+	ResetBit(E, 5);
 }
 
 /* RES 5 H */
 void Processor::RES_5_H() // 0xAC
 {
-	ClearBit(H, 5);
+	ResetBit(H, 5);
 }
 
 /* RES 5 L */
 void Processor::RES_5_L() // 0xAD
 {
-	ClearBit(L, 5);
+	ResetBit(L, 5);
 }
 
 /* RES 5 (HL) */
 void Processor::RES_5_MEM_HL() // 0xAE
 {
 	uint8 result = memory->ReadByte(HL);
-	ClearBit(result, 5);
+	ResetBit(result, 5);
 	memory->WriteByte(HL, result);
 }
 
 /* RES 5 A */
 void Processor::RES_5_A() // 0xAF
 {
-	ClearBit(A, 5);
+	ResetBit(A, 5);
 }
 
 /* RES 6 B */
 void Processor::RES_6_B() // 0xB0
 {
-	ClearBit(B, 6);
+	ResetBit(B, 6);
 }
 
 /* RES 6 C */
 void Processor::RES_6_C() // 0xB1
 {
-	ClearBit(C, 6);
+	ResetBit(C, 6);
 }
 
 /* RES 6 D */
 void Processor::RES_6_D() // 0xB2
 {
-	ClearBit(D, 6);
+	ResetBit(D, 6);
 }
 
 /* RES 6 E */
 void Processor::RES_6_E() // 0xB3
 {
-	ClearBit(E, 6);
+	ResetBit(E, 6);
 }
 
 /* RES 6 H */
 void Processor::RES_6_H() // 0xB4
 {
-	ClearBit(H, 6);
+	ResetBit(H, 6);
 }
 
 /* RES 6 L */
 void Processor::RES_6_L() // 0xB5
 {
-	ClearBit(L, 6);
+	ResetBit(L, 6);
 }
 
 /* RES 6 (HL) */
 void Processor::RES_6_MEM_HL() // 0xB6
 {
 	uint8 result = memory->ReadByte(HL);
-	ClearBit(result, 6);
+	ResetBit(result, 6);
 	memory->WriteByte(HL, result);
 }
 
 /* RES 6 A */
 void Processor::RES_6_A() // 0xB7
 {
-	ClearBit(A, 6);
+	ResetBit(A, 6);
 }
 
 /* RES 7 B */
 void Processor::RES_7_B() // 0xB8
 {
-	ClearBit(B, 7);
+	ResetBit(B, 7);
 }
 
 /* RES 7 C */
 void Processor::RES_7_C() // 0xB9
 {
-	ClearBit(C, 7);
+	ResetBit(C, 7);
 }
 
 /* RES 7 D */
 void Processor::RES_7_D() // 0xBA
 {
-	ClearBit(D, 7);
+	ResetBit(D, 7);
 }
 
 /* RES 7 E */
 void Processor::RES_7_E() // 0xBB
 {
-	ClearBit(E, 7);
+	ResetBit(E, 7);
 }
 
 /* RES 7 H */
 void Processor::RES_7_H() // 0xBC
 {
-	ClearBit(H, 7);
+	ResetBit(H, 7);
 }
 
 /* RES 7 L */
 void Processor::RES_7_L() // 0xBD
 {
-	ClearBit(L, 7);
+	ResetBit(L, 7);
 }
 
 /* RES 7 (HL) */
 void Processor::RES_7_MEM_HL() // 0xBE
 {
 	uint8 result = memory->ReadByte(HL);
-	ClearBit(result, 7);
+	ResetBit(result, 7);
 	memory->WriteByte(HL, result);
 }
 
 /* RES 7 A */
 void Processor::RES_7_A() // 0xBF
 {
-	ClearBit(A, 7);
+	ResetBit(A, 7);
 }
 
 /* SET 0 B */

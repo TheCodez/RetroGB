@@ -401,7 +401,6 @@ namespace CpuGenerator
 
         #region Opcode Templates
 
-        #region Inc, Dec
         public void WriteIncByte(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\t" + GetStoreStub(opcode.FirstOperand), string.Format("Inc({0})", GetLoadStub(opcode.FirstOperand)));
@@ -421,7 +420,13 @@ namespace CpuGenerator
         {
             writer.WriteLine("\t{0}--;", opcode.FirstOperand);
         }
-        #endregion
+
+        public void WriteAnd(TextWriter writer, Opcode opcode)
+        {
+            writer.WriteLine("\tA &= {0};", GetLoadStub(opcode.FirstOperand));
+            writer.WriteLine("\tSetFlag(FLAG_HALFCARRY);");
+            writer.WriteLine("\tif (A == 0) EnableFlag(FLAG_ZERO);");
+        }
 
         public void WriteOr(TextWriter writer, Opcode opcode)
         {
@@ -460,13 +465,6 @@ namespace CpuGenerator
         public void WriteSbc(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\tSbc({0});", GetLoadStub(opcode.SecondOperand));
-        }
-
-        public void WriteAnd(TextWriter writer, Opcode opcode)
-        {
-            writer.WriteLine("\tA &= {0};", GetLoadStub(opcode.FirstOperand));
-            writer.WriteLine("\tClearFlags();");
-            writer.WriteLine("\tif (A == 0) EnableFlag(FLAG_ZERO);");
         }
 
         public void WriteDaa(TextWriter writer, Opcode opcode)
@@ -522,7 +520,7 @@ namespace CpuGenerator
 
         public void WriteRes(TextWriter writer, Opcode opcode)
         {
-            writer.WriteLine("\tClearBit({0}, {1});", opcode.SecondOperand, opcode.FirstOperand);
+            writer.WriteLine("\tResetBit({0}, {1});", opcode.SecondOperand, opcode.FirstOperand);
         }
 
         public void WriteHLSet(TextWriter writer, Opcode opcode)
@@ -535,7 +533,7 @@ namespace CpuGenerator
         public void WriteHLRes(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\tuint8 result = memory->ReadByte(HL);");
-            writer.WriteLine("\tClearBit(result, {0});", opcode.FirstOperand);
+            writer.WriteLine("\tResetBit(result, {0});", opcode.FirstOperand);
             writer.WriteLine("\tmemory->WriteByte(HL, result);");
         }
 
@@ -647,11 +645,10 @@ namespace CpuGenerator
 
         public void WriteCp(TextWriter writer, Opcode opcode)
         {
-            writer.WriteLine("\tuint8 reg = A;");
-            writer.WriteLine("\treg -= {0};", GetLoadStub(opcode.FirstOperand));
             writer.WriteLine("\tSetFlag(FLAG_SUB);");
-            writer.WriteLine("\tif (reg == 0) EnableFlag(FLAG_ZERO);");
-            writer.WriteLine("\tif (reg < 0) EnableFlag(FLAG_CARRY);");
+            writer.WriteLine("\tif (A < {0}) EnableFlag(FLAG_CARRY);", GetLoadStub(opcode.FirstOperand));
+            writer.WriteLine("\tif (A == {0}) EnableFlag(FLAG_ZERO);", GetLoadStub(opcode.FirstOperand));
+            writer.WriteLine("\tif (((A - {0}) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);", GetLoadStub(opcode.FirstOperand));
         }
 
         public void WriteHalt(TextWriter writer, Opcode opcode)
@@ -668,6 +665,7 @@ namespace CpuGenerator
         public void WriteSwap(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\t{0} = (({0} >> 4) & 0x0F) | (({0} << 4) & 0xF0);", opcode.FirstOperand);
+            writer.WriteLine("\tClearFlags();");
             writer.WriteLine("\tif ({0} == 0) EnableFlag(FLAG_ZERO);", opcode.FirstOperand);
         }
 
@@ -675,6 +673,7 @@ namespace CpuGenerator
         {
             writer.WriteLine("\tuint8 val = memory->ReadByte(HL);");
             writer.WriteLine("\tmemory->WriteByte(HL, ((val >> 4) & 0x0F) | ((val << 4) & 0xF0));");
+            writer.WriteLine("\tClearFlags();");
             writer.WriteLine("\tif (memory->ReadByte(HL) == 0) EnableFlag(FLAG_ZERO);");
         }
 
