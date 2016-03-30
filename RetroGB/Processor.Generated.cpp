@@ -591,12 +591,7 @@ void Processor::LD_MEM_nn_SP() // 0x08
 /* ADD HL, BC */
 void Processor::ADD_HL_BC() // 0x09
 {
-	auto before = HL;
-	HL += BC;
-	ClearFlags();
-	if (HL == 0) EnableFlag(FLAG_ZERO);
-	if ((before + BC) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((HL & 0x0F) + (BC & 0x0F)) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	AddHL(BC);
 }
 
 /* LD A, (BC) */
@@ -714,12 +709,7 @@ void Processor::JR_n() // 0x18
 /* ADD HL, DE */
 void Processor::ADD_HL_DE() // 0x19
 {
-	auto before = HL;
-	HL += DE;
-	ClearFlags();
-	if (HL == 0) EnableFlag(FLAG_ZERO);
-	if ((before + DE) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((HL & 0x0F) + (DE & 0x0F)) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	AddHL(DE);
 }
 
 /* LD A, (DE) */
@@ -877,12 +867,7 @@ void Processor::JR_Z_n() // 0x28
 /* ADD HL, HL */
 void Processor::ADD_HL_HL() // 0x29
 {
-	auto before = HL;
-	HL += HL;
-	ClearFlags();
-	if (HL == 0) EnableFlag(FLAG_ZERO);
-	if ((before + HL) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((HL & 0x0F) + (HL & 0x0F)) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	AddHL(HL);
 }
 
 /* LD A, (HLI) */
@@ -1015,12 +1000,7 @@ void Processor::JR_C_n() // 0x38
 /* ADD HL, SP */
 void Processor::ADD_HL_SP() // 0x39
 {
-	auto before = HL;
-	HL += SP;
-	ClearFlags();
-	if (HL == 0) EnableFlag(FLAG_ZERO);
-	if ((before + SP) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((HL & 0x0F) + (SP & 0x0F)) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	AddHL(SP);
 }
 
 /* LD A, (HLD) */
@@ -1450,369 +1430,193 @@ void Processor::LD_A_A() // 0x7F
 /* ADD A, B */
 void Processor::ADD_A_B() // 0x80
 {
-	auto before = A;
-	A += B;
-	ClearFlags();
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if ((before + B) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) + (B & 0x0F)) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	Add(B);
 }
 
 /* ADD A, C */
 void Processor::ADD_A_C() // 0x81
 {
-	auto before = A;
-	A += C;
-	ClearFlags();
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if ((before + C) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) + (C & 0x0F)) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	Add(C);
 }
 
 /* ADD A, D */
 void Processor::ADD_A_D() // 0x82
 {
-	auto before = A;
-	A += D;
-	ClearFlags();
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if ((before + D) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) + (D & 0x0F)) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	Add(D);
 }
 
 /* ADD A, E */
 void Processor::ADD_A_E() // 0x83
 {
-	auto before = A;
-	A += E;
-	ClearFlags();
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if ((before + E) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) + (E & 0x0F)) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	Add(E);
 }
 
 /* ADD A, H */
 void Processor::ADD_A_H() // 0x84
 {
-	auto before = A;
-	A += H;
-	ClearFlags();
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if ((before + H) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) + (H & 0x0F)) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	Add(H);
 }
 
 /* ADD A, L */
 void Processor::ADD_A_L() // 0x85
 {
-	auto before = A;
-	A += L;
-	ClearFlags();
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if ((before + L) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) + (L & 0x0F)) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	Add(L);
 }
 
 /* ADD A, (HL) */
 void Processor::ADD_A_MEM_HL() // 0x86
 {
-	auto before = A;
-	A += memory->ReadByte(HL);
-	ClearFlags();
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if ((before + memory->ReadByte(HL)) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) + (memory->ReadByte(HL) & 0x0F)) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	Add(memory->ReadByte(HL));
 }
 
 /* ADD A, A */
 void Processor::ADD_A_A() // 0x87
 {
-	auto before = A;
-	A += A;
-	ClearFlags();
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if ((before + A) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) + (A & 0x0F)) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	Add(A);
 }
 
 /* ADC A, B */
 void Processor::ADC_A_B() // 0x88
 {
-	auto before = A;
-	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
-	A += (B + carry);
-	ClearFlags();
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if ((before + B) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) + (B & 0x0F) + carry) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	Adc(B);
 }
 
 /* ADC A, C */
 void Processor::ADC_A_C() // 0x89
 {
-	auto before = A;
-	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
-	A += (C + carry);
-	ClearFlags();
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if ((before + C) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) + (C & 0x0F) + carry) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	Adc(C);
 }
 
 /* ADC A, D */
 void Processor::ADC_A_D() // 0x8A
 {
-	auto before = A;
-	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
-	A += (D + carry);
-	ClearFlags();
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if ((before + D) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) + (D & 0x0F) + carry) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	Adc(D);
 }
 
 /* ADC A, E */
 void Processor::ADC_A_E() // 0x8B
 {
-	auto before = A;
-	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
-	A += (E + carry);
-	ClearFlags();
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if ((before + E) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) + (E & 0x0F) + carry) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	Adc(E);
 }
 
 /* ADC A, H */
 void Processor::ADC_A_H() // 0x8C
 {
-	auto before = A;
-	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
-	A += (H + carry);
-	ClearFlags();
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if ((before + H) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) + (H & 0x0F) + carry) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	Adc(H);
 }
 
 /* ADC A, L */
 void Processor::ADC_A_L() // 0x8D
 {
-	auto before = A;
-	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
-	A += (L + carry);
-	ClearFlags();
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if ((before + L) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) + (L & 0x0F) + carry) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	Adc(L);
 }
 
 /* ADC A, (HL) */
 void Processor::ADC_A_MEM_HL() // 0x8E
 {
-	auto before = A;
-	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
-	A += (memory->ReadByte(HL) + carry);
-	ClearFlags();
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if ((before + memory->ReadByte(HL)) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) + (memory->ReadByte(HL) & 0x0F) + carry) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	Adc(memory->ReadByte(HL));
 }
 
 /* ADC A, A */
 void Processor::ADC_A_A() // 0x8F
 {
-	auto before = A;
-	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
-	A += (A + carry);
-	ClearFlags();
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if ((before + A) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) + (A & 0x0F) + carry) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	Adc(A);
 }
 
 /* SUB B */
 void Processor::SUB_B() // 0x90
 {
-	auto before = A;
-	A -= B;
-	SetFlag(FLAG_SUB);
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if (before < B) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) - (B & 0x0F)) < 0) EnableFlag(FLAG_HALFCARRY);
+	Sub(B);
 }
 
 /* SUB C */
 void Processor::SUB_C() // 0x91
 {
-	auto before = A;
-	A -= C;
-	SetFlag(FLAG_SUB);
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if (before < C) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) - (C & 0x0F)) < 0) EnableFlag(FLAG_HALFCARRY);
+	Sub(C);
 }
 
 /* SUB D */
 void Processor::SUB_D() // 0x92
 {
-	auto before = A;
-	A -= D;
-	SetFlag(FLAG_SUB);
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if (before < D) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) - (D & 0x0F)) < 0) EnableFlag(FLAG_HALFCARRY);
+	Sub(D);
 }
 
 /* SUB E */
 void Processor::SUB_E() // 0x93
 {
-	auto before = A;
-	A -= E;
-	SetFlag(FLAG_SUB);
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if (before < E) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) - (E & 0x0F)) < 0) EnableFlag(FLAG_HALFCARRY);
+	Sub(E);
 }
 
 /* SUB H */
 void Processor::SUB_H() // 0x94
 {
-	auto before = A;
-	A -= H;
-	SetFlag(FLAG_SUB);
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if (before < H) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) - (H & 0x0F)) < 0) EnableFlag(FLAG_HALFCARRY);
+	Sub(H);
 }
 
 /* SUB L */
 void Processor::SUB_L() // 0x95
 {
-	auto before = A;
-	A -= L;
-	SetFlag(FLAG_SUB);
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if (before < L) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) - (L & 0x0F)) < 0) EnableFlag(FLAG_HALFCARRY);
+	Sub(L);
 }
 
 /* SUB (HL) */
 void Processor::SUB_MEM_HL() // 0x96
 {
-	auto before = A;
-	A -= memory->ReadByte(HL);
-	SetFlag(FLAG_SUB);
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if (before < memory->ReadByte(HL)) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) - (memory->ReadByte(HL) & 0x0F)) < 0) EnableFlag(FLAG_HALFCARRY);
+	Sub(memory->ReadByte(HL));
 }
 
 /* SUB A */
 void Processor::SUB_A() // 0x97
 {
-	auto before = A;
-	A -= A;
-	SetFlag(FLAG_SUB);
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if (before < A) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) - (A & 0x0F)) < 0) EnableFlag(FLAG_HALFCARRY);
+	Sub(A);
 }
 
 /* SBC A, B */
 void Processor::SBC_A_B() // 0x98
 {
-	auto before = A;
-	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
-	A -= (B + carry);
-	SetFlag(FLAG_SUB);
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if (before < B) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) - (B & 0x0F) - carry) < 0) EnableFlag(FLAG_HALFCARRY);
+	Sbc(B);
 }
 
 /* SBC A, C */
 void Processor::SBC_A_C() // 0x99
 {
-	auto before = A;
-	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
-	A -= (C + carry);
-	SetFlag(FLAG_SUB);
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if (before < C) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) - (C & 0x0F) - carry) < 0) EnableFlag(FLAG_HALFCARRY);
+	Sbc(C);
 }
 
 /* SBC A, D */
 void Processor::SBC_A_D() // 0x9A
 {
-	auto before = A;
-	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
-	A -= (D + carry);
-	SetFlag(FLAG_SUB);
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if (before < D) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) - (D & 0x0F) - carry) < 0) EnableFlag(FLAG_HALFCARRY);
+	Sbc(D);
 }
 
 /* SBC A, E */
 void Processor::SBC_A_E() // 0x9B
 {
-	auto before = A;
-	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
-	A -= (E + carry);
-	SetFlag(FLAG_SUB);
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if (before < E) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) - (E & 0x0F) - carry) < 0) EnableFlag(FLAG_HALFCARRY);
+	Sbc(E);
 }
 
 /* SBC A, H */
 void Processor::SBC_A_H() // 0x9C
 {
-	auto before = A;
-	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
-	A -= (H + carry);
-	SetFlag(FLAG_SUB);
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if (before < H) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) - (H & 0x0F) - carry) < 0) EnableFlag(FLAG_HALFCARRY);
+	Sbc(H);
 }
 
 /* SBC A, L */
 void Processor::SBC_A_L() // 0x9D
 {
-	auto before = A;
-	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
-	A -= (L + carry);
-	SetFlag(FLAG_SUB);
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if (before < L) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) - (L & 0x0F) - carry) < 0) EnableFlag(FLAG_HALFCARRY);
+	Sbc(L);
 }
 
 /* SBC A, (HL) */
 void Processor::SBC_A_MEM_HL() // 0x9E
 {
-	auto before = A;
-	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
-	A -= (memory->ReadByte(HL) + carry);
-	SetFlag(FLAG_SUB);
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if (before < memory->ReadByte(HL)) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) - (memory->ReadByte(HL) & 0x0F) - carry) < 0) EnableFlag(FLAG_HALFCARRY);
+	Sbc(memory->ReadByte(HL));
 }
 
 /* SBC A, A */
 void Processor::SBC_A_A() // 0x9F
 {
-	auto before = A;
-	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
-	A -= (A + carry);
-	SetFlag(FLAG_SUB);
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if (before < A) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) - (A & 0x0F) - carry) < 0) EnableFlag(FLAG_HALFCARRY);
+	Sbc(A);
 }
 
 /* AND B */
@@ -2146,12 +1950,7 @@ void Processor::PUSH_BC() // 0xC5
 /* ADD A, n */
 void Processor::ADD_A_n() // 0xC6
 {
-	auto before = A;
-	A += memory->ReadByte(PC++);
-	ClearFlags();
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if ((before + memory->ReadByte(PC++)) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) + (memory->ReadByte(PC++) & 0x0F)) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	Add(memory->ReadByte(PC++));
 }
 
 /* RST  */
@@ -2217,13 +2016,7 @@ void Processor::CALL_nn() // 0xCD
 /* ADC A, n */
 void Processor::ADC_A_n() // 0xCE
 {
-	auto before = A;
-	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
-	A += (memory->ReadByte(PC++) + carry);
-	ClearFlags();
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if ((before + memory->ReadByte(PC++)) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) + (memory->ReadByte(PC++) & 0x0F) + carry) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	Adc(memory->ReadByte(PC++));
 }
 
 /* RST 0x0008 */
@@ -2286,12 +2079,7 @@ void Processor::PUSH_DE() // 0xD5
 /* SUB n */
 void Processor::SUB_n() // 0xD6
 {
-	auto before = A;
-	A -= memory->ReadByte(PC++);
-	SetFlag(FLAG_SUB);
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if (before < memory->ReadByte(PC++)) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) - (memory->ReadByte(PC++) & 0x0F)) < 0) EnableFlag(FLAG_HALFCARRY);
+	Sub(memory->ReadByte(PC++));
 }
 
 /* RST 0x0010 */
@@ -2349,13 +2137,7 @@ void Processor::CALL_C_nn() // 0xDC
 /* SBC A, n */
 void Processor::SBC_A_n() // 0xDE
 {
-	auto before = A;
-	uint8 carry = IsFlagSet(FLAG_CARRY) ? 1 : 0;
-	A -= (memory->ReadByte(PC++) + carry);
-	SetFlag(FLAG_SUB);
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	if (before < memory->ReadByte(PC++)) EnableFlag(FLAG_CARRY);
-	if (((A & 0x0F) - (memory->ReadByte(PC++) & 0x0F) - carry) < 0) EnableFlag(FLAG_HALFCARRY);
+	Sbc(memory->ReadByte(PC++));
 }
 
 /* RST 0x0018 */
@@ -2407,12 +2189,7 @@ void Processor::RST_0x0020() // 0xE7
 /* ADD SP, n */
 void Processor::ADD_SP_n() // 0xE8
 {
-	auto before = SP;
-	SP += memory->ReadByte(PC++);
-	ClearFlags();
-	if (SP == 0) EnableFlag(FLAG_ZERO);
-	if ((before + memory->ReadByte(PC++)) > 0xFF) EnableFlag(FLAG_CARRY);
-	if (((SP & 0x0F) + (memory->ReadByte(PC++) & 0x0F)) > 0x0F) EnableFlag(FLAG_HALFCARRY);
+	AddSP(memory->ReadByte(PC++));
 }
 
 /* JP (HL) */
@@ -2491,7 +2268,7 @@ void Processor::RST_0x0030() // 0xF7
 /* LD HL, SP+n */
 void Processor::LD_HL_SP_n() // 0xF8
 {
-	int8 n = memory->ReadByte(PC++);
+	int8 n = static_cast<int8>(memory->ReadByte(PC++));
 	HL = SP + n;
 	ClearFlags();
 	if (((SP ^ n ^ HL) & 0x100) == 0x100)

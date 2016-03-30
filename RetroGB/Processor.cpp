@@ -7,7 +7,6 @@ Processor::Processor(Memory* mem)
     Reset();
 }
 
-
 Processor::~Processor()
 {
 }
@@ -22,7 +21,7 @@ void Processor::Reset(bool color)
     BC = 0x0013;
     DE = 0x00D8;
     HL = 0x014D;
-    PC = 0x0100; // TODO boot rom support
+    PC = 0x100; // TODO boot rom support
     SP = 0xFFFE;
     ime = true;
     halted = false;
@@ -150,22 +149,10 @@ bool Processor::IsFlagSet(uint8 flag)
 
 void Processor::UnknownOpcode()
 {
-    //LOG_LINE("Unimplemented opcode: PC: 0x%02X, Opode: 0x%02X", PC, memory->ReadByte(PC));
+    LOG_LINE("Unimplemented opcode: PC: 0x%02X, Opode: 0x%02X", PC, memory->ReadByte(PC));
 }
 
 void Processor::InvalidOpcode()
 {
     LOG_LINE("Invalid opcode: Opcode: 0x%02X", memory->ReadByte(PC));
-}
-
-void Processor::StackPush(uint16& reg)
-{
-    SP -= 2;
-    memory->WriteWord(SP, reg);
-}
-
-void Processor::StackPop(uint16& reg)
-{
-    reg = memory->ReadWord(SP);
-    SP += 2;
 }

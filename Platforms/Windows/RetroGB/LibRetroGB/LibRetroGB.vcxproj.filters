@@ -18,5 +18,6 @@
     <ClCompile Include="..\..\..\..\RetroGB\Cartridge.cpp" />
     <ClCompile Include="..\..\..\..\RetroGB\Color.cpp" />
     <ClCompile Include="..\..\..\..\RetroGB\Processor.Generated.cpp" />
+    <ClCompile Include="..\..\..\..\RetroGB\Processor.Helpers.cpp" />
   </ItemGroup>
 </Project>

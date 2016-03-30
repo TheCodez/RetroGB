@@ -78,6 +78,13 @@ private:
     void InvalidOpcode();
     void StackPush(uint16& reg);
     void StackPop(uint16& reg);
+    void Add(uint8 reg);
+    void Adc(uint8 reg);
+    void Sub(uint8 reg);
+    void Sbc(uint8 reg);
+
+    void AddHL(uint16 val);
+    void AddSP(uint8 val);
 
 public:
     Memory* memory;
