@@ -5,8 +5,8 @@
 Cartridge::Cartridge()
     : rom(nullptr)
 {
+    Reset();
 }
-
 
 Cartridge::~Cartridge()
 {
@@ -16,7 +16,10 @@ Cartridge::~Cartridge()
 void Cartridge::Reset()
 {
     if (rom != nullptr)
+    {
         delete[] rom;
+        rom = nullptr;
+    }
 
     title = "";
     licenseeCode = 0;
@@ -50,38 +53,39 @@ bool Cartridge::LoadRom(const std::string& fileName)
 
         delete[] memblock;
 
-        for (int i = 0x0134; i < 0x0143; i++)
+        if (rom != nullptr && size > 0)
         {
-            if (rom[i] == 0)
-                break;
+            for (int i = 0x0134; i < 0x0143; i++)
+            {
+                if (rom[i] == 0)
+                    break;
 
-            title += rom[i];
+                title += rom[i];
+            }
+
+            licenseeCode = (rom[0x0144] << 8) | rom[0x0145];
+            colorGameboy = rom[0x0143] == 0x80 || (rom[0x0143] == 0xC0);
+            superGameboy = rom[0x0146] == 0x03;
+            cartridgeType = rom[0x0147];
+            romSize = rom[0x0148];
+            ramSize = rom[0x0149];
+            japanese = rom[0x014A] == 0x00;
+            version = rom[0x014C];
+            oldLicenseeCode = rom[0x014B];
+
+            LOG_LINE("Title: %s", title.c_str());
+            LOG_LINE("Licensee Code: %d", licenseeCode);
+            LOG_LINE("Gameboy Color: %s", colorGameboy ? "true" : "false");
+            LOG_LINE("Super Gameboy: %s", superGameboy ? "true" : "false");
+            LOG_LINE("Cartridge Type: %d", cartridgeType);
+            LOG_LINE("ROM Size: %d", romSize);
+            LOG_LINE("RAM Size: %d", ramSize);
+            LOG_LINE("Japanese: %s", japanese ? "true" : "false");
+            LOG_LINE("Version: %d", version);
+            LOG_LINE("Old Licensee Code: %d", oldLicenseeCode);
+
+            return true;
         }
-
-
-        licenseeCode = (rom[0x0144] << 8) | rom[0x0145];
-        colorGameboy = rom[0x0143] == 0x80 || (rom[0x0143] == 0xC0);
-        superGameboy = rom[0x0146] == 0x03;
-        cartridgeType = rom[0x0147];
-        romSize = rom[0x0148];
-        ramSize = rom[0x0149];
-        japanese = rom[0x014A] == 0x00;
-        version = rom[0x014C];
-        oldLicenseeCode = rom[0x014B];
-
-        LOG_LINE("Title: %s", title.c_str());
-        LOG_LINE("Licensee Code: %d", licenseeCode);
-        LOG_LINE("Gameboy Color: %s", colorGameboy ? "true" : "false");
-        LOG_LINE("Super Gameboy: %s", superGameboy ? "true" : "false");
-        LOG_LINE("Cartridge Type: %d", cartridgeType);
-        LOG_LINE("ROM Size: %d", romSize);
-        LOG_LINE("RAM Size: %d", ramSize);
-        LOG_LINE("Japanese: %s", japanese ? "true" : "false");
-        LOG_LINE("Version: %d", version);
-        LOG_LINE("Old Licensee Code: %d", oldLicenseeCode);
-        
-        return true;
     }
-
     return false;
 }

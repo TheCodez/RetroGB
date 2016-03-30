@@ -9,7 +9,6 @@ Video::Video(Memory* mem, Processor* cpu)
     Reset();
 }
 
-
 Video::~Video()
 {
     delete[] frameBuffer;
@@ -17,6 +16,7 @@ Video::~Video()
 
 void Video::Reset(bool color)
 {
+    currLine = 0;
     gameBoycolor = color;
     modeCounter = 0;
     mode = Mode::HBlank;
@@ -171,13 +171,16 @@ void Video::RenderBackground(int scanLine)
 
         for (int x = 0; x < 32; x++)
         {
+            int tile = 0;
+
             if (tiles == 0x8800)
             {
-
+                // signed data
+                //tile = 128 + static_cast<int8>(memory->ReadByte());
             }
             else
             {
-
+                //tile = memory->ReadByte();
             }
 
             //uint8 palette = memory->ReadByte(paletteNumber);

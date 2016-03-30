@@ -28,7 +28,7 @@ public:
     void RenderWindow(int scanLine);
     void RenderSprites(int scanLine);
 
-    Color* GetFrameBuffer() const { return frameBuffer; }
+    const Color* GetFrameBuffer() const { return frameBuffer; }
 private:
     Color GetColor(int colorNum, uint8 palette);
     void CompareLYToLYC();

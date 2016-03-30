@@ -16,7 +16,7 @@ public:
 
     void Run();
     void Step();
-    Color* GetFrameBuffer() const;
+    const Color* GetFrameBuffer() const;
     void Reset(bool color = false);
     bool LoadRom(const std::string& fileName);
     Cartridge* GetCartridge() const { return cartridge; }

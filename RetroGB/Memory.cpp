@@ -8,7 +8,6 @@ Memory::Memory()
     Reset();
 }
 
-
 Memory::~Memory()
 {
 }

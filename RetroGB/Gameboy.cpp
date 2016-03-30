@@ -14,7 +14,6 @@ Gameboy::Gameboy()
     cartridge = new Cartridge();
 }
 
-
 Gameboy::~Gameboy()
 {
     delete memory;
@@ -67,7 +66,7 @@ bool Gameboy::LoadRom(const std::string& fileName)
     return false;
 }
 
-Color* Gameboy::GetFrameBuffer() const 
+const Color* Gameboy::GetFrameBuffer() const
 {
     return video->GetFrameBuffer();
 }
