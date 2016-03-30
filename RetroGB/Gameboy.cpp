@@ -32,7 +32,7 @@ void Gameboy::Run()
         while (cycles < targetCycles)
         {
             cycles += processor->Run();
-            video->Run(cycles);
+            //video->Run(cycles);
         }
     }
 }

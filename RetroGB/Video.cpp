@@ -32,7 +32,7 @@ bool Video::Run(int cycles)
     bool vblank = false;
 
     modeCounter += cycles;
-
+    
     switch (mode)
     {
     case Mode::HBlank:
@@ -44,7 +44,7 @@ bool Video::Run(int cycles)
                 mode = Mode::VBlank;
                 processor->RequestInterrupt(Interrupts::VBlank);
 
-                uint8 stat = memory->ReadByte(0xFF41);
+                uint8 stat = memory->Read(0xFF41);
                 if (IsBitSet(stat, 4))
                 {
                     processor->RequestInterrupt(Interrupts::LCDSTAT);
@@ -56,7 +56,7 @@ bool Video::Run(int cycles)
             {
                 mode = Mode::Oam;
 
-                uint8 stat = memory->ReadByte(0xFF41);
+                uint8 stat = memory->Read(0xFF41);
                 if (IsBitSet(stat, 5))
                 {
                     processor->RequestInterrupt(Interrupts::LCDSTAT);
@@ -68,7 +68,7 @@ bool Video::Run(int cycles)
         if (modeCounter >= 4560)
         {
             currLine++;
-            memory->WriteByte(0xFF44, currLine);
+            memory->Write(0xFF44, currLine);
 
             if (currLine >= 144) 
             {
@@ -79,7 +79,7 @@ bool Video::Run(int cycles)
                 mode = Mode::Oam;
                 CompareLYToLYC();
 
-                uint8 stat = memory->ReadByte(0xFF41);
+                uint8 stat = memory->Read(0xFF41);
 
                 if (IsBitSet(stat, 5))
                 {
@@ -115,8 +115,8 @@ bool Video::Run(int cycles)
 
 void Video::CompareLYToLYC()
 {
-    uint8 stat = memory->ReadByte(0xFF41);
-    uint8 lyc = memory->ReadByte(0xFF45);
+    uint8 stat = memory->Read(0xFF41);
+    uint8 lyc = memory->Read(0xFF45);
 
     if (lyc == currLine)
     {
@@ -129,10 +129,10 @@ void Video::CompareLYToLYC()
     }
     else
     {
-        ClearBit(stat, 2);
+        ResetBit(stat, 2);
     }
 
-    memory->WriteByte(0xFF41, stat);
+    memory->Write(0xFF41, stat);
 }
 
 void Video::ScanLine(int scanLine)
@@ -140,7 +140,7 @@ void Video::ScanLine(int scanLine)
     if (!frameBuffer)
         return;
 
-    uint8 lcdc = memory->ReadByte(0xFF40);
+    uint8 lcdc = memory->Read(0xFF40);
     
     if (IsBitSet(lcdc, 7))
     {
@@ -159,15 +159,16 @@ void Video::ScanLine(int scanLine)
 
 void Video::RenderBackground(int scanLine)
 {
-    uint8 lcdc = memory->ReadByte(0xFF40);
+    uint8 lcdc = memory->Read(0xFF40);
 
     if (IsBitSet(lcdc, 0))
     {
-        int scrollY = memory->ReadByte(0xFF42);
-        int scrollX = memory->ReadByte(0xFF43);
+        int scrollY = memory->Read(0xFF42);
+        int scrollX = memory->Read(0xFF43);
         int tiles = IsBitSet(lcdc, 4) ? 0x8000 : 0x8800;
-        int maps = IsBitSet(lcdc, 3) ? 0x9C00 : 0x9800;
-        int yPos = scrollY + scanLine;
+        int map = IsBitSet(lcdc, 3) ? 0x9C00 : 0x9800;
+        int line = scrollY + scanLine;
+        int y = line / 8;
 
         for (int x = 0; x < 32; x++)
         {
@@ -176,29 +177,49 @@ void Video::RenderBackground(int scanLine)
             if (tiles == 0x8800)
             {
                 // signed data
-                //tile = 128 + static_cast<int8>(memory->ReadByte());
+                tile = 128 + static_cast<int8>(memory->Read(map + (y * 32) + x));
             }
             else
             {
-                //tile = memory->ReadByte();
+                tile = memory->Read(map + (y * 32) + x);
             }
 
-            //uint8 palette = memory->ReadByte(paletteNumber);
-            //Color color = GetColor(colorNum, palette);
+            int offsetX = x * 8;
+            int tileAddress = tiles + (tile * 16) + (line % 8) * 2;
 
-            //frameBuffer[posX + scanLine * SCREEN_WIDTH] = color;
+            uint8 data1 = memory->Read(tileAddress);
+            uint8 data2 = memory->Read(tileAddress + 1);
+
+            for (int pixelX = 0; pixelX < 8; pixelX++)
+            {
+                int posX = offsetX + pixelX - scrollX;
+                int colorBit = 7 - pixelX;
+                int colorNum = GetBitValue(data1, colorBit) | (GetBitValue(data2, colorBit) * 2);
+
+                uint8 palette = memory->Read(0xFF47);
+                Color color = GetColor(colorNum, palette);
+
+                frameBuffer[posX + scanLine * SCREEN_WIDTH] = color;
+            }
+        }
+    }
+    else
+    {
+        for (int x = 0; x < SCREEN_WIDTH; x++)
+        {
+            frameBuffer[x + scanLine * SCREEN_WIDTH] = Color::WHITE;
         }
     }
 }
 
 void Video::RenderWindow(int scanLine)
 {
-    uint8 lcdc = memory->ReadIO(0xFF40);
+    uint8 lcdc = memory->Read(0xFF40);
 
     if (IsBitSet(lcdc, 5))
     {
-        int windowY = memory->ReadByte(0xFF4A);
-        int windowX = memory->ReadByte(0xFF4B) - 7;
+        int windowY = memory->Read(0xFF4A);
+        int windowX = memory->Read(0xFF4B) - 7;
         int tiles = IsBitSet(lcdc, 4) ? 0x8000 : 0x8800;
         int maps = IsBitSet(lcdc, 3) ? 0x9C00 : 0x9800;
         int yPos = scanLine - windowY;
@@ -207,7 +228,7 @@ void Video::RenderWindow(int scanLine)
 
 void Video::RenderSprites(int scanLine)
 {
-    uint8 lcdc = memory->ReadByte(0xFF40);
+    uint8 lcdc = memory->Read(0xFF40);
 
     if (IsBitSet(lcdc, 1))
     {
@@ -219,10 +240,10 @@ void Video::RenderSprites(int scanLine)
         {
             // Every sprite has 4 bytes of memory assigned
             int index = sprite * 4;
-            int spriteY = memory->ReadByte(0xFE00 + index + 0) - 16;
-            int spriteX = memory->ReadByte(0xFE00 + index + 1) - 8;
-            uint8 tileLocation = memory->ReadByte(0xFE00 + index + 2);
-            uint8 attributes = memory->ReadByte(0xFE00 + index + 3);
+            int spriteY = memory->Read(0xFE00 + index + 0) - 16;
+            int spriteX = memory->Read(0xFE00 + index + 1) - 8;
+            uint8 tileLocation = memory->Read(0xFE00 + index + 2);
+            uint8 attributes = memory->Read(0xFE00 + index + 3);
 
             bool belowBG = IsBitSet(attributes, 7);
             bool yFlip = IsBitSet(attributes, 6);
@@ -242,8 +263,8 @@ void Video::RenderSprites(int scanLine)
             int line = yFlip ? spriteHeight - (scanLine - spriteY) * 2 : (scanLine - spriteY) * 2;
 
             int tileAddress = 0x8000 + (tileLocation * 16) + line;
-            uint8 data1 = memory->ReadByte(tileAddress);
-            uint8 data2 = memory->ReadByte(tileAddress + 1);
+            uint8 data1 = memory->Read(tileAddress);
+            uint8 data2 = memory->Read(tileAddress + 1);
 
             for (int pixelX = 0; pixelX < 8; pixelX++)
             {
@@ -256,7 +277,7 @@ void Video::RenderSprites(int scanLine)
                     continue;
                 }
 
-                uint8 palette = memory->ReadByte(paletteNumber);
+                uint8 palette = memory->Read(paletteNumber);
                 Color color = GetColor(colorNum, palette);
 
                 // whites indicates transparent for sprites
@@ -271,7 +292,8 @@ void Video::RenderSprites(int scanLine)
 
 Color Video::GetColor(int colorNum, uint8 palette)
 {
-    Color colors[4] = {
+    Color colors[4] = 
+    {
         Color::WHITE,
         Color(170, 170, 170, 255),
         Color(85, 85, 85, 255),

@@ -17,8 +17,8 @@ public:
     uint8 ReadByte(uint16 address);
     uint16 ReadWord(uint16 address);
 
-    void WriteIO(uint16 address, uint8 value);
-    uint8 ReadIO(uint16 address);
+    void Write(uint16 address, uint8 value);
+    uint8 Read(uint16 address) const;
 
     void Save();
 
