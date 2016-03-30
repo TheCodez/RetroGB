@@ -125,7 +125,7 @@ void Memory::WriteByte(uint16 address, uint8 value)
     }
     else if (address == 0xFF01)
     {
-        LOG_LINE("%c", (char)value);
+        LOG("%c", (char)value);
         io[address - 0xFF00] = value;
     }
     else if (address >= 0xFF00 && address <= 0xFF7F)
@@ -242,7 +242,6 @@ uint8 Memory::ReadByte(uint16 address)
     }
 }
 
-
 void Memory::WriteWord(uint16 address, uint16 value)
 {
     WriteByte(address, value & 0xFF);
@@ -251,7 +250,7 @@ void Memory::WriteWord(uint16 address, uint16 value)
 
 uint16 Memory::ReadWord(uint16 address)
 {
-    return (uint16)(ReadByte(address) | (ReadByte(address + 1) << 8));
+    return (ReadByte(address) | (ReadByte(address + 1) << 8));
 }
 
 void Memory::WriteIO(uint16 address, uint8 value)

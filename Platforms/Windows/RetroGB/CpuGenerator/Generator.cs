@@ -249,19 +249,38 @@ namespace CpuGenerator
                         else
                             WriteSwapHL(writer, opcode);
                         break;
+                case "RL":
+                        WriteRl(writer, opcode);
+                        break;
+                case "RLC":
+                        WriteRlc(writer, opcode);
+                        break;
+                case "RR":
+                        WriteRr(writer, opcode);
+                        break;
+                case "RRC":
+                        WriteRrc(writer, opcode);
+                        break;
+                case "RLA":
+                        WriteRl(writer, opcode, true);
+                        break;
+                case "RLCA":
+                        WriteRlc(writer, opcode, true);
+                        break;
+                case "RRA":
+                        WriteRr(writer, opcode, true);
+                        break;
+                case "RRCA":
+                        WriteRrc(writer, opcode, true);
+                        break;
                 case "SLA":
-                        if (firstOperand != "(HL)")
-                            WriteSla(writer, opcode);
-                        else
-                            WriteSlaHL(writer, opcode);
-
+                        WriteSla(writer, opcode, true);
                         break;
                 case "SRA":
-                        if (firstOperand != "(HL)")
-                            WriteSra(writer, opcode);
-                        else
-                            WriteSraHL(writer, opcode);
-
+                        WriteSra(writer, opcode, true);
+                        break;
+                case "SRL":
+                        WriteSrl(writer, opcode, true);
                         break;
                 default:
                     writer.WriteLine("\t// Not implemented yet");
@@ -385,15 +404,7 @@ namespace CpuGenerator
         #region Inc, Dec
         public void WriteIncByte(TextWriter writer, Opcode opcode)
         {
-            if (opcode.FirstOperand == "(HL)")
-                writer.WriteLine("\tmemory->WriteByte(HL, memory->ReadByte(HL++));");
-            else
-                writer.WriteLine("\t{0}++;", opcode.FirstOperand);
-            writer.WriteLine("\tIsFlagSet(FLAG_CARRY) ? SetFlag(FLAG_CARRY) : ClearFlags();");
-            //writer.WriteLine("\tDisableFlag(FLAG_SUB);");
-            writer.WriteLine("\tif ({0} == 0) EnableFlag(FLAG_ZERO);", opcode.FirstOperand);
-            writer.WriteLine("\telse DisableFlag(FLAG_ZERO);");
-            writer.WriteLine("\tif (({0} & 0x0F) == 0x00) EnableFlag(FLAG_HALFCARRY); else DisableFlag(FLAG_HALFCARRY);", opcode.FirstOperand);
+            writer.WriteLine("\t" + GetStoreStub(opcode.FirstOperand), string.Format("Inc({0})", GetLoadStub(opcode.FirstOperand)));
         }
 
         public void WriteIncWord(TextWriter writer, Opcode opcode)
@@ -403,15 +414,7 @@ namespace CpuGenerator
 
         public void WriteDecByte(TextWriter writer, Opcode opcode)
         {
-            if (opcode.FirstOperand == "(HL)")
-                writer.WriteLine("\tmemory->WriteByte(HL, memory->ReadByte(HL--));");
-            else
-                writer.WriteLine("\t{0}--;", opcode.FirstOperand);
-            writer.WriteLine("\tIsFlagSet(FLAG_CARRY) ? SetFlag(FLAG_CARRY) : ClearFlags();");
-            writer.WriteLine("\tEnableFlag(FLAG_SUB);");
-            writer.WriteLine("\tif ({0} == 0) EnableFlag(FLAG_ZERO);", opcode.FirstOperand);
-            writer.WriteLine("\telse DisableFlag(FLAG_ZERO);");
-            writer.WriteLine("\tif (({0} & 0x0F) == 0x0F) EnableFlag(FLAG_HALFCARRY); else DisableFlag(FLAG_HALFCARRY);", opcode.FirstOperand);
+            writer.WriteLine("\t" + GetStoreStub(opcode.FirstOperand), string.Format("Dec({0})", GetLoadStub(opcode.FirstOperand)));
         }
 
         public void WriteDecWord(TextWriter writer, Opcode opcode)
@@ -662,30 +665,6 @@ namespace CpuGenerator
             writer.WriteLine("\tPC = {0};", string.IsNullOrEmpty(opcode.FirstOperand) ? "0x0000" : opcode.FirstOperand);
         }
 
-        public void WriteSla(TextWriter writer, Opcode opcode)
-        {
-            writer.WriteLine("\t{0} <<= 1;", opcode.FirstOperand);
-            writer.WriteLine("\tif ({0} == 0) EnableFlag(FLAG_ZERO);", opcode.FirstOperand);
-        }
-
-        public void WriteSra(TextWriter writer, Opcode opcode)
-        {
-            writer.WriteLine("\t{0} >>= 1;", opcode.FirstOperand);
-            writer.WriteLine("\tif ({0} == 0) EnableFlag(FLAG_ZERO);", opcode.FirstOperand);
-        }
-
-        public void WriteSlaHL(TextWriter writer, Opcode opcode)
-        {
-            writer.WriteLine("\tmemory->WriteByte(HL, memory->ReadByte(HL) << 1);");
-            writer.WriteLine("\tif (memory->ReadByte(HL) == 0) EnableFlag(FLAG_ZERO);");
-        }
-
-        public void WriteSraHL(TextWriter writer, Opcode opcode)
-        {
-            writer.WriteLine("\tmemory->WriteByte(HL, memory->ReadByte(HL) >> 1);");
-            writer.WriteLine("\tif (memory->ReadByte(HL) == 0) EnableFlag(FLAG_ZERO);");
-        }
-
         public void WriteSwap(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\t{0} = (({0} >> 4) & 0x0F) | (({0} << 4) & 0xF0);", opcode.FirstOperand);
@@ -708,6 +687,45 @@ namespace CpuGenerator
             writer.WriteLine("\t\tEnableFlag(FLAG_CARRY);");
             writer.WriteLine("\tif (((SP ^ n ^ HL) & 0x10) == 0x10)");
             writer.WriteLine("\t\tEnableFlag(FLAG_HALFCARRY);");
+        }
+
+        public void WriteRl(TextWriter writer, Opcode opcode, bool a = false)
+        {
+            string operand = a ? "A" : opcode.FirstOperand;
+            writer.WriteLine("\t" + GetStoreStub(operand), string.Format("Rl({0})", GetLoadStub(operand)));
+        }
+
+        public void WriteRlc(TextWriter writer, Opcode opcode, bool a = false)
+        {
+            string operand = a ? "A" : opcode.FirstOperand;
+            writer.WriteLine("\t" + GetStoreStub(operand), string.Format("Rlc({0})", GetLoadStub(operand)));
+        }
+
+        public void WriteRr(TextWriter writer, Opcode opcode, bool a = false)
+        {
+            string operand = a ? "A" : opcode.FirstOperand;
+            writer.WriteLine("\t" + GetStoreStub(operand), string.Format("Rr({0})", GetLoadStub(operand)));
+        }
+
+        public void WriteRrc(TextWriter writer, Opcode opcode, bool a = false)
+        {
+            string operand = a ? "A" : opcode.FirstOperand;
+            writer.WriteLine("\t" + GetStoreStub(operand), string.Format("Rrc({0})", GetLoadStub(operand)));
+        }
+
+        public void WriteSla(TextWriter writer, Opcode opcode, bool a = false)
+        {
+            writer.WriteLine("\t" + GetStoreStub(opcode.FirstOperand), string.Format("Sla({0})", GetLoadStub(opcode.FirstOperand)));
+        }
+
+        public void WriteSra(TextWriter writer, Opcode opcode, bool a = false)
+        {
+            writer.WriteLine("\t" + GetStoreStub(opcode.FirstOperand), string.Format("Sra({0})", GetLoadStub(opcode.FirstOperand)));
+        }
+
+        public void WriteSrl(TextWriter writer, Opcode opcode, bool a = false)
+        {
+            writer.WriteLine("\t" + GetStoreStub(opcode.FirstOperand), string.Format("Srl({0})", GetLoadStub(opcode.FirstOperand)));
         }
 
         #endregion

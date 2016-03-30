@@ -550,22 +550,13 @@ void Processor::INC_BC() // 0x03
 /* INC B */
 void Processor::INC_B() // 0x04
 {
-	B++;
-	IsFlagSet(FLAG_CARRY) ? SetFlag(FLAG_CARRY) : ClearFlags();
-	if (B == 0) EnableFlag(FLAG_ZERO);
-	else DisableFlag(FLAG_ZERO);
-	if ((B & 0x0F) == 0x00) EnableFlag(FLAG_HALFCARRY); else DisableFlag(FLAG_HALFCARRY);
+	B = Inc(B);
 }
 
 /* DEC B */
 void Processor::DEC_B() // 0x05
 {
-	B--;
-	IsFlagSet(FLAG_CARRY) ? SetFlag(FLAG_CARRY) : ClearFlags();
-	EnableFlag(FLAG_SUB);
-	if (B == 0) EnableFlag(FLAG_ZERO);
-	else DisableFlag(FLAG_ZERO);
-	if ((B & 0x0F) == 0x0F) EnableFlag(FLAG_HALFCARRY); else DisableFlag(FLAG_HALFCARRY);
+	B = Dec(B);
 }
 
 /* LD B, n */
@@ -577,8 +568,7 @@ void Processor::LD_B_n() // 0x06
 /* RLCA */
 void Processor::RLCA() // 0x07
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = Rlc(A);
 }
 
 /* LD (nn), SP */
@@ -609,22 +599,13 @@ void Processor::DEC_BC() // 0x0B
 /* INC C */
 void Processor::INC_C() // 0x0C
 {
-	C++;
-	IsFlagSet(FLAG_CARRY) ? SetFlag(FLAG_CARRY) : ClearFlags();
-	if (C == 0) EnableFlag(FLAG_ZERO);
-	else DisableFlag(FLAG_ZERO);
-	if ((C & 0x0F) == 0x00) EnableFlag(FLAG_HALFCARRY); else DisableFlag(FLAG_HALFCARRY);
+	C = Inc(C);
 }
 
 /* DEC C */
 void Processor::DEC_C() // 0x0D
 {
-	C--;
-	IsFlagSet(FLAG_CARRY) ? SetFlag(FLAG_CARRY) : ClearFlags();
-	EnableFlag(FLAG_SUB);
-	if (C == 0) EnableFlag(FLAG_ZERO);
-	else DisableFlag(FLAG_ZERO);
-	if ((C & 0x0F) == 0x0F) EnableFlag(FLAG_HALFCARRY); else DisableFlag(FLAG_HALFCARRY);
+	C = Dec(C);
 }
 
 /* LD C, n */
@@ -636,8 +617,7 @@ void Processor::LD_C_n() // 0x0E
 /* RRCA */
 void Processor::RRCA() // 0x0F
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = Rrc(A);
 }
 
 /* STOP */
@@ -669,22 +649,13 @@ void Processor::INC_DE() // 0x13
 /* INC D */
 void Processor::INC_D() // 0x14
 {
-	D++;
-	IsFlagSet(FLAG_CARRY) ? SetFlag(FLAG_CARRY) : ClearFlags();
-	if (D == 0) EnableFlag(FLAG_ZERO);
-	else DisableFlag(FLAG_ZERO);
-	if ((D & 0x0F) == 0x00) EnableFlag(FLAG_HALFCARRY); else DisableFlag(FLAG_HALFCARRY);
+	D = Inc(D);
 }
 
 /* DEC D */
 void Processor::DEC_D() // 0x15
 {
-	D--;
-	IsFlagSet(FLAG_CARRY) ? SetFlag(FLAG_CARRY) : ClearFlags();
-	EnableFlag(FLAG_SUB);
-	if (D == 0) EnableFlag(FLAG_ZERO);
-	else DisableFlag(FLAG_ZERO);
-	if ((D & 0x0F) == 0x0F) EnableFlag(FLAG_HALFCARRY); else DisableFlag(FLAG_HALFCARRY);
+	D = Dec(D);
 }
 
 /* LD D, n */
@@ -696,8 +667,7 @@ void Processor::LD_D_n() // 0x16
 /* RLA */
 void Processor::RLA() // 0x17
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = Rl(A);
 }
 
 /* JR n */
@@ -727,22 +697,13 @@ void Processor::DEC_DE() // 0x1B
 /* INC E */
 void Processor::INC_E() // 0x1C
 {
-	E++;
-	IsFlagSet(FLAG_CARRY) ? SetFlag(FLAG_CARRY) : ClearFlags();
-	if (E == 0) EnableFlag(FLAG_ZERO);
-	else DisableFlag(FLAG_ZERO);
-	if ((E & 0x0F) == 0x00) EnableFlag(FLAG_HALFCARRY); else DisableFlag(FLAG_HALFCARRY);
+	E = Inc(E);
 }
 
 /* DEC E */
 void Processor::DEC_E() // 0x1D
 {
-	E--;
-	IsFlagSet(FLAG_CARRY) ? SetFlag(FLAG_CARRY) : ClearFlags();
-	EnableFlag(FLAG_SUB);
-	if (E == 0) EnableFlag(FLAG_ZERO);
-	else DisableFlag(FLAG_ZERO);
-	if ((E & 0x0F) == 0x0F) EnableFlag(FLAG_HALFCARRY); else DisableFlag(FLAG_HALFCARRY);
+	E = Dec(E);
 }
 
 /* LD E, n */
@@ -754,8 +715,7 @@ void Processor::LD_E_n() // 0x1E
 /* RRA */
 void Processor::RRA() // 0x1F
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = Rr(A);
 }
 
 /* JR NZ, n */
@@ -793,22 +753,13 @@ void Processor::INC_HL() // 0x23
 /* INC H */
 void Processor::INC_H() // 0x24
 {
-	H++;
-	IsFlagSet(FLAG_CARRY) ? SetFlag(FLAG_CARRY) : ClearFlags();
-	if (H == 0) EnableFlag(FLAG_ZERO);
-	else DisableFlag(FLAG_ZERO);
-	if ((H & 0x0F) == 0x00) EnableFlag(FLAG_HALFCARRY); else DisableFlag(FLAG_HALFCARRY);
+	H = Inc(H);
 }
 
 /* DEC H */
 void Processor::DEC_H() // 0x25
 {
-	H--;
-	IsFlagSet(FLAG_CARRY) ? SetFlag(FLAG_CARRY) : ClearFlags();
-	EnableFlag(FLAG_SUB);
-	if (H == 0) EnableFlag(FLAG_ZERO);
-	else DisableFlag(FLAG_ZERO);
-	if ((H & 0x0F) == 0x0F) EnableFlag(FLAG_HALFCARRY); else DisableFlag(FLAG_HALFCARRY);
+	H = Dec(H);
 }
 
 /* LD H, n */
@@ -885,22 +836,13 @@ void Processor::DEC_HL() // 0x2B
 /* INC L */
 void Processor::INC_L() // 0x2C
 {
-	L++;
-	IsFlagSet(FLAG_CARRY) ? SetFlag(FLAG_CARRY) : ClearFlags();
-	if (L == 0) EnableFlag(FLAG_ZERO);
-	else DisableFlag(FLAG_ZERO);
-	if ((L & 0x0F) == 0x00) EnableFlag(FLAG_HALFCARRY); else DisableFlag(FLAG_HALFCARRY);
+	L = Inc(L);
 }
 
 /* DEC L */
 void Processor::DEC_L() // 0x2D
 {
-	L--;
-	IsFlagSet(FLAG_CARRY) ? SetFlag(FLAG_CARRY) : ClearFlags();
-	EnableFlag(FLAG_SUB);
-	if (L == 0) EnableFlag(FLAG_ZERO);
-	else DisableFlag(FLAG_ZERO);
-	if ((L & 0x0F) == 0x0F) EnableFlag(FLAG_HALFCARRY); else DisableFlag(FLAG_HALFCARRY);
+	L = Dec(L);
 }
 
 /* LD L, n */
@@ -952,22 +894,13 @@ void Processor::INC_SP() // 0x33
 /* INC (HL) */
 void Processor::INC_MEM_HL() // 0x34
 {
-	memory->WriteByte(HL, memory->ReadByte(HL++));
-	IsFlagSet(FLAG_CARRY) ? SetFlag(FLAG_CARRY) : ClearFlags();
-	if ((HL) == 0) EnableFlag(FLAG_ZERO);
-	else DisableFlag(FLAG_ZERO);
-	if (((HL) & 0x0F) == 0x00) EnableFlag(FLAG_HALFCARRY); else DisableFlag(FLAG_HALFCARRY);
+	memory->WriteByte(HL, Inc(memory->ReadByte(HL)));
 }
 
 /* DEC (HL) */
 void Processor::DEC_MEM_HL() // 0x35
 {
-	memory->WriteByte(HL, memory->ReadByte(HL--));
-	IsFlagSet(FLAG_CARRY) ? SetFlag(FLAG_CARRY) : ClearFlags();
-	EnableFlag(FLAG_SUB);
-	if ((HL) == 0) EnableFlag(FLAG_ZERO);
-	else DisableFlag(FLAG_ZERO);
-	if (((HL) & 0x0F) == 0x0F) EnableFlag(FLAG_HALFCARRY); else DisableFlag(FLAG_HALFCARRY);
+	memory->WriteByte(HL, Dec(memory->ReadByte(HL)));
 }
 
 /* LD (HL), n */
@@ -1018,22 +951,13 @@ void Processor::DEC_SP() // 0x3B
 /* INC A */
 void Processor::INC_A() // 0x3C
 {
-	A++;
-	IsFlagSet(FLAG_CARRY) ? SetFlag(FLAG_CARRY) : ClearFlags();
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	else DisableFlag(FLAG_ZERO);
-	if ((A & 0x0F) == 0x00) EnableFlag(FLAG_HALFCARRY); else DisableFlag(FLAG_HALFCARRY);
+	A = Inc(A);
 }
 
 /* DEC A */
 void Processor::DEC_A() // 0x3D
 {
-	A--;
-	IsFlagSet(FLAG_CARRY) ? SetFlag(FLAG_CARRY) : ClearFlags();
-	EnableFlag(FLAG_SUB);
-	if (A == 0) EnableFlag(FLAG_ZERO);
-	else DisableFlag(FLAG_ZERO);
-	if ((A & 0x0F) == 0x0F) EnableFlag(FLAG_HALFCARRY); else DisableFlag(FLAG_HALFCARRY);
+	A = Dec(A);
 }
 
 /* LD A, n */
@@ -2318,337 +2242,289 @@ void Processor::RST_0x0038() // 0xFF
 /* RLC B */
 void Processor::RLC_B() // 0x00
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = Rlc(B);
 }
 
 /* RLC C */
 void Processor::RLC_C() // 0x01
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = Rlc(C);
 }
 
 /* RLC D */
 void Processor::RLC_D() // 0x02
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = Rlc(D);
 }
 
 /* RLC E */
 void Processor::RLC_E() // 0x03
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = Rlc(E);
 }
 
 /* RLC H */
 void Processor::RLC_H() // 0x04
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = Rlc(H);
 }
 
 /* RLC L */
 void Processor::RLC_L() // 0x05
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = Rlc(L);
 }
 
 /* RLC (HL) */
 void Processor::RLC_MEM_HL() // 0x06
 {
-	// Not implemented yet
-	UnknownOpcode();
+	memory->WriteByte(HL, Rlc(memory->ReadByte(HL)));
 }
 
 /* RLC A */
 void Processor::RLC_A() // 0x07
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = Rlc(A);
 }
 
 /* RRC B */
 void Processor::RRC_B() // 0x08
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = Rrc(B);
 }
 
 /* RRC C */
 void Processor::RRC_C() // 0x09
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = Rrc(C);
 }
 
 /* RRC D */
 void Processor::RRC_D() // 0x0A
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = Rrc(D);
 }
 
 /* RRC E */
 void Processor::RRC_E() // 0x0B
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = Rrc(E);
 }
 
 /* RRC H */
 void Processor::RRC_H() // 0x0C
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = Rrc(H);
 }
 
 /* RRC L */
 void Processor::RRC_L() // 0x0D
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = Rrc(L);
 }
 
 /* RRC (HL) */
 void Processor::RRC_MEM_HL() // 0x0E
 {
-	// Not implemented yet
-	UnknownOpcode();
+	memory->WriteByte(HL, Rrc(memory->ReadByte(HL)));
 }
 
 /* RRC A */
 void Processor::RRC_A() // 0x0F
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = Rrc(A);
 }
 
 /* RL B */
 void Processor::RL_B() // 0x10
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = Rl(B);
 }
 
 /* RL C */
 void Processor::RL_C() // 0x11
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = Rl(C);
 }
 
 /* RL D */
 void Processor::RL_D() // 0x12
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = Rl(D);
 }
 
 /* RL E */
 void Processor::RL_E() // 0x13
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = Rl(E);
 }
 
 /* RL H */
 void Processor::RL_H() // 0x14
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = Rl(H);
 }
 
 /* RL L  */
 void Processor::RL_L() // 0x15
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = Rl(L);
 }
 
 /* RL (HL) */
 void Processor::RL_MEM_HL() // 0x16
 {
-	// Not implemented yet
-	UnknownOpcode();
+	memory->WriteByte(HL, Rl(memory->ReadByte(HL)));
 }
 
 /* RL A */
 void Processor::RL_A() // 0x17
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = Rl(A);
 }
 
 /* RR B */
 void Processor::RR_B() // 0x18
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = Rr(B);
 }
 
 /* RR C */
 void Processor::RR_C() // 0x19
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = Rr(C);
 }
 
 /* RR D */
 void Processor::RR_D() // 0x1A
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = Rr(D);
 }
 
 /* RR E */
 void Processor::RR_E() // 0x1B
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = Rr(E);
 }
 
 /* RR H */
 void Processor::RR_H() // 0x1C
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = Rr(H);
 }
 
 /* RR L */
 void Processor::RR_L() // 0x1D
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = Rr(L);
 }
 
 /* RR (HL) */
 void Processor::RR_MEM_HL() // 0x1E
 {
-	// Not implemented yet
-	UnknownOpcode();
+	memory->WriteByte(HL, Rr(memory->ReadByte(HL)));
 }
 
 /* RR A */
 void Processor::RR_A() // 0x1F
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = Rr(A);
 }
 
 /* SLA B */
 void Processor::SLA_B() // 0x20
 {
-	B <<= 1;
-	if (B == 0) EnableFlag(FLAG_ZERO);
+	B = Sla(B);
 }
 
 /* SLA C */
 void Processor::SLA_C() // 0x21
 {
-	C <<= 1;
-	if (C == 0) EnableFlag(FLAG_ZERO);
+	C = Sla(C);
 }
 
 /* SLA D */
 void Processor::SLA_D() // 0x22
 {
-	D <<= 1;
-	if (D == 0) EnableFlag(FLAG_ZERO);
+	D = Sla(D);
 }
 
 /* SLA E */
 void Processor::SLA_E() // 0x23
 {
-	E <<= 1;
-	if (E == 0) EnableFlag(FLAG_ZERO);
+	E = Sla(E);
 }
 
 /* SLA H */
 void Processor::SLA_H() // 0x24
 {
-	H <<= 1;
-	if (H == 0) EnableFlag(FLAG_ZERO);
+	H = Sla(H);
 }
 
 /* SLA L */
 void Processor::SLA_L() // 0x25
 {
-	L <<= 1;
-	if (L == 0) EnableFlag(FLAG_ZERO);
+	L = Sla(L);
 }
 
 /* SLA (HL) */
 void Processor::SLA_MEM_HL() // 0x26
 {
-	memory->WriteByte(HL, memory->ReadByte(HL) << 1);
-	if (memory->ReadByte(HL) == 0) EnableFlag(FLAG_ZERO);
+	memory->WriteByte(HL, Sla(memory->ReadByte(HL)));
 }
 
 /* SLA A */
 void Processor::SLA_A() // 0x27
 {
-	A <<= 1;
-	if (A == 0) EnableFlag(FLAG_ZERO);
+	A = Sla(A);
 }
 
 /* SRA B */
 void Processor::SRA_B() // 0x28
 {
-	B >>= 1;
-	if (B == 0) EnableFlag(FLAG_ZERO);
+	B = Sra(B);
 }
 
 /* SRA C */
 void Processor::SRA_C() // 0x29
 {
-	C >>= 1;
-	if (C == 0) EnableFlag(FLAG_ZERO);
+	C = Sra(C);
 }
 
 /* SRA D */
 void Processor::SRA_D() // 0x2A
 {
-	D >>= 1;
-	if (D == 0) EnableFlag(FLAG_ZERO);
+	D = Sra(D);
 }
 
 /* SRA E */
 void Processor::SRA_E() // 0x2B
 {
-	E >>= 1;
-	if (E == 0) EnableFlag(FLAG_ZERO);
+	E = Sra(E);
 }
 
 /* SRA H */
 void Processor::SRA_H() // 0x2C
 {
-	H >>= 1;
-	if (H == 0) EnableFlag(FLAG_ZERO);
+	H = Sra(H);
 }
 
 /* SRA L */
 void Processor::SRA_L() // 0x2D
 {
-	L >>= 1;
-	if (L == 0) EnableFlag(FLAG_ZERO);
+	L = Sra(L);
 }
 
 /* SRA (HL) */
 void Processor::SRA_MEM_HL() // 0x2E
 {
-	memory->WriteByte(HL, memory->ReadByte(HL) >> 1);
-	if (memory->ReadByte(HL) == 0) EnableFlag(FLAG_ZERO);
+	memory->WriteByte(HL, Sra(memory->ReadByte(HL)));
 }
 
 /* SRA A */
 void Processor::SRA_A() // 0x2F
 {
-	A >>= 1;
-	if (A == 0) EnableFlag(FLAG_ZERO);
+	A = Sra(A);
 }
 
 /* SWAP B */
@@ -2711,57 +2587,49 @@ void Processor::SWAP_A() // 0x37
 /* SRL B */
 void Processor::SRL_B() // 0x38
 {
-	// Not implemented yet
-	UnknownOpcode();
+	B = Srl(B);
 }
 
 /* SRL C */
 void Processor::SRL_C() // 0x39
 {
-	// Not implemented yet
-	UnknownOpcode();
+	C = Srl(C);
 }
 
 /* SRL D */
 void Processor::SRL_D() // 0x3A
 {
-	// Not implemented yet
-	UnknownOpcode();
+	D = Srl(D);
 }
 
 /* SRL E */
 void Processor::SRL_E() // 0x3B
 {
-	// Not implemented yet
-	UnknownOpcode();
+	E = Srl(E);
 }
 
 /* SRL H */
 void Processor::SRL_H() // 0x3C
 {
-	// Not implemented yet
-	UnknownOpcode();
+	H = Srl(H);
 }
 
 /* SRL L */
 void Processor::SRL_L() // 0x3D
 {
-	// Not implemented yet
-	UnknownOpcode();
+	L = Srl(L);
 }
 
 /* SRL (HL) */
 void Processor::SRL_MEM_HL() // 0x3E
 {
-	// Not implemented yet
-	UnknownOpcode();
+	memory->WriteByte(HL, Srl(memory->ReadByte(HL)));
 }
 
 /* SRL A */
 void Processor::SRL_A() // 0x3F
 {
-	// Not implemented yet
-	UnknownOpcode();
+	A = Srl(A);
 }
 
 /* BIT 0 B */
