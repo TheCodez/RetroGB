@@ -1827,7 +1827,7 @@ void Processor::JP_NZ_nn() // 0xC2
 {
 	if (!IsFlagSet(FLAG_ZERO))
 	{
-		PC = memory->ReadWord(PC++);
+		PC = memory->ReadWord(PC);
 	}
 	else
 	{
@@ -1838,7 +1838,7 @@ void Processor::JP_NZ_nn() // 0xC2
 /* JP nn */
 void Processor::JP_nn() // 0xC3
 {
-	PC = memory->ReadWord(PC++);
+	PC = memory->ReadWord(PC);
 }
 
 /* CALL NZ, nn */
@@ -1896,7 +1896,7 @@ void Processor::JP_Z_nn() // 0xCA
 {
 	if (IsFlagSet(FLAG_ZERO))
 	{
-		PC = memory->ReadWord(PC++);
+		PC = memory->ReadWord(PC);
 	}
 	else
 	{
@@ -1962,7 +1962,7 @@ void Processor::JP_NC_nn() // 0xD2
 {
 	if (!IsFlagSet(FLAG_CARRY))
 	{
-		PC = memory->ReadWord(PC++);
+		PC = memory->ReadWord(PC);
 	}
 	else
 	{
@@ -2026,7 +2026,7 @@ void Processor::JP_C_nn() // 0xDA
 {
 	if (IsFlagSet(FLAG_CARRY))
 	{
-		PC = memory->ReadWord(PC++);
+		PC = memory->ReadWord(PC);
 	}
 	else
 	{

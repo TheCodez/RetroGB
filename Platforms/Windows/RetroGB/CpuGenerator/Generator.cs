@@ -618,7 +618,7 @@ namespace CpuGenerator
                 writer.WriteLine("\tif (" + cond + ")\n\t{");
             }
 
-            writer.WriteLine(tabs + "PC = memory->ReadWord(PC++);");
+            writer.WriteLine(tabs + "PC = memory->ReadWord(PC);");
             if (cond != string.Empty)
             {
                 writer.WriteLine("\t}\n\telse\n\t{\n\t\tPC += 2;\n\t}");
