@@ -94,10 +94,10 @@ bool Video::Run(int cycles)
         if (modeCounter >= 80)
         {
             modeCounter = 0;
-            mode = Mode::Vram;
+            mode = Mode::DataTransfer;
         }
         break;
-    case Mode::Vram:
+    case Mode::DataTransfer:
         ScanLine(currLine);
 
         if (modeCounter >= 172)

@@ -208,9 +208,32 @@ void Memory::WriteByte(uint16 address, uint8 value)
 {
     if (address == 0xFF01)
     {
-        // Catch data on the SB port
+        // SB
         LOG("%c", (char)value);
-        data[address] = value;
+        Write(address, value);
+    }
+    else if (address == 0xFF04)
+    {
+        // DIV
+        Write(0xFF04, 0x00);
+    }
+    else if (address == 0xFF44)
+    {
+        // LY
+        Write(0xFF44, 0x00);
+    }
+    else if (address == 0xFF45)
+    {
+        // LYC
+        Write(0xFF45, value);
+    }
+    else if (address == 0xFF46)
+    {
+        // DMA
+        for (int i = 0; i < 160; i++)
+        {
+            Write(0xFE00 + i, Read((value << 8) + i));
+        }
     }
     else if (address == 0xFFFF)
     {
@@ -222,17 +245,13 @@ void Memory::WriteByte(uint16 address, uint8 value)
     }
     else
     {
-        data[address] = value;
+        Write(address, value);
     }
 }
 
 uint8 Memory::ReadByte(uint16 address)
 {
-    if (address == 0xFF01)
-    {
-        return 0xFF;
-    }
-    else if (address == 0xFFFF)
+    if (address == 0xFFFF)
     {
         return interruptEnable;
     }

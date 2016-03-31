@@ -20,22 +20,22 @@ typedef int16_t int16;
 
 inline void SetBit(uint8& value, uint8 bit)
 {
-    value |= 0x01 << bit;
+    value |= 1 << bit;
 }
 
 inline void ResetBit(uint8& value, uint8 bit)
 {
-    value &= ~(0x01 << bit);
+    value &= ~(1 << bit);
 }
 
 inline bool IsBitSet(uint8 value, uint8 bit)
 {
-    return (value & (0x01 << bit)) != 0;
+    return (value & (1 << bit)) != 0;
 }
 
 inline uint8 GetBitValue(uint8 value, uint8 bit)
 {
-    return (value & (0x01 << bit)) ? 1 : 0;
+    return (value & (1 << bit)) ? 1 : 0;
 }
 
 #ifdef _DEBUG

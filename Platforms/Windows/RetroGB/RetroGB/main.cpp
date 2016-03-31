@@ -12,13 +12,6 @@ int scale = 2;
 int screenWidth = SCREEN_WIDTH * scale, screenHeight = SCREEN_HEIGHT * scale;
 bool enableFiltering = false;
 
-int total = 0;
-int timer = 0;
-int current = 0;
-int counter = 0;
-bool first = true;
-
-
 void init()
 {
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -70,25 +63,6 @@ void run()
     SDL_GL_SwapBuffers();
 }
 
-void CheckFPS()
-{
-    if (first)
-    {
-        first = false;
-        timer = SDL_GetTicks();
-    }
-
-    counter++;
-    current = SDL_GetTicks();
-    if ((timer + 1000) < current)
-    {
-        timer = current;
-        total = counter;
-        counter = 0;
-    }
-}
-
-
 void HandleInput(SDL_Event& event)
 {
     if (event.type == SDL_KEYDOWN)
@@ -131,7 +105,7 @@ int main(int argc, char** argv)
     float interval = 1000;
     interval /= fps;
 
-    unsigned int time2 = SDL_GetTicks();
+    unsigned int lastTime = SDL_GetTicks();
 
     while (!quit)
     {
@@ -145,13 +119,12 @@ int main(int argc, char** argv)
             }
         }
 
-        unsigned int current = SDL_GetTicks();
+        unsigned int currentTime = SDL_GetTicks();
 
-        if ((time2 + interval) < current)
+        if ((lastTime + interval) < currentTime)
         {
-            CheckFPS();
             run();
-            time2 = current;
+            lastTime = currentTime;
         }
 
     }

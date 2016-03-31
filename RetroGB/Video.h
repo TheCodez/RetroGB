@@ -11,7 +11,7 @@ enum class Mode
     HBlank,
     VBlank,
     Oam,
-    Vram
+    DataTransfer
 };
 
 class Video
