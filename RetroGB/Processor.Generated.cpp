@@ -623,8 +623,7 @@ void Processor::RRCA() // 0x0F
 /* STOP */
 void Processor::STOP() // 0x10
 {
-	// Not implemented yet
-	UnknownOpcode();
+	PC++;
 }
 
 /* LD DE, nn */

@@ -125,6 +125,9 @@ namespace CpuGenerator
             {
                 case "NOP":
                     break;
+                case "STOP":
+                    writer.WriteLine("\tPC++;");
+                    break;
                 case "LD":
                     if (firstOperand != secondOperand)
                     {

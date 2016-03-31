@@ -50,14 +50,18 @@ int Processor::Run()
             opcode = memory->ReadByte(PC++);
             opcodesCB[opcode]();
 
-            clockCycles += opcodeCBCycles[opcode];
+            clockCycles += opcodeCBCycles[opcode] * 4;
         }
         else
         {
             opcodes[opcode]();
 
-            clockCycles += opcodeCycles[opcode];
+            clockCycles += opcodeCycles[opcode] * 4;
         }
+    }
+    else
+    {
+        clockCycles += 4;
     }
 
     return clockCycles;
@@ -65,49 +69,49 @@ int Processor::Run()
 
 void Processor::RequestInterrupt(Interrupts interrupt)
 {
-    memory->WriteByte(0xFF0F, memory->ReadByte(0xFF0F) | interrupt);
+    memory->Write(0xFF0F, memory->Read(0xFF0F) | interrupt);
 }
 
 void Processor::HandleInterrupts()
 {
     if (ime)
     {
-        uint8 interruptEnable = memory->ReadByte(0xFFFF);
-        uint8 interruptFlag = memory->ReadByte(0xFF0F);
+        uint8 interruptEnable = memory->Read(0xFFFF);
+        uint8 interruptFlag = memory->Read(0xFF0F);
 
         uint8 interrupt = interruptEnable & interruptFlag;
 
         if (interrupt & VBlank)
         {
-            memory->WriteByte(0xFF0F, interruptFlag & ~VBlank);
+            memory->Write(0xFF0F, interruptFlag & ~VBlank);
             ime = false;
             StackPush(PC);
             PC = 0x0040;
         }
         else if (interrupt & LCDSTAT)
         {
-            memory->WriteByte(0xFF0F, interruptFlag & ~LCDSTAT);
+            memory->Write(0xFF0F, interruptFlag & ~LCDSTAT);
             ime = false;
             StackPush(PC);
             PC = 0x0048;
         }
         else if (interrupt & Timer)
         {
-            memory->WriteByte(0xFF0F, interruptFlag & ~Timer);
+            memory->Write(0xFF0F, interruptFlag & ~Timer);
             ime = false;
             StackPush(PC);
             PC = 0x0050;
         }
         else if (interrupt & Serial)
         {
-            memory->WriteByte(0xFF0F, interruptFlag & ~Serial);
+            memory->Write(0xFF0F, interruptFlag & ~Serial);
             ime = false;
             StackPush(PC);
             PC = 0x0058;
         }
         else if (interrupt & Joypad)
         {
-            memory->WriteByte(0xFF0F, interruptFlag & ~Joypad);
+            memory->Write(0xFF0F, interruptFlag & ~Joypad);
             ime = false;
             StackPush(PC);
             PC = 0x0060;
