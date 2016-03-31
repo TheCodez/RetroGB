@@ -220,7 +220,10 @@ namespace CpuGenerator
                         WriteJr(writer, opcode);
                         break;
                 case "JP":
-                        WriteJp(writer, opcode);
+                        if (firstOperand == "(HL)")
+                            writer.WriteLine("\tPC = HL;");
+                        else
+                            WriteJp(writer, opcode);
                         break;
                 case "DAA":
                         WriteDaa(writer, opcode);
@@ -598,7 +601,7 @@ namespace CpuGenerator
                 writer.WriteLine("\tif (" + cond + ")\n\t{");
             }
 
-            writer.WriteLine(tabs + "PC += 1 + static_cast<int8>(memory->ReadByte(PC));", opcode.FirstOperand);
+            writer.WriteLine(tabs + "PC += static_cast<int8>(memory->ReadByte(PC++));");
             if (cond != string.Empty)
             {
                 writer.WriteLine("\t}\n\telse\n\t{\n\t\tPC++;\n\t}");
@@ -615,7 +618,7 @@ namespace CpuGenerator
                 writer.WriteLine("\tif (" + cond + ")\n\t{");
             }
 
-            writer.WriteLine(tabs + "PC = memory->ReadWord(PC);", opcode.FirstOperand);
+            writer.WriteLine(tabs + "PC = memory->ReadWord(PC++);");
             if (cond != string.Empty)
             {
                 writer.WriteLine("\t}\n\telse\n\t{\n\t\tPC += 2;\n\t}");

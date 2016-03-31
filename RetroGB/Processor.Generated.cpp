@@ -673,7 +673,7 @@ void Processor::RLA() // 0x17
 /* JR n */
 void Processor::JR_n() // 0x18
 {
-	PC += 1 + static_cast<int8>(memory->ReadByte(PC));
+	PC += static_cast<int8>(memory->ReadByte(PC++));
 }
 
 /* ADD HL, DE */
@@ -723,7 +723,7 @@ void Processor::JR_NZ_n() // 0x20
 {
 	if (!IsFlagSet(FLAG_ZERO))
 	{
-		PC += 1 + static_cast<int8>(memory->ReadByte(PC));
+		PC += static_cast<int8>(memory->ReadByte(PC++));
 	}
 	else
 	{
@@ -807,7 +807,7 @@ void Processor::JR_Z_n() // 0x28
 {
 	if (IsFlagSet(FLAG_ZERO))
 	{
-		PC += 1 + static_cast<int8>(memory->ReadByte(PC));
+		PC += static_cast<int8>(memory->ReadByte(PC++));
 	}
 	else
 	{
@@ -864,7 +864,7 @@ void Processor::JR_NC_n() // 0x30
 {
 	if (!IsFlagSet(FLAG_CARRY))
 	{
-		PC += 1 + static_cast<int8>(memory->ReadByte(PC));
+		PC += static_cast<int8>(memory->ReadByte(PC++));
 	}
 	else
 	{
@@ -922,7 +922,7 @@ void Processor::JR_C_n() // 0x38
 {
 	if (IsFlagSet(FLAG_CARRY))
 	{
-		PC += 1 + static_cast<int8>(memory->ReadByte(PC));
+		PC += static_cast<int8>(memory->ReadByte(PC++));
 	}
 	else
 	{
@@ -1827,7 +1827,7 @@ void Processor::JP_NZ_nn() // 0xC2
 {
 	if (!IsFlagSet(FLAG_ZERO))
 	{
-		PC = memory->ReadWord(PC);
+		PC = memory->ReadWord(PC++);
 	}
 	else
 	{
@@ -1838,7 +1838,7 @@ void Processor::JP_NZ_nn() // 0xC2
 /* JP nn */
 void Processor::JP_nn() // 0xC3
 {
-	PC = memory->ReadWord(PC);
+	PC = memory->ReadWord(PC++);
 }
 
 /* CALL NZ, nn */
@@ -1896,7 +1896,7 @@ void Processor::JP_Z_nn() // 0xCA
 {
 	if (IsFlagSet(FLAG_ZERO))
 	{
-		PC = memory->ReadWord(PC);
+		PC = memory->ReadWord(PC++);
 	}
 	else
 	{
@@ -1962,7 +1962,7 @@ void Processor::JP_NC_nn() // 0xD2
 {
 	if (!IsFlagSet(FLAG_CARRY))
 	{
-		PC = memory->ReadWord(PC);
+		PC = memory->ReadWord(PC++);
 	}
 	else
 	{
@@ -2026,7 +2026,7 @@ void Processor::JP_C_nn() // 0xDA
 {
 	if (IsFlagSet(FLAG_CARRY))
 	{
-		PC = memory->ReadWord(PC);
+		PC = memory->ReadWord(PC++);
 	}
 	else
 	{
@@ -2111,7 +2111,7 @@ void Processor::ADD_SP_n() // 0xE8
 /* JP (HL) */
 void Processor::JP_MEM_HL() // 0xE9
 {
-	PC = memory->ReadWord(PC);
+	PC = HL;
 }
 
 /* LD (nn), A */
