@@ -40,7 +40,7 @@ inline uint8 GetBitValue(uint8 value, uint8 bit)
 
 #ifdef _DEBUG
 #define LOG_LINE(msg, ...) (LogLine(true, msg, ##__VA_ARGS__))
-#define LOG(msg, ...) (LogLine(false,msg, ##__VA_ARGS__))
+#define LOG(msg, ...) (LogLine(false, msg, ##__VA_ARGS__))
 #else
 #define LOG_LINE(msg, ...)  
 #define LOG(msg, ...)  

@@ -722,6 +722,7 @@ void Processor::JR_NZ_n() // 0x20
 {
 	if (!IsFlagSet(FLAG_ZERO))
 	{
+		condition = true;
 		PC += static_cast<int8>(memory->ReadByte(PC++));
 	}
 	else
@@ -806,6 +807,7 @@ void Processor::JR_Z_n() // 0x28
 {
 	if (IsFlagSet(FLAG_ZERO))
 	{
+		condition = true;
 		PC += static_cast<int8>(memory->ReadByte(PC++));
 	}
 	else
@@ -863,6 +865,7 @@ void Processor::JR_NC_n() // 0x30
 {
 	if (!IsFlagSet(FLAG_CARRY))
 	{
+		condition = true;
 		PC += static_cast<int8>(memory->ReadByte(PC++));
 	}
 	else
@@ -921,6 +924,7 @@ void Processor::JR_C_n() // 0x38
 {
 	if (IsFlagSet(FLAG_CARRY))
 	{
+		condition = true;
 		PC += static_cast<int8>(memory->ReadByte(PC++));
 	}
 	else
@@ -1811,6 +1815,7 @@ void Processor::RET_NZ() // 0xC0
 {
 	if (!IsFlagSet(FLAG_ZERO))
 	{
+		condition = true;
 		StackPop(PC);
 	}
 }
@@ -1826,6 +1831,7 @@ void Processor::JP_NZ_nn() // 0xC2
 {
 	if (!IsFlagSet(FLAG_ZERO))
 	{
+		condition = true;
 		PC = memory->ReadWord(PC);
 	}
 	else
@@ -1845,6 +1851,7 @@ void Processor::CALL_NZ_nn() // 0xC4
 {
 	if (!IsFlagSet(FLAG_ZERO))
 	{
+		condition = true;
 		uint16 address = memory->ReadWord(PC);
 		PC += 2;
 		StackPush(PC);
@@ -1880,6 +1887,7 @@ void Processor::RET_Z() // 0xC8
 {
 	if (IsFlagSet(FLAG_ZERO))
 	{
+		condition = true;
 		StackPop(PC);
 	}
 }
@@ -1895,6 +1903,7 @@ void Processor::JP_Z_nn() // 0xCA
 {
 	if (IsFlagSet(FLAG_ZERO))
 	{
+		condition = true;
 		PC = memory->ReadWord(PC);
 	}
 	else
@@ -1908,6 +1917,7 @@ void Processor::CALL_Z_nn() // 0xCC
 {
 	if (IsFlagSet(FLAG_ZERO))
 	{
+		condition = true;
 		uint16 address = memory->ReadWord(PC);
 		PC += 2;
 		StackPush(PC);
@@ -1946,6 +1956,7 @@ void Processor::RET_NC() // 0xD0
 {
 	if (!IsFlagSet(FLAG_CARRY))
 	{
+		condition = true;
 		StackPop(PC);
 	}
 }
@@ -1961,6 +1972,7 @@ void Processor::JP_NC_nn() // 0xD2
 {
 	if (!IsFlagSet(FLAG_CARRY))
 	{
+		condition = true;
 		PC = memory->ReadWord(PC);
 	}
 	else
@@ -1974,6 +1986,7 @@ void Processor::CALL_NC_nn() // 0xD4
 {
 	if (!IsFlagSet(FLAG_CARRY))
 	{
+		condition = true;
 		uint16 address = memory->ReadWord(PC);
 		PC += 2;
 		StackPush(PC);
@@ -2009,6 +2022,7 @@ void Processor::RET_C() // 0xD8
 {
 	if (IsFlagSet(FLAG_CARRY))
 	{
+		condition = true;
 		StackPop(PC);
 	}
 }
@@ -2025,6 +2039,7 @@ void Processor::JP_C_nn() // 0xDA
 {
 	if (IsFlagSet(FLAG_CARRY))
 	{
+		condition = true;
 		PC = memory->ReadWord(PC);
 	}
 	else
@@ -2038,6 +2053,7 @@ void Processor::CALL_C_nn() // 0xDC
 {
 	if (IsFlagSet(FLAG_CARRY))
 	{
+		condition = true;
 		uint16 address = memory->ReadWord(PC);
 		PC += 2;
 		StackPush(PC);

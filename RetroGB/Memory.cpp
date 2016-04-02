@@ -20,6 +20,7 @@ void Memory::Reset()
 {
     inBootRom = false;
 
+    /*
     for (int i = 0; i < 0x8000; i++)
     {
         rom[i] = 0xFF;
@@ -48,10 +49,11 @@ void Memory::Reset()
     {
         hram[i] = 0;
     }
+    */
 
     for (int i = 0; i < 0x10000; i++)
     {
-        data[i] = 0;
+        data[i] = 0xFF;
     }
 
     // Default values
@@ -261,7 +263,7 @@ uint8 Memory::ReadByte(uint16 address)
     }
     else
     {
-        return data[address];
+        return Read(address);
     }
 }
 

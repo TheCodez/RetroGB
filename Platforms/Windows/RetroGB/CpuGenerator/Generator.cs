@@ -551,6 +551,7 @@ namespace CpuGenerator
             {
                 tabs += "\t";
                 writer.WriteLine("\tif (" + cond + ")\n\t{");
+                writer.WriteLine(tabs + "condition = true;");
             }
             writer.WriteLine(tabs + "uint16 address = memory->ReadWord(PC);");
             writer.WriteLine(tabs + "PC += 2;");
@@ -570,6 +571,7 @@ namespace CpuGenerator
             {
                 tabs += "\t";
                 writer.WriteLine("\tif (" + cond + ")\n\t{");
+                writer.WriteLine(tabs + "condition = true;");
             }
             writer.WriteLine(tabs + "StackPop(PC);");
             if (cond != string.Empty)
@@ -602,6 +604,7 @@ namespace CpuGenerator
             {
                 tabs += "\t";
                 writer.WriteLine("\tif (" + cond + ")\n\t{");
+                writer.WriteLine(tabs + "condition = true;");
             }
 
             writer.WriteLine(tabs + "PC += static_cast<int8>(memory->ReadByte(PC++));");
@@ -619,6 +622,7 @@ namespace CpuGenerator
             {
                 tabs += "\t";
                 writer.WriteLine("\tif (" + cond + ")\n\t{");
+                writer.WriteLine(tabs + "condition = true;");
             }
 
             writer.WriteLine(tabs + "PC = memory->ReadWord(PC);");

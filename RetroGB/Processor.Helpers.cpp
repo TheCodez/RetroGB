@@ -14,7 +14,7 @@ void Processor::StackPop(uint16& reg)
 
 uint8 Processor::Inc(uint8 reg)
 {
-    uint8  result = reg + 1;
+    uint8 result = reg + 1;
     IsFlagSet(FLAG_CARRY) ? SetFlag(FLAG_CARRY) : ClearFlags();
 
     if (result == 0)
@@ -22,15 +22,13 @@ uint8 Processor::Inc(uint8 reg)
 
     if ((result & 0x0F) == 0x00)
         EnableFlag(FLAG_HALFCARRY);
-    else
-        DisableFlag(FLAG_HALFCARRY);
 
     return result;
 }
 
 uint8 Processor::Dec(uint8 reg)
 {
-    uint8  result = reg - 1;
+    uint8 result = reg - 1;
     IsFlagSet(FLAG_CARRY) ? SetFlag(FLAG_CARRY) : ClearFlags();
 
     if (reg == 0)
@@ -38,8 +36,6 @@ uint8 Processor::Dec(uint8 reg)
 
     if ((reg & 0x0F) == 0x0F)
         EnableFlag(FLAG_HALFCARRY);
-    else
-        DisableFlag(FLAG_HALFCARRY);
 
     return result;
 }
@@ -52,7 +48,7 @@ void Processor::Add(uint8 reg)
     A += reg;
 
     ClearFlags();
-    if (result == 0) 
+    if (A == 0) 
         EnableFlag(FLAG_ZERO);
 
     if ((bits & 0x100) != 0x00)
@@ -68,7 +64,7 @@ void Processor::Adc(uint8 reg)
     int result = A + reg + carry;
     
     ClearFlags();
-    if (result == 0) EnableFlag(FLAG_ZERO);
+    if (A == 0) EnableFlag(FLAG_ZERO);
 
     if (result > 0xFF)
         EnableFlag(FLAG_CARRY);
@@ -85,7 +81,7 @@ void Processor::Sub(uint8 reg)
     int bits = A ^ reg ^ result;
 
     SetFlag(FLAG_SUB);
-    if (result == 0) EnableFlag(FLAG_ZERO);
+    if (A == 0) EnableFlag(FLAG_ZERO);
 
     if ((bits & 0x100) != 0x00)
     {
@@ -105,7 +101,7 @@ void Processor::Sbc(uint8 reg)
     int result = A - reg - carry;
     
     SetFlag(FLAG_SUB);
-    if (result == 0) 
+    if (A == 0) 
         EnableFlag(FLAG_ZERO);
 
     if (result > 0xFF)
@@ -122,7 +118,7 @@ void Processor::AddHL(uint16 val)
     int result = HL + val;
 
     IsFlagSet(FLAG_ZERO) ? SetFlag(FLAG_ZERO) : ClearFlags();
-    if (HL & 0x10000)
+    if (result & 0x10000)
         EnableFlag(FLAG_CARRY);
 
     if ((HL ^ val ^ (result & 0xFFFF)) & 0x1000)
@@ -136,13 +132,11 @@ void Processor::AddSP(uint8 val)
     int result = SP + val;
 
     ClearFlags();
-    if (SP == 0)
-        EnableFlag(FLAG_ZERO);
 
     if (((SP ^ val ^ (result & 0xFFFF)) & 0x100) == 0x100)
         EnableFlag(FLAG_CARRY);
 
-    if (((SP & 0x0F) + (val & 0x0F)) > 0x0F)
+    if (((SP ^ val ^ (result & 0xFFFF)) & 0x10) == 0x10)
         EnableFlag(FLAG_HALFCARRY);
 
     SP += val;

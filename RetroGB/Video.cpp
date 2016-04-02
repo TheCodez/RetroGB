@@ -169,22 +169,23 @@ void Video::RenderBackground(int scanLine)
         int map = IsBitSet(lcdc, 3) ? 0x9C00 : 0x9800;
         int line = scrollY + scanLine;
         int y = line / 8;
+        int row = y * 32;
 
-        for (int x = 0; x < 32; x++)
+        for (int column = 0; column < 32; column++)
         {
             int tile = 0;
 
             if (tiles == 0x8800)
             {
                 // signed data
-                tile = 128 + static_cast<int8>(memory->Read(map + (y * 32) + x));
+                tile = 128 + static_cast<int8>(memory->Read(map + row + column));
             }
             else
             {
-                tile = memory->Read(map + (y * 32) + x);
+                tile = memory->Read(map + row + column);
             }
 
-            int offsetX = x * 8;
+            int offsetX = column * 8;
             int tileAddress = tiles + (tile * 16) + (line % 8) * 2;
 
             uint8 data1 = memory->Read(tileAddress);
@@ -277,12 +278,15 @@ void Video::RenderSprites(int scanLine)
                     continue;
                 }
 
+                if (colorNum == 0)
+                    continue;
+
                 uint8 palette = memory->Read(paletteNumber);
                 Color color = GetColor(colorNum, palette);
 
                 // whites indicates transparent for sprites
-                if (color == Color::WHITE)
-                    continue;
+                //if (color == Color::WHITE)
+                //    continue;
 
                 frameBuffer[posX + scanLine * SCREEN_WIDTH] = color;
             }
