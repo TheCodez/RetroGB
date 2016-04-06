@@ -208,7 +208,19 @@ uint8 Memory::ReadByte(uint16 address)
 
 void Memory::WriteByte(uint16 address, uint8 value)
 {
-    if (address == 0xFF01)
+    if (address >= 0xC000 && address <= 0xDFFF)
+    {
+        // Echo  RAM
+        Write(address + 0x2000, value);
+        Write(address, value);
+    }
+    else if (address >= 0xE000 && address <= 0xFDFF)
+    {
+        // Echo  RAM
+        Write(address - 0x2000, value);
+        Write(address, value);
+    }
+    else if (address == 0xFF01)
     {
         // SB
         LOG("%c", (char)value);
@@ -237,14 +249,6 @@ void Memory::WriteByte(uint16 address, uint8 value)
             Write(0xFE00 + i, Read((value << 8) + i));
         }
     }
-    else if (address == 0xFFFF)
-    {
-        interruptEnable = value;
-    }
-    else if (address == 0xFF0F)
-    {
-        interruptFlag = value;
-    }
     else
     {
         Write(address, value);
@@ -253,18 +257,7 @@ void Memory::WriteByte(uint16 address, uint8 value)
 
 uint8 Memory::ReadByte(uint16 address)
 {
-    if (address == 0xFFFF)
-    {
-        return interruptEnable;
-    }
-    else if (address == 0xFF0F)
-    {
-        return interruptFlag;
-    }
-    else
-    {
-        return Read(address);
-    }
+    return Read(address);
 }
 
 void Memory::WriteWord(uint16 address, uint16 value)
@@ -275,7 +268,7 @@ void Memory::WriteWord(uint16 address, uint16 value)
 
 uint16 Memory::ReadWord(uint16 address)
 {
-    return (ReadByte(address) | (ReadByte(address + 1) << 8));
+    return (ReadByte(address) | (ReadByte(address + 1) << 8 ));
 }
 
 void Memory::Write(uint16 address, uint8 value)

@@ -1741,73 +1741,81 @@ void Processor::OR_A() // 0xB7
 /* CP B */
 void Processor::CP_B() // 0xB8
 {
+	uint8 value = B;
 	SetFlag(FLAG_SUB);
-	if (A < B) EnableFlag(FLAG_CARRY);
-	if (A == B) EnableFlag(FLAG_ZERO);
-	if (((A - B) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
+	if (A < value) EnableFlag(FLAG_CARRY);
+	if (A == value) EnableFlag(FLAG_ZERO);
+	if (((A - value) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
 }
 
 /* CP C */
 void Processor::CP_C() // 0xB9
 {
+	uint8 value = C;
 	SetFlag(FLAG_SUB);
-	if (A < C) EnableFlag(FLAG_CARRY);
-	if (A == C) EnableFlag(FLAG_ZERO);
-	if (((A - C) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
+	if (A < value) EnableFlag(FLAG_CARRY);
+	if (A == value) EnableFlag(FLAG_ZERO);
+	if (((A - value) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
 }
 
 /* CP D */
 void Processor::CP_D() // 0xBA
 {
+	uint8 value = D;
 	SetFlag(FLAG_SUB);
-	if (A < D) EnableFlag(FLAG_CARRY);
-	if (A == D) EnableFlag(FLAG_ZERO);
-	if (((A - D) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
+	if (A < value) EnableFlag(FLAG_CARRY);
+	if (A == value) EnableFlag(FLAG_ZERO);
+	if (((A - value) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
 }
 
 /* CP E */
 void Processor::CP_E() // 0xBB
 {
+	uint8 value = E;
 	SetFlag(FLAG_SUB);
-	if (A < E) EnableFlag(FLAG_CARRY);
-	if (A == E) EnableFlag(FLAG_ZERO);
-	if (((A - E) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
+	if (A < value) EnableFlag(FLAG_CARRY);
+	if (A == value) EnableFlag(FLAG_ZERO);
+	if (((A - value) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
 }
 
 /* CP H */
 void Processor::CP_H() // 0xBC
 {
+	uint8 value = H;
 	SetFlag(FLAG_SUB);
-	if (A < H) EnableFlag(FLAG_CARRY);
-	if (A == H) EnableFlag(FLAG_ZERO);
-	if (((A - H) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
+	if (A < value) EnableFlag(FLAG_CARRY);
+	if (A == value) EnableFlag(FLAG_ZERO);
+	if (((A - value) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
 }
 
 /* CP L */
 void Processor::CP_L() // 0xBD
 {
+	uint8 value = L;
 	SetFlag(FLAG_SUB);
-	if (A < L) EnableFlag(FLAG_CARRY);
-	if (A == L) EnableFlag(FLAG_ZERO);
-	if (((A - L) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
+	if (A < value) EnableFlag(FLAG_CARRY);
+	if (A == value) EnableFlag(FLAG_ZERO);
+	if (((A - value) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
 }
 
 /* CP (HL) */
 void Processor::CP_MEM_HL() // 0xBE
 {
+	uint8 value = memory->ReadByte(HL);
 	SetFlag(FLAG_SUB);
-	if (A < memory->ReadByte(HL)) EnableFlag(FLAG_CARRY);
-	if (A == memory->ReadByte(HL)) EnableFlag(FLAG_ZERO);
-	if (((A - memory->ReadByte(HL)) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
+	if (A < value) EnableFlag(FLAG_CARRY);
+	if (A == value) EnableFlag(FLAG_ZERO);
+	if (((A - value) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
 }
 
 /* CP A */
 void Processor::CP_A() // 0xBF
 {
+	uint8 value = A;
 	SetFlag(FLAG_SUB);
-	if (A < A) EnableFlag(FLAG_CARRY);
-	if (A == A) EnableFlag(FLAG_ZERO);
-	if (((A - A) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
+	if (A < value) EnableFlag(FLAG_CARRY);
+	if (A == value) EnableFlag(FLAG_ZERO);
+	if (((A - value) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
 }
 
 /* RET NZ */
@@ -2230,10 +2238,11 @@ void Processor::EI() // 0xFB
 /* CP n */
 void Processor::CP_n() // 0xFE
 {
+	uint8 value = memory->ReadByte(PC++);
 	SetFlag(FLAG_SUB);
-	if (A < memory->ReadByte(PC++)) EnableFlag(FLAG_CARRY);
-	if (A == memory->ReadByte(PC++)) EnableFlag(FLAG_ZERO);
-	if (((A - memory->ReadByte(PC++)) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
+	if (A < value) EnableFlag(FLAG_CARRY);
+	if (A == value) EnableFlag(FLAG_ZERO);
+	if (((A - value) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);
 }
 
 /* RST 0x0038 */

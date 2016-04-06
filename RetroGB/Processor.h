@@ -96,7 +96,7 @@ private:
 
     void UnknownOpcode();
     void InvalidOpcode();
-    void StackPush(uint16& reg);
+    void StackPush(uint16 reg);
     void StackPop(uint16& reg);
 
     uint8 Inc(uint8 reg);

@@ -38,7 +38,9 @@ inline uint8 GetBitValue(uint8 value, uint8 bit)
     return (value & (1 << bit)) ? 1 : 0;
 }
 
-#ifdef _DEBUG
+#define DEBUG
+
+#ifdef DEBUG
 #define LOG_LINE(msg, ...) (LogLine(true, msg, ##__VA_ARGS__))
 #define LOG(msg, ...) (LogLine(false, msg, ##__VA_ARGS__))
 #else

@@ -1,6 +1,6 @@
 #include "Processor.h"
 
-void Processor::StackPush(uint16& reg)
+void Processor::StackPush(uint16 reg)
 {
     SP -= 2;
     memory->WriteWord(SP, reg);
