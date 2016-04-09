@@ -27,9 +27,9 @@ void init()
     glBindTexture(GL_TEXTURE_2D, texture);
 }
 
-void updateTexture()
+void updateTexture(Color* framebuffer)
 {
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*)gameboy->GetFrameBuffer());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*)framebuffer);
 
     if (enableFiltering)
     {
@@ -54,12 +54,10 @@ void updateTexture()
     glEnd();
 }
 
-void run()
+void updateScreen(Color* framebuffer)
 {
-    gameboy->Run();
-
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    updateTexture();
+    updateTexture(framebuffer);
     SDL_GL_SwapBuffers();
 }
 
@@ -78,7 +76,7 @@ void HandleInput(SDL_Event& event)
 
 int main(int argc, char** argv)
 {
-    gameboy = new Gameboy();
+    gameboy = new Gameboy(&updateScreen);
 
     std::string fileName("E:/RetroGB/Roms/opus5.gb");
 
@@ -123,7 +121,7 @@ int main(int argc, char** argv)
 
         if ((lastTime + interval) < currentTime)
         {
-            run();
+            gameboy->Run();
             lastTime = currentTime;
         }
 

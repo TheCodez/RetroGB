@@ -2,9 +2,10 @@
 #include "Memory.h"
 #include "Processor.h"
 
-Video::Video(Memory* mem, Processor* cpu)
+Video::Video(UpdateScreenFunc func, Memory* mem, Processor* cpu)
     : memory(mem), processor(cpu)
 {
+    screenFunc = func;
     frameBuffer = new Color[SCREEN_WIDTH * SCREEN_HEIGHT];
     Reset();
 }
@@ -63,6 +64,9 @@ void Video::Run(int cycles)
             if (scanline == 144)
             {
                 mode = Mode::VBlank;
+
+                if (screenFunc)
+                    screenFunc(frameBuffer);
 
                 /*processor->RequestInterrupt(Interrupts::VBlank);
 

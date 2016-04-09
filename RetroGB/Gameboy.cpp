@@ -3,14 +3,13 @@
 #include "Processor.h"
 #include "Video.h"
 #include "Cartridge.h"
-#include <Windows.h>
 #include "Color.h"
 
-Gameboy::Gameboy()
+Gameboy::Gameboy(UpdateScreenFunc func)
 {
     memory = new Memory();
     processor = new Processor(memory);
-    video = new Video(memory, processor);
+    video = new Video(func, memory, processor);
     cartridge = new Cartridge();
 }
 

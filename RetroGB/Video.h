@@ -17,7 +17,7 @@ enum class Mode
 class Video
 {
 public:
-    Video(Memory* mem, Processor* cpu);
+    Video(UpdateScreenFunc func, Memory* mem, Processor* cpu);
     ~Video();
 
     void Reset(bool color = false);
@@ -42,5 +42,6 @@ private:
     int scanline;
 
     Color* frameBuffer;
+    UpdateScreenFunc screenFunc;
 };
 

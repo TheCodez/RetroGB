@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "Definitions.h"
 
 class Processor;
 class Memory;
@@ -11,7 +12,7 @@ struct Color;
 class Gameboy
 {
 public:
-    Gameboy();
+    Gameboy(UpdateScreenFunc func);
     ~Gameboy();
 
     void Run();

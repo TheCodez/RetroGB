@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <string>
 #include <cstdarg>
+#include <functional>
 
 #define SCREEN_WIDTH 160
 #define SCREEN_HEIGHT 144
@@ -17,6 +18,9 @@ typedef int16_t int16;
 #define FLAG_HALFCARRY 0x20
 #define FLAG_CARRY 0x10
 #define FLAG_NONE 0x00
+
+struct Color;
+typedef std::function<void (Color*)> UpdateScreenFunc;
 
 inline void SetBit(uint8& value, uint8 bit)
 {
