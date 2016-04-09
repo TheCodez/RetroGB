@@ -284,6 +284,9 @@ namespace CpuGenerator
         public void WritePop(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\tStackPop({0});", opcode.FirstOperand);
+
+            if (opcode.FirstOperand == "AF")
+                writer.WriteLine("\tF &= 0xF0;");
         }
 
         public void WriteJr(TextWriter writer, Opcode opcode)

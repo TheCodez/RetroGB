@@ -2169,6 +2169,7 @@ void Processor::LD_A_MEM_0xFF00_n() // 0xF0
 void Processor::POP_AF() // 0xF1
 {
 	StackPop(AF);
+	F &= 0xF0;
 }
 
 /* LD A, (0xFF00+C) */

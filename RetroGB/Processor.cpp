@@ -3,8 +3,8 @@
 Processor::Processor(Memory* mem)
     : memory(mem)
 {
-    InitOpcodes();
     Reset();
+    InitOpcodes();
 }
 
 Processor::~Processor()
