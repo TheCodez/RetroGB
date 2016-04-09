@@ -25,7 +25,7 @@ void Cartridge::Reset()
     licenseeCode = 0;
     colorGameboy = false;
     superGameboy = false;
-    cartridgeType = 0;
+    cartridgeType = CartridgeType::ROMONLY;
     romSize = 0;
     ramSize = 0;
     japanese = false;
@@ -66,7 +66,7 @@ bool Cartridge::LoadRom(const std::string& fileName)
             licenseeCode = (rom[0x0144] << 8) | rom[0x0145];
             colorGameboy = rom[0x0143] == 0x80 || (rom[0x0143] == 0xC0);
             superGameboy = rom[0x0146] == 0x03;
-            cartridgeType = rom[0x0147];
+            cartridgeType = (CartridgeType)rom[0x0147];
             romSize = rom[0x0148];
             ramSize = rom[0x0149];
             japanese = rom[0x014A] == 0x00;

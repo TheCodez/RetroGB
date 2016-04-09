@@ -3,6 +3,39 @@
 #include <string>
 #include "Definitions.h"
 
+enum class CartridgeType : uint8
+{
+    ROMONLY,
+    MBC1,
+    MBC1_RAM,
+    MBC1_RAM_BATTERY,
+    MBC2,
+    MBC2_BATTERY,
+    ROM_RAM,
+    ROM_RAM_BATTERY,
+    MMM01,
+    MMM01_RAM,
+    MMM01_RAM_BATTERY,
+    MBC3_TIMER_BATTERY,
+    MBC3_TIMER_RAM_BATTERY,
+    MBC3,
+    MBC3_RAM,
+    MBC3_RAM_BATTERY,
+    MBC4,
+    MBC4_RAM,
+    MBC4_RAM_BATTERY,
+    MBC5,
+    MBC5_RAM,
+    MBC5_RAM_BATTERY,
+    MBC5_RUMBLE,
+    MBC5_RUMBLE_RAM,
+    MBC5_RUMBLE_RAM_BATTERY,
+    POCKETCAMERA,
+    BANDAITAMA5,
+    HuC3,
+    HuC1_RAM_BATTERY
+};
+
 class Cartridge
 {
 public:
@@ -16,7 +49,7 @@ public:
     int GetLicenseeCode() const { return licenseeCode; }
     bool IsGameboyColor() const { return colorGameboy; }
     bool IsSuperGameboy() const { return superGameboy; }
-    int GetCartridgeType() const { return cartridgeType; }
+    CartridgeType GetCartridgeType() const { return cartridgeType; }
     int GetRomSize() const { return romSize; }
     int GetRamSize() const { return ramSize; }
     bool IsJapanese() const { return japanese; }
@@ -32,7 +65,7 @@ private:
     int licenseeCode;
     bool colorGameboy;
     bool superGameboy;
-    int cartridgeType;
+    CartridgeType cartridgeType;
     int romSize;
     int ramSize;
     bool japanese;
