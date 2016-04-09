@@ -80,7 +80,9 @@ int main(int argc, char** argv)
 {
     gameboy = new Gameboy();
 
-    if (!gameboy->LoadRom("E:/RetroGB/Roms/cpu_instrs.gb"))
+    std::string fileName("E:/RetroGB/Roms/opus5.gb");
+
+    if (!gameboy->LoadRom(fileName))
     {
         return 0;
     }
@@ -102,9 +104,7 @@ int main(int argc, char** argv)
     SDL_Event event;
 
     float fps = 59.73f;
-    float interval = 1000;
-    interval /= fps;
-
+    float interval = 1000 / fps;
     unsigned int lastTime = SDL_GetTicks();
 
     while (!quit)

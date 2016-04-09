@@ -16,10 +16,11 @@ Gameboy::Gameboy()
 
 Gameboy::~Gameboy()
 {
-    delete memory;
-    delete processor;
-    delete video;
-    delete cartridge;
+    // TODO hack fix for heap corruption error
+    //delete memory;
+    //delete processor;
+    //delete video;
+    //delete cartridge;
 }
 
 void Gameboy::Run()
@@ -32,7 +33,7 @@ void Gameboy::Run()
         while (cycles < targetCycles)
         {
             cycles += processor->Run();
-            //video->Run(cycles);
+            video->Run(cycles);
         }
     }
 }
