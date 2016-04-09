@@ -5,18 +5,17 @@
 Video::Video(Memory* mem, Processor* cpu)
     : memory(mem), processor(cpu)
 {
-    frameBuffer = new Color[SCREEN_WIDTH * SCREEN_HEIGHT];;
+    frameBuffer = new Color[SCREEN_WIDTH * SCREEN_HEIGHT];
     Reset();
 }
 
 Video::~Video()
 {
-    delete[] frameBuffer;
 }
 
 void Video::Reset(bool color)
 {
-    currLine = 0;
+    scanline = 0;
     gameBoycolor = color;
     modeCounter = 0;
     mode = Mode::HBlank;
@@ -27,69 +26,12 @@ void Video::Reset(bool color)
     }
 }
 
-bool Video::Run(int cycles)
+void Video::Run(int cycles)
 {
-    bool vblank = false;
-
     modeCounter += cycles;
     
     switch (mode)
     {
-    case Mode::HBlank:
-        if (modeCounter >= 204)
-        {
-            modeCounter = 0;
-            if (currLine == 144)
-            {
-                mode = Mode::VBlank;
-                processor->RequestInterrupt(Interrupts::VBlank);
-
-                uint8 stat = memory->Read(0xFF41);
-                if (IsBitSet(stat, 4))
-                {
-                    processor->RequestInterrupt(Interrupts::LCDSTAT);
-                }
-
-                //vblank = true;
-            }
-            else
-            {
-                mode = Mode::Oam;
-
-                uint8 stat = memory->Read(0xFF41);
-                if (IsBitSet(stat, 5))
-                {
-                    processor->RequestInterrupt(Interrupts::LCDSTAT);
-                }
-            }
-        }
-        break;
-    case Mode::VBlank:
-        if (modeCounter >= 4560)
-        {
-            currLine++;
-            memory->Write(0xFF44, currLine);
-
-            if (currLine >= 144) 
-            {
-            }
-            else
-            {
-                vblank = true;
-                mode = Mode::Oam;
-                CompareLYToLYC();
-
-                uint8 stat = memory->Read(0xFF41);
-
-                if (IsBitSet(stat, 5))
-                {
-                    processor->RequestInterrupt(Interrupts::LCDSTAT);
-                }
-            }
-
-            modeCounter = 0;
-        }
-        break;
     case Mode::Oam:
         if (modeCounter >= 80)
         {
@@ -98,19 +40,65 @@ bool Video::Run(int cycles)
         }
         break;
     case Mode::DataTransfer:
-        ScanLine(currLine);
-
         if (modeCounter >= 172)
         {
-            modeCounter = 0;
+            // Enter hblank
             mode = Mode::HBlank;
 
-            processor->RequestInterrupt(Interrupts::LCDSTAT);
+            //processor->RequestInterrupt(Interrupts::LCDSTAT);
+
+            ScanLine(scanline);
+        }
+        break;
+
+    case Mode::HBlank:
+        if (modeCounter >= 204)
+        {
+            modeCounter = 0;
+            scanline++;
+            
+            memory->Write(0xFF44, scanline);
+            CompareLYToLYC();
+
+            if (scanline == 144)
+            {
+                mode = Mode::VBlank;
+
+                /*processor->RequestInterrupt(Interrupts::VBlank);
+
+                uint8 stat = memory->Read(0xFF41);
+                if (IsBitSet(stat, 4))
+                {
+                    processor->RequestInterrupt(Interrupts::LCDSTAT);
+                }*/
+            }
+            else
+            {
+                mode = Mode::Oam;
+
+                /*uint8 stat = memory->Read(0xFF41);
+                if (IsBitSet(stat, 5))
+                {
+                    processor->RequestInterrupt(Interrupts::LCDSTAT);
+                }*/
+            }
+        }
+        break;
+
+    case Mode::VBlank:
+        if (modeCounter >= 456)
+        {
+            modeCounter = 0;
+            scanline++;
+
+            if (scanline > 153)
+            {
+                mode = Mode::Oam;
+                scanline = 0;
+            }
         }
         break;
     }
-
-    return vblank;
 }
 
 void Video::CompareLYToLYC()
@@ -118,7 +106,7 @@ void Video::CompareLYToLYC()
     uint8 stat = memory->Read(0xFF41);
     uint8 lyc = memory->Read(0xFF45);
 
-    if (lyc == currLine)
+    if (lyc == scanline)
     {
         SetBit(stat, 2);
 
@@ -137,9 +125,6 @@ void Video::CompareLYToLYC()
 
 void Video::ScanLine(int scanLine)
 {
-    if (!frameBuffer)
-        return;
-
     uint8 lcdc = memory->Read(0xFF40);
     
     if (IsBitSet(lcdc, 7))
@@ -152,7 +137,7 @@ void Video::ScanLine(int scanLine)
     {
         for (int x = 0; x < SCREEN_WIDTH; x++)
         {
-            //frameBuffer[x + scanLine * SCREEN_WIDTH] = gameBoycolor ? Color::BLACK : Color::WHITE;
+            frameBuffer[x + scanLine * SCREEN_WIDTH] = gameBoycolor ? Color::BLACK : Color::WHITE;
         }
     }
 }

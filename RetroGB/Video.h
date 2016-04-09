@@ -22,7 +22,7 @@ public:
 
     void Reset(bool color = false);
 
-    bool Run(int cycles);
+    void Run(int cycles);
     void ScanLine(int scanLine);
     void RenderBackground(int scanLine);
     void RenderWindow(int scanLine);
@@ -39,7 +39,7 @@ private:
     Mode mode;
     bool gameBoycolor;
     int modeCounter;
-    int currLine;
+    int scanline;
 
     Color* frameBuffer;
 };

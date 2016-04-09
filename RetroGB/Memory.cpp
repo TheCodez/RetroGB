@@ -20,37 +20,6 @@ void Memory::Reset()
 {
     inBootRom = false;
 
-    /*
-    for (int i = 0; i < 0x8000; i++)
-    {
-        rom[i] = 0xFF;
-    }
-    for (int i = 0; i < 0x2000; i++)
-    {
-        eram[i] = 0;
-    }
-    for (int i = 0; i < 0x100; i++)
-    {
-        io[i] = 0;
-    }
-    for (int i = 0; i < 0x2000; i++)
-    {
-        vram[i] = 0;
-    }
-    for (int i = 0; i < 0x100; i++)
-    {
-        oam[i] = 0;
-    }
-    for (int i = 0; i < 0x2000; i++)
-    {
-        wram[i] = 0;
-    }
-    for (int i = 0; i < 0x80; i++)
-    {
-        hram[i] = 0;
-    }
-    */
-
     for (int i = 0; i < 0x10000; i++)
     {
         data[i] = 0xFF;
@@ -268,7 +237,7 @@ void Memory::WriteWord(uint16 address, uint16 value)
 
 uint16 Memory::ReadWord(uint16 address)
 {
-    return (ReadByte(address) | (ReadByte(address + 1) << 8 ));
+    return (ReadByte(address) | (ReadByte(address + 1) << 8));
 }
 
 void Memory::Write(uint16 address, uint8 value)

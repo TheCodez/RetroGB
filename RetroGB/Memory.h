@@ -24,16 +24,6 @@ public:
     void Save();
 
 private:
-    uint8 rom[0x8000];
-    uint8 eram[0x2000];
-    uint8 io[0x100];
-    uint8 vram[0x2000];
-    uint8 oam[0x100];
-    uint8 wram[0x2000];
-    uint8 hram[0x80];
-    uint8 interruptEnable;
-    uint8 interruptFlag;
-
     uint8 data[0x10000]; // 65536
     bool inBootRom;
 };
