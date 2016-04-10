@@ -1,16 +1,17 @@
 #include "Gameboy.h"
 #include "Color.h"
 #include "Definitions.h"
-#include "Memory.h"
-#include "Processor.h"
+#include "Cartridge.h"
 #include "SDL.h"
 #include "SDL_opengl.h"
 
 GLuint texture;
 Gameboy* gameboy;
-int scale = 2;
+int scale = 4;
 int screenWidth = SCREEN_WIDTH * scale, screenHeight = SCREEN_HEIGHT * scale;
 bool enableFiltering = false;
+SDL_Window* window;
+SDL_GLContext context;
 
 void init()
 {
@@ -58,45 +59,48 @@ void updateScreen(Color* framebuffer)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     updateTexture(framebuffer);
-    SDL_GL_SwapBuffers();
+    SDL_GL_SwapWindow(window);
 }
 
 void HandleInput(SDL_Event& event)
 {
     if (event.type == SDL_KEYDOWN)
     {
-        switch (event.key.keysym.sym)
-        {
-        case SDLK_SPACE:
-            gameboy->Step();
-            break;
-        }
     }
+}
+
+void ClearConsole()
+{
+#ifdef _WIN32
+    system("cls");
+#endif
 }
 
 int main(int argc, char** argv)
 {
     gameboy = new Gameboy(&updateScreen);
 
-    std::string fileName("E:/RetroGB/Roms/opus5.gb");
-
-    if (!gameboy->LoadRom(fileName))
-    {
-        return 0;
-    }
-
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
     {
         return 0;
     }
-    if (SDL_SetVideoMode(screenWidth, screenHeight, 8, SDL_OPENGL) == NULL)
+
+    window = SDL_CreateWindow("RetroGB",
+        SDL_WINDOWPOS_CENTERED,
+        SDL_WINDOWPOS_CENTERED,
+        screenWidth, screenHeight,
+        SDL_WINDOW_OPENGL);
+
+    if (window == nullptr)
     {
         return 0;
     }
 
+    context = SDL_GL_CreateContext(window);
+
     init();
 
-    SDL_WM_SetCaption("RetroGB", NULL);
+    LOG_LINE("Drag and drop roms to run them.\n");
 
     bool quit = false;
     SDL_Event event;
@@ -104,6 +108,8 @@ int main(int argc, char** argv)
     float fps = 59.73f;
     float interval = 1000 / fps;
     unsigned int lastTime = SDL_GetTicks();
+
+    SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
 
     while (!quit)
     {
@@ -114,6 +120,17 @@ int main(int argc, char** argv)
             if (event.type == SDL_QUIT)
             {
                 quit = true;
+            }
+
+            if (event.type == SDL_DROPFILE)
+            {
+                ClearConsole();
+                if (!gameboy->LoadRom(event.drop.file))
+                {
+                    quit = true;
+                }
+
+                SDL_SetWindowTitle(window, std::string("RetroGB: " + gameboy->GetCartridge()->GetTitle()).c_str());
             }
         }
 
@@ -126,6 +143,9 @@ int main(int argc, char** argv)
         }
 
     }
+
+    SDL_GL_DeleteContext(context);
+    SDL_DestroyWindow(window);
     SDL_Quit();
 
     delete gameboy;

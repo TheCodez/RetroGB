@@ -21,7 +21,8 @@ void Video::Reset(bool color)
     modeCounter = 0;
     mode = Mode::HBlank;
 
-    for (int i = 0; i < (SCREEN_WIDTH * SCREEN_HEIGHT); i++)
+    int size = SCREEN_WIDTH * SCREEN_HEIGHT;
+    for (int i = 0; i < size; i++)
     {
         frameBuffer[i] = color ? Color::BLACK : Color::WHITE;
     }
@@ -30,7 +31,7 @@ void Video::Reset(bool color)
 void Video::Run(int cycles)
 {
     modeCounter += cycles;
-    
+
     switch (mode)
     {
     case Mode::Oam:
@@ -116,7 +117,7 @@ void Video::CompareLYToLYC()
 
         if (IsBitSet(stat, 6))
         {
-            processor->RequestInterrupt(Interrupts::LCDSTAT);
+            //processor->RequestInterrupt(Interrupts::LCDSTAT);
         }
     }
     else

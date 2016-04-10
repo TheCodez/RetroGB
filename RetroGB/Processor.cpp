@@ -39,11 +39,10 @@ int Processor::Run()
 
         uint8 opcode = memory->ReadByte(PC++);
 
-        int c = IsFlagSet(FLAG_CARRY);
-        int n = IsFlagSet(FLAG_SUB);
-        int h = IsFlagSet(FLAG_HALFCARRY);
-        int z = IsFlagSet(FLAG_ZERO);
-
+        //int c = IsFlagSet(FLAG_CARRY);
+        //int n = IsFlagSet(FLAG_SUB);
+        //int h = IsFlagSet(FLAG_HALFCARRY);
+        //int z = IsFlagSet(FLAG_ZERO);
         //LOG_LINE("PC:%02X, OP:%02X, AF:%04X, BC:%04X, DE:%04X, HL:%04X, SP:%04X, Z:%d, N:%d, H:%d, C:%d", PC - 1, opcode, AF, BC, DE, HL, SP, z, n, h, c);
         
         if (opcode == 0xCB)
