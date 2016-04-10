@@ -260,7 +260,7 @@ void Video::RenderSprites(int scanLine)
             for (int pixelX = 0; pixelX < 8; pixelX++)
             {
                 int posX = spriteX + pixelX;
-                int colorBit = xFlip ? 7 - pixelX : pixelX;
+                int colorBit = xFlip ? pixelX : 7 - pixelX;
                 int colorNum = GetBitValue(data1, colorBit) | (GetBitValue(data2, colorBit) * 2);
 
                 if (belowBG && frameBuffer[posX + scanLine * SCREEN_WIDTH] != Color::WHITE)
