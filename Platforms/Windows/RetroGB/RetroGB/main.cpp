@@ -66,6 +66,10 @@ void HandleInput(SDL_Event& event)
 {
     if (event.type == SDL_KEYDOWN)
     {
+        if (event.key.keysym.scancode == SDL_SCANCODE_F)
+        {
+            enableFiltering = !enableFiltering;
+        }
     }
 }
 
@@ -91,12 +95,15 @@ int main(int argc, char** argv)
         screenWidth, screenHeight,
         SDL_WINDOW_OPENGL);
 
-    if (window == nullptr)
+    if (!window)
     {
         return 0;
     }
 
     context = SDL_GL_CreateContext(window);
+
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetSwapInterval(1);
 
     init();
 
