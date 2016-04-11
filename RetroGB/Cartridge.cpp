@@ -44,14 +44,9 @@ bool Cartridge::LoadRom(const std::string& fileName)
         int size = static_cast<int>(file.tellg());
         rom = new uint8[size];
 
-        char* memblock = new char[size];
         file.seekg(0, std::ios::beg);
-        file.read(memblock, size);
+        file.read((char*)rom, size);
         file.close();
-
-        memcpy(rom, memblock, size);
-
-        delete[] memblock;
 
         if (rom != nullptr && size > 0)
         {
