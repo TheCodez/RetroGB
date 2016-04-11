@@ -246,7 +246,7 @@ void Video::RenderSprites(int scanLine)
             {
                 continue;
             }
-            else if (spriteY > scanLine || (spriteY + spriteHeight) < scanLine)
+            else if (spriteY > scanLine || (spriteY + spriteHeight) <= scanLine)
             {
                 continue;
             }
@@ -273,11 +273,7 @@ void Video::RenderSprites(int scanLine)
 
                 uint8 palette = memory->Read(paletteNumber);
                 Color color = GetColor(colorNum, palette);
-
-                // whites indicates transparent for sprites
-                //if (color == Color::WHITE)
-                //    continue;
-
+                
                 frameBuffer[posX + scanLine * SCREEN_WIDTH] = color;
             }
         }
