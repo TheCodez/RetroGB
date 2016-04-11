@@ -19,7 +19,7 @@ void Video::Reset(bool color)
     scanline = 0;
     gameBoycolor = color;
     modeCounter = 0;
-    mode = Mode::HBlank;
+    mode = Mode::VBlank;
 
     int size = SCREEN_WIDTH * SCREEN_HEIGHT;
     for (int i = 0; i < size; i++)
@@ -155,8 +155,8 @@ void Video::RenderBackground(int scanLine)
     {
         int scrollY = memory->Read(0xFF42);
         int scrollX = memory->Read(0xFF43);
-        int tiles = IsBitSet(lcdc, 4) ? 0x8000 : 0x8800;
-        int map = IsBitSet(lcdc, 3) ? 0x9C00 : 0x9800;
+        uint16 tiles = IsBitSet(lcdc, 4) ? 0x8000 : 0x8800;
+        uint16 map = IsBitSet(lcdc, 3) ? 0x9C00 : 0x9800;
         int line = scrollY + scanLine;
         int y = line / 8;
         int row = y * 32;
@@ -184,6 +184,10 @@ void Video::RenderBackground(int scanLine)
             for (int pixelX = 0; pixelX < 8; pixelX++)
             {
                 int posX = offsetX + pixelX - scrollX;
+
+                if (posX >= SCREEN_WIDTH)
+                    continue;
+
                 int colorBit = 7 - pixelX;
                 int colorNum = GetBitValue(data1, colorBit) | (GetBitValue(data2, colorBit) * 2);
 
@@ -211,8 +215,8 @@ void Video::RenderWindow(int scanLine)
     {
         int windowY = memory->Read(0xFF4A);
         int windowX = memory->Read(0xFF4B) - 7;
-        int tiles = IsBitSet(lcdc, 4) ? 0x8000 : 0x8800;
-        int maps = IsBitSet(lcdc, 3) ? 0x9C00 : 0x9800;
+        uint16 tiles = IsBitSet(lcdc, 4) ? 0x8000 : 0x8800;
+        uint16 maps = IsBitSet(lcdc, 3) ? 0x9C00 : 0x9800;
         int yPos = scanLine - windowY;
     }
 }
