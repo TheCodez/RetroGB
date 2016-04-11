@@ -72,6 +72,7 @@
     <ClInclude Include="..\..\..\..\RetroGB\Gameboy.h" />
     <ClInclude Include="..\..\..\..\RetroGB\Memory.h" />
     <ClInclude Include="..\..\..\..\RetroGB\Processor.h" />
+    <ClInclude Include="..\..\..\..\RetroGB\Processor.Timings.h" />
     <ClInclude Include="..\..\..\..\RetroGB\Video.h" />
   </ItemGroup>
   <ItemGroup>
@@ -81,7 +82,7 @@
     <ClCompile Include="..\..\..\..\RetroGB\Memory.cpp" />
     <ClCompile Include="..\..\..\..\RetroGB\Processor.cpp" />
     <ClCompile Include="..\..\..\..\RetroGB\Processor.Generated.cpp" />
-    <ClCompile Include="..\..\..\..\RetroGB\Processor.Helpers.cpp" />
+    <ClCompile Include="..\..\..\..\RetroGB\Processor.Helpers.h" />
     <ClCompile Include="..\..\..\..\RetroGB\Video.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

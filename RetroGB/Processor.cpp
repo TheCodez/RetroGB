@@ -1,4 +1,5 @@
 #include "Processor.h"
+#include "Processor.Timings.h"
 
 Processor::Processor(Memory* mem)
     : memory(mem)

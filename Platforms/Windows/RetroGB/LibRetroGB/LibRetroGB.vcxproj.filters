@@ -9,6 +9,7 @@
     <ClInclude Include="..\..\..\..\RetroGB\Cartridge.h" />
     <ClInclude Include="..\..\..\..\RetroGB\BootRoms.h" />
     <ClInclude Include="..\..\..\..\RetroGB\Color.h" />
+    <ClInclude Include="..\..\..\..\RetroGB\Processor.Timings.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\RetroGB\Gameboy.cpp" />
@@ -18,6 +19,6 @@
     <ClCompile Include="..\..\..\..\RetroGB\Cartridge.cpp" />
     <ClCompile Include="..\..\..\..\RetroGB\Color.cpp" />
     <ClCompile Include="..\..\..\..\RetroGB\Processor.Generated.cpp" />
-    <ClCompile Include="..\..\..\..\RetroGB\Processor.Helpers.cpp" />
+    <ClCompile Include="..\..\..\..\RetroGB\Processor.Helpers.h" />
   </ItemGroup>
 </Project>
