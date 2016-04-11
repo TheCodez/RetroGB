@@ -227,7 +227,7 @@ void Video::RenderSprites(int scanLine)
         int spriteHeight = IsBitSet(lcdc, 2) ? 16 : 8;
 
         // 40 sprites
-        for (int sprite = 40; sprite > 0; sprite--)
+        for (int sprite = 39; sprite >= 0; sprite--)
         {
             // Every sprite has 4 bytes of memory assigned
             int index = sprite * 4;
