@@ -46,7 +46,7 @@ void Gameboy::Step()
 
 void Gameboy::Reset(bool color)
 {
-    memory->Reset();
+    memory->Reset(color);
     processor->Reset(color);
     video->Reset(color);
     //cartridge->Reset();

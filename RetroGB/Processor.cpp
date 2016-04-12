@@ -4,7 +4,7 @@
 Processor::Processor(Memory* mem)
     : memory(mem)
 {
-    Reset();
+    Reset(false);
     InitOpcodes();
 }
 

@@ -7,7 +7,7 @@ Video::Video(UpdateScreenFunc func, Memory* mem, Processor* cpu)
 {
     screenFunc = func;
     frameBuffer = new Color[SCREEN_WIDTH * SCREEN_HEIGHT];
-    Reset();
+    Reset(false);
 }
 
 Video::~Video()

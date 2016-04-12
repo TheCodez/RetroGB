@@ -10,7 +10,7 @@ public:
     Memory();
     ~Memory();
 
-    void Reset();
+    void Reset(bool color);
     void LoadFromCartridge(Cartridge* cartridge);
 
     // Software Read / Write
@@ -28,5 +28,6 @@ public:
 private:
     uint8 data[0x10000]; // 65536
     bool inBootRom;
+    bool colorGameboy;
 };
 

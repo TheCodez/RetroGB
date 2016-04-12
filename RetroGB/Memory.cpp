@@ -6,7 +6,7 @@
 
 Memory::Memory()
 {
-    Reset();
+    Reset(false);
 }
 
 Memory::~Memory()
@@ -17,8 +17,9 @@ void Memory::Save()
 {
 }
 
-void Memory::Reset()
+void Memory::Reset(bool color)
 {
+    colorGameboy = color;
     inBootRom = false;
 
     for (int i = 0; i < 0x10000; i++)

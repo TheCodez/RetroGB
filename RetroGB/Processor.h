@@ -21,7 +21,7 @@ public:
     ~Processor();
 
     int Run();
-    void Reset(bool color = false);
+    void Reset(bool color);
     void RequestInterrupt(Interrupts interrupt);
 private:
     void InitOpcodes();

@@ -20,7 +20,7 @@ public:
     Video(UpdateScreenFunc func, Memory* mem, Processor* cpu);
     ~Video();
 
-    void Reset(bool color = false);
+    void Reset(bool color);
 
     void Run(int cycles);
     void ScanLine(int scanLine);
