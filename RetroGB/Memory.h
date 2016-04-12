@@ -2,6 +2,8 @@
 
 #include "Definitions.h"
 
+class Cartridge;
+
 class Memory
 {
 public:
@@ -9,7 +11,7 @@ public:
     ~Memory();
 
     void Reset();
-    void LoadRom(uint8* r);
+    void LoadFromCartridge(Cartridge* cartridge);
 
     // Software Read / Write
     void WriteByte(uint16 address, uint8 value);

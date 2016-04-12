@@ -1,5 +1,6 @@
 #include "Memory.h"
 #include "BootRoms.h"
+#include "Cartridge.h"
 #include <fstream>
 #include <iostream>
 
@@ -22,7 +23,7 @@ void Memory::Reset()
 
     for (int i = 0; i < 0x10000; i++)
     {
-        data[i] = 0xFF;
+        data[i] = 0x00;
     }
 
     // Default values
@@ -59,12 +60,15 @@ void Memory::Reset()
     Write(0xFFFF, 0x00);
 }
 
-void Memory::LoadRom(uint8* r)
+void Memory::LoadFromCartridge(Cartridge* cartridge)
 {
+    uint8* rom = cartridge->GetROM();
     for (int i = 0; i < 0x8000; i++)
     {
-        data[i] = r[i];
+        data[i] = rom[i];
     }
+
+    // TODO set mbc here
 }
 
 void Memory::WriteByte(uint16 address, uint8 value)

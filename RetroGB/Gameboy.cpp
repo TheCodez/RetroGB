@@ -15,11 +15,10 @@ Gameboy::Gameboy(UpdateScreenFunc func)
 
 Gameboy::~Gameboy()
 {
-    // TODO hack fix for heap corruption error
-    //delete memory;
-    //delete processor;
-    //delete video;
-    //delete cartridge;
+    delete memory;
+    delete processor;
+    delete video;
+    delete cartridge;
 }
 
 void Gameboy::Run()
@@ -58,7 +57,7 @@ bool Gameboy::LoadRom(const std::string& fileName)
     if (cartridge->LoadRom(fileName))
     {
         Reset(cartridge->IsGameboyColor());
-        memory->LoadRom(cartridge->GetROM());
+        memory->LoadFromCartridge(cartridge);
 
         return true;
     }
