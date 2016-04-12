@@ -7,11 +7,11 @@
 
 enum Interrupts
 {
-    VBlank = 0x01,
+    VBLANK = 0x01,
     LCDSTAT = 0x02,
-    Timer = 0x04,
-    Serial = 0x08,
-    Joypad = 0x10
+    TIMER = 0x04,
+    SERIAL = 0x08,
+    JOYPAD = 0x10
 };
 
 class Processor
@@ -23,6 +23,7 @@ public:
     int Run();
     void Reset(bool color);
     void RequestInterrupt(Interrupts interrupt);
+    bool IsFlagSet(uint8 flag);
 private:
     void InitOpcodes();
     void HandleInterrupts();
@@ -31,7 +32,6 @@ private:
     void DisableFlag(uint8 flag);
     void InvertFlag(uint8 flag);
     void ClearFlags();
-    bool IsFlagSet(uint8 flag);
 
     void UnknownOpcode();
     void InvalidOpcode();
@@ -58,11 +58,11 @@ private:
     uint8 Sra(uint8 reg);
     uint8 Srl(uint8 reg);
 
-public:
     Memory* memory;
     std::function<void()> opcodes[256];
     std::function<void()> opcodesCB[256];
 
+public:
     int clockCycles;
     bool ime;
     bool halted;
@@ -101,6 +101,7 @@ public:
         };
         uint16 HL;
     };
+
 private:
     void NOP();
     void LD_BC_nn();

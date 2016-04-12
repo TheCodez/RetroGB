@@ -3,6 +3,8 @@
 #include "Processor.h"
 #include "Video.h"
 #include "Cartridge.h"
+#include "Timer.h"
+#include "Input.h"
 #include "Color.h"
 
 Gameboy::Gameboy(UpdateScreenFunc func)
@@ -11,6 +13,10 @@ Gameboy::Gameboy(UpdateScreenFunc func)
     processor = new Processor(memory);
     video = new Video(func, memory, processor);
     cartridge = new Cartridge();
+    timer = new Timer(memory);
+    input = new Input(memory);
+
+    memory->SetIOs(cartridge, timer, input);
 }
 
 Gameboy::~Gameboy()
@@ -19,6 +25,8 @@ Gameboy::~Gameboy()
     delete processor;
     delete video;
     delete cartridge;
+    delete timer;
+    delete input;
 }
 
 void Gameboy::Run()
@@ -32,6 +40,8 @@ void Gameboy::Run()
         {
             cycles += processor->Run();
             video->Run(cycles);
+            timer->Run(cycles);
+            input->Run(cycles);
         }
     }
 }
@@ -44,12 +54,23 @@ void Gameboy::Step()
     }
 }
 
+void Gameboy::KeyPressed(int key)
+{
+    input->KeyPressed(key);
+}
+
+void Gameboy::KeyReleased(int key)
+{
+    input->KeyReleased(key);
+}
+
 void Gameboy::Reset(bool color)
 {
     memory->Reset(color);
     processor->Reset(color);
     video->Reset(color);
-    //cartridge->Reset();
+    timer->Reset(color);
+    input->Reset(color);
 }
 
 bool Gameboy::LoadRom(const std::string& fileName)

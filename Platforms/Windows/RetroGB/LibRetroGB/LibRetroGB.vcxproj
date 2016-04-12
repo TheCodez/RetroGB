@@ -70,19 +70,23 @@
     <ClInclude Include="..\..\..\..\RetroGB\Color.h" />
     <ClInclude Include="..\..\..\..\RetroGB\Definitions.h" />
     <ClInclude Include="..\..\..\..\RetroGB\Gameboy.h" />
+    <ClInclude Include="..\..\..\..\RetroGB\Input.h" />
     <ClInclude Include="..\..\..\..\RetroGB\Memory.h" />
     <ClInclude Include="..\..\..\..\RetroGB\Processor.h" />
     <ClInclude Include="..\..\..\..\RetroGB\Processor.Timings.h" />
+    <ClInclude Include="..\..\..\..\RetroGB\Timer.h" />
     <ClInclude Include="..\..\..\..\RetroGB\Video.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\RetroGB\Cartridge.cpp" />
     <ClCompile Include="..\..\..\..\RetroGB\Color.cpp" />
     <ClCompile Include="..\..\..\..\RetroGB\Gameboy.cpp" />
+    <ClCompile Include="..\..\..\..\RetroGB\Input.cpp" />
     <ClCompile Include="..\..\..\..\RetroGB\Memory.cpp" />
     <ClCompile Include="..\..\..\..\RetroGB\Processor.cpp" />
     <ClCompile Include="..\..\..\..\RetroGB\Processor.Generated.cpp" />
     <ClCompile Include="..\..\..\..\RetroGB\Processor.Helpers.h" />
+    <ClCompile Include="..\..\..\..\RetroGB\Timer.cpp" />
     <ClCompile Include="..\..\..\..\RetroGB\Video.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

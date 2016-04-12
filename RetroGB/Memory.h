@@ -3,6 +3,8 @@
 #include "Definitions.h"
 
 class Cartridge;
+class Timer;
+class Input;
 
 class Memory
 {
@@ -10,6 +12,7 @@ public:
     Memory();
     ~Memory();
 
+    void SetIOs(Cartridge* cartridge, Timer* timer, Input* input);
     void Reset(bool color);
     void LoadFromCartridge(Cartridge* cartridge);
 
@@ -29,5 +32,8 @@ private:
     uint8 data[0x10000]; // 65536
     bool inBootRom;
     bool colorGameboy;
+    Timer* timer;
+    Cartridge* cartridge;
+    Input* input;
 };
 

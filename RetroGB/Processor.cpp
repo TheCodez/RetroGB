@@ -90,10 +90,10 @@ void Processor::HandleInterrupts()
 
         uint8 interrupt = interruptEnable & interruptFlag;
 
-        if (interrupt & VBlank)
+        if (interrupt & VBLANK)
         {
             halted = false;
-            memory->Write(0xFF0F, interruptFlag & ~VBlank);
+            memory->Write(0xFF0F, interruptFlag & ~VBLANK);
             ime = false;
             StackPush(PC);
             PC = 0x0040;
@@ -106,26 +106,26 @@ void Processor::HandleInterrupts()
             StackPush(PC);
             PC = 0x0048;
         }
-        else if (interrupt & Timer)
+        else if (interrupt & TIMER)
         {
             halted = false;
-            memory->Write(0xFF0F, interruptFlag & ~Timer);
+            memory->Write(0xFF0F, interruptFlag & ~TIMER);
             ime = false;
             StackPush(PC);
             PC = 0x0050;
         }
-        else if (interrupt & Serial)
+        else if (interrupt & SERIAL)
         {
             halted = false;
-            memory->Write(0xFF0F, interruptFlag & ~Serial);
+            memory->Write(0xFF0F, interruptFlag & ~SERIAL);
             ime = false;
             StackPush(PC);
             PC = 0x0058;
         }
-        else if (interrupt & Joypad)
+        else if (interrupt & JOYPAD)
         {
             halted = false;
-            memory->Write(0xFF0F, interruptFlag & ~Joypad);
+            memory->Write(0xFF0F, interruptFlag & ~JOYPAD);
             ime = false;
             StackPush(PC);
             PC = 0x0060;

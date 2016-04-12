@@ -1,6 +1,8 @@
 #include "Memory.h"
 #include "BootRoms.h"
 #include "Cartridge.h"
+#include "Timer.h"
+#include "Input.h"
 #include <fstream>
 #include <iostream>
 
@@ -15,6 +17,13 @@ Memory::~Memory()
 
 void Memory::Save()
 {
+}
+
+void Memory::SetIOs(Cartridge* cartridge, Timer* timer, Input* input)
+{
+    this->cartridge = cartridge;
+    this->timer = timer;
+    this->input = input;
 }
 
 void Memory::Reset(bool color)
