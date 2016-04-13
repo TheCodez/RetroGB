@@ -25,9 +25,12 @@ public:
     const Color* GetFrameBuffer() const;
     void Reset(bool color = false);
     bool LoadRom(const std::string& fileName);
-    Cartridge* GetCartridge() const { return cartridge; }
 
-public:
+    Cartridge* GetCartridge() const { return cartridge; }
+    Processor* GetProcessor() const { return processor; }
+    Memory* GetMemory() const { return memory; }
+
+private:
     Memory* memory;
     Processor* processor;
     Video* video;
