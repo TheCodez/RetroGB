@@ -13,7 +13,7 @@ Gameboy::Gameboy(UpdateScreenFunc func)
     processor = new Processor(memory);
     video = new Video(func, memory, processor);
     cartridge = new Cartridge();
-    timer = new Timer(memory);
+    timer = new Timer(memory, processor);
     input = new Input(memory);
 
     memory->SetIOs(cartridge, timer, input);
@@ -40,8 +40,8 @@ void Gameboy::Run()
         {
             cycles += processor->Run();
             video->Run(cycles);
-            timer->Run(cycles);
-            input->Run(cycles);
+            //timer->Run(cycles);
+            //input->Run(cycles);
         }
     }
 }

@@ -5,6 +5,7 @@
 #include "Input.h"
 #include <fstream>
 #include <iostream>
+#include <random>
 
 Memory::Memory()
 {
@@ -95,6 +96,10 @@ void Memory::WriteByte(uint16 address, uint8 value)
         Write(address - 0x2000, value);
         Write(address, value);
     }
+    if (address == 0xFF00)
+    {
+        input->Write(value);
+    }
     else if (address == 0xFF01)
     {
         // SB
@@ -104,7 +109,7 @@ void Memory::WriteByte(uint16 address, uint8 value)
     else if (address == 0xFF04)
     {
         // DIV
-        Write(0xFF04, 0x00);
+        timer->ResetDIV();
     }
     else if (address == 0xFF44)
     {
@@ -119,9 +124,10 @@ void Memory::WriteByte(uint16 address, uint8 value)
     else if (address == 0xFF46)
     {
         // DMA
+        int addr = value << 8;
         for (int i = 0; i < 160; i++)
         {
-            Write(0xFE00 + i, Read((value << 8) + i));
+            Write(0xFE00 + i, Read(addr + i));
         }
     }
     else
@@ -132,7 +138,14 @@ void Memory::WriteByte(uint16 address, uint8 value)
 
 uint8 Memory::ReadByte(uint16 address)
 {
-    return Read(address);
+    if (address == 0xFF00)
+    {
+        return input->Read();
+    }
+    else
+    {
+        return Read(address);
+    }
 }
 
 void Memory::WriteWord(uint16 address, uint16 value)

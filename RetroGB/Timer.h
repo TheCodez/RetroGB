@@ -3,11 +3,12 @@
 #include "Definitions.h"
 
 class Memory;
+class Processor;
 
 class Timer
 {
 public:
-    Timer(Memory* mem);
+    Timer(Memory* mem, Processor* cpu);
     ~Timer();
 
     void Reset(bool color);
@@ -17,5 +18,6 @@ public:
 
 private:
     Memory* memory;
+    Processor* processor;
 };
 

@@ -28,3 +28,12 @@ void Input::KeyReleased(int key)
 {
 
 }
+
+void Input::Write(uint8 value)
+{
+}
+
+uint8 Input::Read()
+{
+    return 0xFF;
+}

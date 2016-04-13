@@ -16,6 +16,9 @@ public:
     void KeyPressed(int key);
     void KeyReleased(int key);
 
+    void Write(uint8 value);
+    uint8 Read();
+
 private:
     Memory* memory;
 };
