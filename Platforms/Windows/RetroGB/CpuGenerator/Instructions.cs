@@ -349,10 +349,11 @@ namespace CpuGenerator
         public void WriteCp(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\tuint8 value = {0};", GetLoadStub(opcode.FirstOperand));
+            writer.WriteLine("\tuint8 result = A - value;");
             writer.WriteLine("\tSetFlag(FLAG_SUB);");
             writer.WriteLine("\tif (A < value) EnableFlag(FLAG_CARRY);");
-            writer.WriteLine("\tif (A == value) EnableFlag(FLAG_ZERO);");
-            writer.WriteLine("\tif (((A - value) & 0xF) > (A & 0xF)) EnableFlag(FLAG_HALFCARRY);");
+            writer.WriteLine("\tif (result == 0) EnableFlag(FLAG_ZERO);");
+            writer.WriteLine("\tif (((A ^ value ^ result) & 0x10) != 0) EnableFlag(FLAG_HALFCARRY);");
         }
 
         public void WriteHalt(TextWriter writer, Opcode opcode)
