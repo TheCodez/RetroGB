@@ -58,7 +58,7 @@ bool Cartridge::LoadRom(const std::string& fileName)
                 title += rom[i];
             }
 
-            licenseeCode = (rom[0x0144] << 8) | rom[0x0145];
+            licenseeCode = (rom[0x0144] << 4) | rom[0x0145];
             colorGameboy = rom[0x0143] == 0x80 || (rom[0x0143] == 0xC0);
             superGameboy = rom[0x0146] == 0x03;
             cartridgeType = (CartridgeType)rom[0x0147];
@@ -68,16 +68,16 @@ bool Cartridge::LoadRom(const std::string& fileName)
             version = rom[0x014C];
             oldLicenseeCode = rom[0x014B];
 
-            LOG_LINE("Title: %s", title.c_str());
-            LOG_LINE("Licensee Code: %d", licenseeCode);
-            LOG_LINE("Gameboy Color: %s", colorGameboy ? "true" : "false");
-            LOG_LINE("Super Gameboy: %s", superGameboy ? "true" : "false");
-            LOG_LINE("Cartridge Type: %d", cartridgeType);
-            LOG_LINE("ROM Size: %d", romSize);
-            LOG_LINE("RAM Size: %d", ramSize);
-            LOG_LINE("Japanese: %s", japanese ? "true" : "false");
-            LOG_LINE("Version: %d", version);
-            LOG_LINE("Old Licensee Code: %d", oldLicenseeCode);
+            LogLine("Title: %s", title.c_str());
+            LogLine("Licensee Code: %d", licenseeCode);
+            LogLine("Gameboy Color: %s", colorGameboy ? "true" : "false");
+            LogLine("Super Gameboy: %s", superGameboy ? "true" : "false");
+            LogLine("Cartridge Type: %d", cartridgeType);
+            LogLine("ROM Size: %d", romSize);
+            LogLine("RAM Size: %d", ramSize);
+            LogLine("Japanese: %s", japanese ? "true" : "false");
+            LogLine("Version: %d", version);
+            LogLine("Old Licensee Code: %d", oldLicenseeCode);
 
             return true;
         }

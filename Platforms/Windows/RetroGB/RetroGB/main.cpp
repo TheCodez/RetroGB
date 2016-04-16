@@ -1,13 +1,10 @@
-#include "Gameboy.h"
-#include "Color.h"
-#include "Definitions.h"
-#include "Cartridge.h"
+#include "RetroGB.h"
 #include "SDL.h"
 #include "SDL_opengl.h"
 
 GLuint texture;
 Gameboy* gameboy;
-int scale = 4;
+int scale = 3;
 int screenWidth = SCREEN_WIDTH * scale, screenHeight = SCREEN_HEIGHT * scale;
 bool enableFiltering = false;
 SDL_Window* window;
@@ -57,7 +54,7 @@ void updateTexture(Color* framebuffer)
 
 void updateScreen(Color* framebuffer)
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
     updateTexture(framebuffer);
     SDL_GL_SwapWindow(window);
 }
@@ -107,7 +104,7 @@ int main(int argc, char** argv)
 
     init();
 
-    LOG_LINE("Drag and drop roms to run them.\n");
+	LogLine("Drag and drop roms to run them.\n");
 
     bool quit = false;
     SDL_Event event;

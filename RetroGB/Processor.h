@@ -1,9 +1,8 @@
 #pragma once
 
 #include "Definitions.h"
-#include <functional>
-
 #include "Memory.h"
+#include <functional>
 
 enum Interrupts
 {

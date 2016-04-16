@@ -165,10 +165,10 @@ bool Processor::IsFlagSet(uint8 flag)
 
 void Processor::UnknownOpcode()
 {
-    LOG_LINE("Unimplemented opcode: PC: 0x%02X, Opode: 0x%02X", PC, memory->ReadByte(PC));
+    LogLine("Unimplemented opcode: PC: 0x%02X, Opode: 0x%02X", PC, memory->ReadByte(PC));
 }
 
 void Processor::InvalidOpcode()
 {
-    LOG_LINE("Invalid opcode: Opcode: 0x%02X", memory->ReadByte(PC));
+    LogLine("Invalid opcode: Opcode: 0x%02X", memory->ReadByte(PC));
 }

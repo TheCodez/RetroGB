@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace CpuGenerator
 {
@@ -300,7 +295,7 @@ namespace CpuGenerator
                 writer.WriteLine(tabs + "condition = true;");
             }
 
-            writer.WriteLine(tabs + "PC += static_cast<int8>(memory->ReadByte(PC++));");
+            writer.WriteLine(tabs + "PC += 1 + static_cast<int8>(memory->ReadByte(PC));");
             if (cond != string.Empty)
             {
                 writer.WriteLine("\t}\n\telse\n\t{\n\t\tPC++;\n\t}");

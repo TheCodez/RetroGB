@@ -45,24 +45,21 @@ inline uint8 GetBitValue(uint8 value, uint8 bit)
 #define DEBUG
 
 #ifdef DEBUG
-#define LOG_LINE(msg, ...) (LogLine(true, msg, ##__VA_ARGS__))
-#define LOG(msg, ...) (LogLine(false, msg, ##__VA_ARGS__))
-#else
-#define LOG_LINE(msg, ...)  
-#define LOG(msg, ...)  
-#endif
-
-inline void LogLine(bool newLine, const char* msg, ...)
+template <typename ... Args>
+void Log(const char* msg, const Args& ... args)
 {
-    char buf[512];
-
-    va_list args;
-    va_start(args, msg);
-    vsprintf_s(buf, msg, args);
-    va_end(args);
-
-    if (newLine)
-        printf("%s\n", buf);
-    else
-        printf("%s", buf);
+    printf(msg, args...);
 }
+
+template <typename ... Args>
+void LogLine(const char* msg, const Args& ... args)
+{
+    printf(msg, args...);
+    printf("\n");
+}
+#else
+template <typename ... Args>
+void Log(const char* format, const Args& ... args) {}
+template <typename ... Args>
+void LogLine(const char* format, const Args& ... args) {}
+#endif

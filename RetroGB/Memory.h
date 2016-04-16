@@ -5,6 +5,7 @@
 class Cartridge;
 class Timer;
 class Input;
+class MemoryController;
 
 class Memory
 {
@@ -27,7 +28,6 @@ public:
     uint8 Read(uint16 address) const;
 
     void Save();
-
 private:
     uint8 data[0x10000]; // 65536
     bool inBootRom;
@@ -35,5 +35,6 @@ private:
     Timer* timer;
     Cartridge* cartridge;
     Input* input;
+    MemoryController* memoryController;
 };
 

@@ -3,6 +3,8 @@
 #include "Cartridge.h"
 #include "Timer.h"
 #include "Input.h"
+#include "MemoryController.h"
+#include "Mbc1.h"
 #include <fstream>
 #include <iostream>
 #include <random>
@@ -80,11 +82,47 @@ void Memory::LoadFromCartridge(Cartridge* cartridge)
     }
 
     // TODO set mbc here
+    switch (cartridge->GetCartridgeType())
+    {
+        case CartridgeType::ROMONLY:
+        case CartridgeType::ROM_RAM:
+        case CartridgeType::ROM_RAM_BATTERY:
+            memoryController = new MemoryController(this, cartridge);
+            break;
+        case CartridgeType::MBC1:
+        case CartridgeType::MBC1_RAM:
+        case CartridgeType::MBC1_RAM_BATTERY:
+            memoryController = new Mbc1(this, cartridge);
+            break;
+        case CartridgeType::MBC2:
+        case CartridgeType::MBC2_BATTERY:
+            break;
+        case CartridgeType::MBC3:
+        case CartridgeType::MBC3_RAM:
+        case CartridgeType::MBC3_RAM_BATTERY:    
+        case CartridgeType::MBC3_TIMER_BATTERY:
+        case CartridgeType::MBC3_TIMER_RAM_BATTERY:
+            break;
+        case CartridgeType::MBC5:
+        case CartridgeType::MBC5_RAM:
+        case CartridgeType::MBC5_RAM_BATTERY:
+        case CartridgeType::MBC5_RUMBLE:
+        case CartridgeType::MBC5_RUMBLE_RAM:
+        case CartridgeType::MBC5_RUMBLE_RAM_BATTERY:
+        default:
+            memoryController = new MemoryController(this, cartridge);
+            LogLine("Unsupported Cartridge.");
+            break;
+    }
 }
 
 void Memory::WriteByte(uint16 address, uint8 value)
 {
-    if (address >= 0xC000 && address <= 0xDFFF)
+    if (address <= 0x7FFF)
+    {
+        memoryController->Write(address, value);
+    }
+    else if (address >= 0xC000 && address <= 0xDFFF)
     {
         // Echo  RAM
         Write(address + 0x2000, value);
@@ -103,7 +141,7 @@ void Memory::WriteByte(uint16 address, uint8 value)
     else if (address == 0xFF01)
     {
         // SB
-        LOG("%c", (char)value);
+        Log("%c", (char)value);
         Write(address, value);
     }
     else if (address == 0xFF04)
@@ -138,7 +176,11 @@ void Memory::WriteByte(uint16 address, uint8 value)
 
 uint8 Memory::ReadByte(uint16 address)
 {
-    if (address == 0xFF00)
+    if (address <= 0x7FFF)
+    {
+        return memoryController->Read(address);
+    }
+    else if (address == 0xFF00)
     {
         return input->Read();
     }

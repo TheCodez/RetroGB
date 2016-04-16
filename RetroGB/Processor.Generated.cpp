@@ -672,7 +672,7 @@ void Processor::RLA() // 0x17
 /* JR n */
 void Processor::JR_n() // 0x18
 {
-	PC += static_cast<int8>(memory->ReadByte(PC++));
+	PC += 1 + static_cast<int8>(memory->ReadByte(PC));
 }
 
 /* ADD HL, DE */
@@ -723,7 +723,7 @@ void Processor::JR_NZ_n() // 0x20
 	if (!IsFlagSet(FLAG_ZERO))
 	{
 		condition = true;
-		PC += static_cast<int8>(memory->ReadByte(PC++));
+		PC += 1 + static_cast<int8>(memory->ReadByte(PC));
 	}
 	else
 	{
@@ -808,7 +808,7 @@ void Processor::JR_Z_n() // 0x28
 	if (IsFlagSet(FLAG_ZERO))
 	{
 		condition = true;
-		PC += static_cast<int8>(memory->ReadByte(PC++));
+		PC += 1 + static_cast<int8>(memory->ReadByte(PC));
 	}
 	else
 	{
@@ -866,7 +866,7 @@ void Processor::JR_NC_n() // 0x30
 	if (!IsFlagSet(FLAG_CARRY))
 	{
 		condition = true;
-		PC += static_cast<int8>(memory->ReadByte(PC++));
+		PC += 1 + static_cast<int8>(memory->ReadByte(PC));
 	}
 	else
 	{
@@ -925,7 +925,7 @@ void Processor::JR_C_n() // 0x38
 	if (IsFlagSet(FLAG_CARRY))
 	{
 		condition = true;
-		PC += static_cast<int8>(memory->ReadByte(PC++));
+		PC += 1 + static_cast<int8>(memory->ReadByte(PC));
 	}
 	else
 	{
