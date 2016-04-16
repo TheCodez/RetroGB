@@ -9,9 +9,10 @@
 
 Gameboy::Gameboy(UpdateScreenFunc func)
 {
+    screenFunc = func;
     memory = new Memory();
     processor = new Processor(memory);
-    video = new Video(func, memory, processor);
+    video = new Video(memory, processor);
     cartridge = new Cartridge();
     timer = new Timer(memory, processor);
     input = new Input(memory);
@@ -43,6 +44,9 @@ void Gameboy::Run()
             //timer->Run(cycles);
             //input->Run(cycles);
         }
+        
+        if (screenFunc)
+            screenFunc(video->GetFrameBuffer());
     }
 }
 
@@ -86,7 +90,7 @@ bool Gameboy::LoadRom(const std::string& fileName)
     return false;
 }
 
-const Color* Gameboy::GetFrameBuffer() const
+Color* Gameboy::GetFrameBuffer() const
 {
     return video->GetFrameBuffer();
 }

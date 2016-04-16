@@ -2,16 +2,16 @@
 #include "Memory.h"
 #include "Processor.h"
 
-Video::Video(UpdateScreenFunc func, Memory* mem, Processor* cpu)
+Video::Video(Memory* mem, Processor* cpu)
     : memory(mem), processor(cpu)
 {
-    screenFunc = func;
     frameBuffer = new Color[SCREEN_WIDTH * SCREEN_HEIGHT];
     Reset(false);
 }
 
 Video::~Video()
 {
+    delete[] frameBuffer;
 }
 
 void Video::Reset(bool color)
@@ -34,75 +34,72 @@ void Video::Run(int cycles)
 
     switch (mode)
     {
-    case Mode::Oam:
-        if (modeCounter >= 80)
-        {
-            modeCounter = 0;
-            mode = Mode::DataTransfer;
-        }
-        break;
-    case Mode::DataTransfer:
-        if (modeCounter >= 172)
-        {
-            // Enter hblank
-            mode = Mode::HBlank;
+        case Mode::Oam:
+            if (modeCounter >= 80)
+            {
+                modeCounter = 0;
+                mode = Mode::DataTransfer;
+            }
+            break;
+        case Mode::DataTransfer:
+            if (modeCounter >= 172)
+            {
+                // Enter hblank
+                mode = Mode::HBlank;
 
-            //processor->RequestInterrupt(Interrupts::LCDSTAT);
+                //processor->RequestInterrupt(Interrupts::LCDSTAT);
 
-            ScanLine(scanline);
-        }
-        break;
+                ScanLine(scanline);
+            }
+            break;
 
-    case Mode::HBlank:
-        if (modeCounter >= 204)
-        {
-            modeCounter = 0;
-            scanline++;
+        case Mode::HBlank:
+            if (modeCounter >= 204)
+            {
+                modeCounter = 0;
+                scanline++;
             
-            memory->Write(0xFF44, scanline);
-            CompareLYToLYC();
+                memory->Write(0xFF44, scanline);
+                CompareLYToLYC();
 
-            if (scanline == 144)
-            {
-                mode = Mode::VBlank;
-
-                if (screenFunc)
-                    screenFunc(frameBuffer);
-
-                /*processor->RequestInterrupt(Interrupts::VBlank);
-
-                uint8 stat = memory->Read(0xFF41);
-                if (IsBitSet(stat, 4))
+                if (scanline == 144)
                 {
-                    processor->RequestInterrupt(Interrupts::LCDSTAT);
-                }*/
-            }
-            else
-            {
-                mode = Mode::Oam;
+                    mode = Mode::VBlank;
 
-                /*uint8 stat = memory->Read(0xFF41);
-                if (IsBitSet(stat, 5))
+                    /*processor->RequestInterrupt(Interrupts::VBlank);
+
+                    uint8 stat = memory->Read(0xFF41);
+                    if (IsBitSet(stat, 4))
+                    {
+                        processor->RequestInterrupt(Interrupts::LCDSTAT);
+                    }*/
+                }
+                else
                 {
-                    processor->RequestInterrupt(Interrupts::LCDSTAT);
-                }*/
+                    mode = Mode::Oam;
+
+                    /*uint8 stat = memory->Read(0xFF41);
+                    if (IsBitSet(stat, 5))
+                    {
+                        processor->RequestInterrupt(Interrupts::LCDSTAT);
+                    }*/
+                }
             }
-        }
-        break;
+            break;
 
-    case Mode::VBlank:
-        if (modeCounter >= 456)
-        {
-            modeCounter = 0;
-            scanline++;
-
-            if (scanline > 153)
+        case Mode::VBlank:
+            if (modeCounter >= 456)
             {
-                mode = Mode::Oam;
-                scanline = 0;
+                modeCounter = 0;
+                scanline++;
+
+                if (scanline > 153)
+                {
+                    mode = Mode::Oam;
+                    scanline = 0;
+                }
             }
-        }
-        break;
+            break;
     }
 }
 

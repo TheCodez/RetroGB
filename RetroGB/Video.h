@@ -17,7 +17,7 @@ enum class Mode
 class Video
 {
 public:
-    Video(UpdateScreenFunc func, Memory* mem, Processor* cpu);
+    Video(Memory* mem, Processor* cpu);
     ~Video();
 
     void Reset(bool color);
@@ -28,7 +28,7 @@ public:
     void RenderWindow(int scanLine);
     void RenderSprites(int scanLine);
 
-    const Color* GetFrameBuffer() const { return frameBuffer; }
+    Color* GetFrameBuffer() const { return frameBuffer; }
 private:
     Color GetColor(int colorNum, uint8 palette);
     void CompareLYToLYC();
@@ -42,6 +42,5 @@ private:
     int scanline;
 
     Color* frameBuffer;
-    UpdateScreenFunc screenFunc;
 };
 

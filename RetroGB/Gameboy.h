@@ -1,6 +1,5 @@
 #pragma once
 
-#include <string>
 #include "Definitions.h"
 
 class Processor;
@@ -22,7 +21,7 @@ public:
     void KeyPressed(int key);
     void KeyReleased(int key);
 
-    const Color* GetFrameBuffer() const;
+    Color* GetFrameBuffer() const;
     void Reset(bool color = false);
     bool LoadRom(const std::string& fileName);
 
@@ -37,5 +36,5 @@ private:
     Cartridge* cartridge;
     Timer* timer;
     Input* input;
+    UpdateScreenFunc screenFunc;
 };
-
