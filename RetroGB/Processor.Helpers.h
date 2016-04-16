@@ -15,6 +15,7 @@ void Processor::StackPop(uint16& reg)
 uint8 Processor::Inc(uint8 reg)
 {
     uint8 result = reg + 1;
+    
     IsFlagSet(FLAG_CARRY) ? SetFlag(FLAG_CARRY) : ClearFlags();
 
     if (result == 0)
@@ -29,12 +30,14 @@ uint8 Processor::Inc(uint8 reg)
 uint8 Processor::Dec(uint8 reg)
 {
     uint8 result = reg - 1;
+    
     IsFlagSet(FLAG_CARRY) ? SetFlag(FLAG_CARRY) : ClearFlags();
+    EnableFlag(FLAG_SUB);
 
-    if (reg == 0)
+    if (result == 0)
         EnableFlag(FLAG_ZERO);
 
-    if ((reg & 0x0F) == 0x0F)
+    if ((result & 0x0F) == 0x0F)
         EnableFlag(FLAG_HALFCARRY);
 
     return result;
@@ -48,7 +51,7 @@ void Processor::Add(uint8 reg)
     A += reg;
 
     ClearFlags();
-    if (A == 0) 
+    if (result == 0) 
         EnableFlag(FLAG_ZERO);
 
     if ((bits & 0x100) != 0x00)
@@ -64,7 +67,8 @@ void Processor::Adc(uint8 reg)
     int result = A + reg + carry;
     
     ClearFlags();
-    if (A == 0) EnableFlag(FLAG_ZERO);
+    if (result == 0)
+        EnableFlag(FLAG_ZERO);
 
     if (result > 0xFF)
         EnableFlag(FLAG_CARRY);
@@ -80,8 +84,11 @@ void Processor::Sub(uint8 reg)
     int result = A - reg;
     int bits = A ^ reg ^ result;
 
+    A -= reg;
+
     SetFlag(FLAG_SUB);
-    if (A == 0) EnableFlag(FLAG_ZERO);
+    if (result == 0)
+        EnableFlag(FLAG_ZERO);
 
     if ((bits & 0x100) != 0x00)
     {
@@ -91,8 +98,6 @@ void Processor::Sub(uint8 reg)
     {
         EnableFlag(FLAG_HALFCARRY);
     }
-
-    A -= reg;
 }
 
 void Processor::Sbc(uint8 reg)
@@ -101,16 +106,14 @@ void Processor::Sbc(uint8 reg)
     int result = A - reg - carry;
     
     SetFlag(FLAG_SUB);
-    if (A == 0) 
+    if (result == 0)
         EnableFlag(FLAG_ZERO);
 
-    if (result > 0xFF)
+    if (result < 0)
         EnableFlag(FLAG_CARRY);
 
     if (((A & 0x0F) - (reg & 0x0F) - carry) < 0)
         EnableFlag(FLAG_HALFCARRY);
-
-    A -= reg - carry;
 }
 
 void Processor::AddHL(uint16 val)
