@@ -27,7 +27,7 @@
 #include "Input.h"
 #include "Color.h"
 
-Gameboy::Gameboy(std::function<void(Color*)> updateScreenFunc)
+Gameboy::Gameboy(const std::function<void(Color*)>& updateScreenFunc)
 {
     screenFunc = updateScreenFunc;
     memory = new Memory();

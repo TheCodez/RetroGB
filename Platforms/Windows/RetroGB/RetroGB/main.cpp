@@ -152,6 +152,7 @@ int main(int argc, char** argv)
     SDL_DestroyWindow(window);
     SDL_Quit();
 
+    glDeleteTextures(1, &texture);
     delete gameboy;
 
     return 0;
