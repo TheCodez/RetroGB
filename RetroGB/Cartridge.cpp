@@ -68,7 +68,7 @@ bool Cartridge::LoadRom(const std::string& fileName)
         file.read((char*)rom, size);
         file.close();
 
-        if (rom != nullptr && size > 0)
+        if (rom != nullptr && size >= 0x8000)
         {
             for (int i = 0x0134; i < 0x0143; i++)
             {

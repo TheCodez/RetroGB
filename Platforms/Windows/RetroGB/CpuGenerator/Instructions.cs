@@ -30,13 +30,13 @@ namespace CpuGenerator
             switch (operand)
             {
                 case "NZ":
-                    return "!IsFlagSet(FLAG_ZERO)";
+                    return "!IsFlagSet(Flags::ZERO)";
                 case "Z":
-                    return "IsFlagSet(FLAG_ZERO)";
+                    return "IsFlagSet(Flags::ZERO)";
                 case "NC":
-                    return "!IsFlagSet(FLAG_CARRY)";
+                    return "!IsFlagSet(Flags::CARRY)";
                 case "C":
-                    return "IsFlagSet(FLAG_CARRY)";
+                    return "IsFlagSet(Flags::CARRY)";
                 default:
                     return "";
             }
@@ -135,22 +135,22 @@ namespace CpuGenerator
         public void WriteAnd(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\tA &= {0};", GetLoadStub(opcode.FirstOperand));
-            writer.WriteLine("\tSetFlag(FLAG_HALFCARRY);");
-            writer.WriteLine("\tif (A == 0) EnableFlag(FLAG_ZERO);");
+            writer.WriteLine("\tSetFlag(Flags::HALFCARRY);");
+            writer.WriteLine("\tif (A == 0) EnableFlag(Flags::ZERO);");
         }
 
         public void WriteOr(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\tA |= {0};", GetLoadStub(opcode.FirstOperand));
             writer.WriteLine("\tClearFlags();");
-            writer.WriteLine("\tif (A == 0) EnableFlag(FLAG_ZERO);");
+            writer.WriteLine("\tif (A == 0) EnableFlag(Flags::ZERO);");
         }
 
         public void WriteXor(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\tA ^= {0};", GetLoadStub(opcode.FirstOperand));
             writer.WriteLine("\tClearFlags();");
-            writer.WriteLine("\tif (A == 0) EnableFlag(FLAG_ZERO);");
+            writer.WriteLine("\tif (A == 0) EnableFlag(Flags::ZERO);");
         }
 
         public void WriteAddWord(TextWriter writer, Opcode opcode)
@@ -181,28 +181,28 @@ namespace CpuGenerator
         public void WriteDaa(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\tuint8 reg = A;\n");
-            writer.WriteLine("\tif (IsFlagSet(FLAG_SUB))\n\t{");
-            writer.WriteLine("\t\tif ((reg & 0x0F) > 9 || IsFlagSet(FLAG_HALFCARRY))");
+            writer.WriteLine("\tif (IsFlagSet(Flags::SUB))\n\t{");
+            writer.WriteLine("\t\tif ((reg & 0x0F) > 9 || IsFlagSet(Flags::HALFCARRY))");
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\treg -= 0x06;");
             writer.WriteLine("\t\t}");
-            writer.WriteLine("\t\telse if ((reg & 0x9F) > 9 || IsFlagSet(FLAG_CARRY))");
+            writer.WriteLine("\t\telse if ((reg & 0x9F) > 9 || IsFlagSet(Flags::CARRY))");
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\treg -= 0x60;");
             writer.WriteLine("\t\t}");
             writer.WriteLine("\t}");
             writer.WriteLine("\telse\n\t{");
-            writer.WriteLine("\t\tif ((reg & 0x0F) > 9 || IsFlagSet(FLAG_HALFCARRY))");
+            writer.WriteLine("\t\tif ((reg & 0x0F) > 9 || IsFlagSet(Flags::HALFCARRY))");
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\treg += 0x06;");
             writer.WriteLine("\t\t}");
-            writer.WriteLine("\t\telse if ((reg & 0x9F) > 9 || IsFlagSet(FLAG_CARRY))");
+            writer.WriteLine("\t\telse if ((reg & 0x9F) > 9 || IsFlagSet(Flags::CARRY))");
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\treg += 0x60;");
             writer.WriteLine("\t\t}\n");
             writer.WriteLine("\t}");
-            writer.WriteLine("\tDisableFlag(FLAG_HALFCARRY);");
-            writer.WriteLine("\tif (reg == 0) EnableFlag(FLAG_ZERO);\n");
+            writer.WriteLine("\tDisableFlag(Flags::HALFCARRY);");
+            writer.WriteLine("\tif (reg == 0) EnableFlag(Flags::ZERO);\n");
             writer.WriteLine("\tA = reg;");
         }
 
@@ -218,10 +218,10 @@ namespace CpuGenerator
 
         public void WriteBit(TextWriter writer, Opcode opcode)
         {
-            writer.WriteLine("\tif ((({0} >> {1}) & 0x01) == 0) EnableFlag(FLAG_ZERO);", GetLoadStub(opcode.SecondOperand), opcode.FirstOperand);
-            writer.WriteLine("\telse DisableFlag(FLAG_ZERO);");
-            writer.WriteLine("\tDisableFlag(FLAG_SUB);");
-            writer.WriteLine("\tEnableFlag(FLAG_HALFCARRY);");
+            writer.WriteLine("\tif ((({0} >> {1}) & 0x01) == 0) EnableFlag(Flags::ZERO);", GetLoadStub(opcode.SecondOperand), opcode.FirstOperand);
+            writer.WriteLine("\telse DisableFlag(Flags::ZERO);");
+            writer.WriteLine("\tDisableFlag(Flags::SUB);");
+            writer.WriteLine("\tEnableFlag(Flags::HALFCARRY);");
         }
 
         public void WriteSet(TextWriter writer, Opcode opcode)
@@ -343,32 +343,32 @@ namespace CpuGenerator
         public void WriteCpl(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\tA = ~A;");
-            writer.WriteLine("\tEnableFlag(FLAG_HALFCARRY);");
-            writer.WriteLine("\tEnableFlag(FLAG_SUB);");
+            writer.WriteLine("\tEnableFlag(Flags::HALFCARRY);");
+            writer.WriteLine("\tEnableFlag(Flags::SUB);");
         }
 
         public void WriteCcf(TextWriter writer, Opcode opcode)
         {
-            writer.WriteLine("\tInvertFlag(FLAG_CARRY);");
-            writer.WriteLine("\tDisableFlag(FLAG_HALFCARRY);");
-            writer.WriteLine("\tDisableFlag(FLAG_SUB);");
+            writer.WriteLine("\tInvertFlag(Flags::CARRY);");
+            writer.WriteLine("\tDisableFlag(Flags::HALFCARRY);");
+            writer.WriteLine("\tDisableFlag(Flags::SUB);");
         }
 
         public void WriteScf(TextWriter writer, Opcode opcode)
         {
-            writer.WriteLine("\tEnableFlag(FLAG_CARRY);");
-            writer.WriteLine("\tDisableFlag(FLAG_HALFCARRY);");
-            writer.WriteLine("\tDisableFlag(FLAG_SUB);");
+            writer.WriteLine("\tEnableFlag(Flags::CARRY);");
+            writer.WriteLine("\tDisableFlag(Flags::HALFCARRY);");
+            writer.WriteLine("\tDisableFlag(Flags::SUB);");
         }
 
         public void WriteCp(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\tuint8 value = {0};", GetLoadStub(opcode.FirstOperand));
             writer.WriteLine("\tuint8 result = A - value;");
-            writer.WriteLine("\tSetFlag(FLAG_SUB);");
-            writer.WriteLine("\tif (A < value) EnableFlag(FLAG_CARRY);");
-            writer.WriteLine("\tif (result == 0) EnableFlag(FLAG_ZERO);");
-            writer.WriteLine("\tif (((A ^ value ^ result) & 0x10) != 0) EnableFlag(FLAG_HALFCARRY);");
+            writer.WriteLine("\tSetFlag(Flags::SUB);");
+            writer.WriteLine("\tif (A < value) EnableFlag(Flags::CARRY);");
+            writer.WriteLine("\tif (result == 0) EnableFlag(Flags::ZERO);");
+            writer.WriteLine("\tif (((A ^ value ^ result) & 0x10) != 0) EnableFlag(Flags::HALFCARRY);");
         }
 
         public void WriteHalt(TextWriter writer, Opcode opcode)
@@ -386,7 +386,7 @@ namespace CpuGenerator
         {
             writer.WriteLine("\t{0} = (({0} >> 4) & 0x0F) | (({0} << 4) & 0xF0);", opcode.FirstOperand);
             writer.WriteLine("\tClearFlags();");
-            writer.WriteLine("\tif ({0} == 0) EnableFlag(FLAG_ZERO);", opcode.FirstOperand);
+            writer.WriteLine("\tif ({0} == 0) EnableFlag(Flags::ZERO);", opcode.FirstOperand);
         }
 
         public void WriteSwapHL(TextWriter writer, Opcode opcode)
@@ -394,7 +394,7 @@ namespace CpuGenerator
             writer.WriteLine("\tuint8 val = memory->ReadByte(HL);");
             writer.WriteLine("\tmemory->WriteByte(HL, ((val >> 4) & 0x0F) | ((val << 4) & 0xF0));");
             writer.WriteLine("\tClearFlags();");
-            writer.WriteLine("\tif (memory->ReadByte(HL) == 0) EnableFlag(FLAG_ZERO);");
+            writer.WriteLine("\tif (memory->ReadByte(HL) == 0) EnableFlag(ZERO);");
         }
 
         public void WriteHLSPN(TextWriter writer, Opcode opcode)
@@ -403,9 +403,9 @@ namespace CpuGenerator
             writer.WriteLine("\tHL = SP + n;");
             writer.WriteLine("\tClearFlags();");
             writer.WriteLine("\tif (((SP ^ n ^ HL) & 0x100) == 0x100)");
-            writer.WriteLine("\t\tEnableFlag(FLAG_CARRY);");
+            writer.WriteLine("\t\tEnableFlag(Flags::CARRY);");
             writer.WriteLine("\tif (((SP ^ n ^ HL) & 0x10) == 0x10)");
-            writer.WriteLine("\t\tEnableFlag(FLAG_HALFCARRY);");
+            writer.WriteLine("\t\tEnableFlag(Flags::HALFCARRY);");
         }
 
         public void WriteRl(TextWriter writer, Opcode opcode, bool a = false)

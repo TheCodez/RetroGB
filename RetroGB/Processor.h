@@ -24,13 +24,22 @@
 #include "Memory.h"
 #include <functional>
 
-enum Interrupts
+enum Interrupts : uint8
 {
     VBLANK = 0x01,
     LCDSTAT = 0x02,
     TIMER = 0x04,
     SERIAL = 0x08,
     JOYPAD = 0x10
+};
+
+enum Flags : uint8
+{
+    ZERO = 0x80,
+    SUB = 0x40,
+    HALFCARRY = 0x20,
+    CARRY = 0x10,
+    NONE = 0x00
 };
 
 class Processor
@@ -46,10 +55,10 @@ public:
 private:
     void InitOpcodes();
     void HandleInterrupts();
-    void SetFlag(uint8 flag);
-    void EnableFlag(uint8 flag);
-    void DisableFlag(uint8 flag);
-    void InvertFlag(uint8 flag);
+    void SetFlag(Flags flag);
+    void EnableFlag(Flags flag);
+    void DisableFlag(Flags flag);
+    void InvertFlag(Flags flag);
     void ClearFlags();
 
     void UnknownOpcode();

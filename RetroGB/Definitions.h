@@ -22,25 +22,15 @@
 
 #include <stdint.h>
 #include <string>
-#include <cstdarg>
 #include <functional>
 
-#define SCREEN_WIDTH 160
-#define SCREEN_HEIGHT 144
+constexpr int SCREEN_WIDTH = 160;
+constexpr int SCREEN_HEIGHT = 144;
 
-typedef uint8_t uint8;
-typedef uint16_t uint16;
-typedef int8_t int8;
-typedef int16_t int16;
-
-#define FLAG_ZERO 0x80
-#define FLAG_SUB 0x40
-#define FLAG_HALFCARRY 0x20
-#define FLAG_CARRY 0x10
-#define FLAG_NONE 0x00
-
-struct Color;
-typedef std::function<void (Color*)> UpdateScreenFunc;
+using uint8 = uint8_t;
+using uint16 = uint16_t;
+using int8 = int8_t;
+using int16 = int16_t;
 
 inline void SetBit(uint8& value, uint8 bit)
 {

@@ -33,7 +33,7 @@ struct Color;
 class Gameboy
 {
 public:
-    Gameboy(UpdateScreenFunc func);
+    Gameboy(std::function<void(Color*)> updateScreenFunc);
     ~Gameboy();
 
     void Run();
@@ -56,5 +56,5 @@ private:
     Cartridge* cartridge;
     Timer* timer;
     Input* input;
-    UpdateScreenFunc screenFunc;
+    std::function<void(Color*)> screenFunc;
 };
