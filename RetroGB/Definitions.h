@@ -52,8 +52,6 @@ inline uint8 GetBitValue(uint8 value, uint8 bit)
     return (value & (1 << bit)) ? 1 : 0;
 }
 
-#define DEBUG
-
 #ifdef DEBUG
 template <typename ... Args>
 void Log(const char* msg, const Args& ... args)
