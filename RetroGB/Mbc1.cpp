@@ -43,6 +43,9 @@ void Mbc1::Reset(bool color)
     ramOffset = 0;
     ramEnabled = false;
     bankMode = BankingMode::ROMBanking;
+
+    for (int i = 0; i < 0x8000; i++)
+        ramBanks[i] = 0xFF;
 }
 
 void Mbc1::Write(uint16 address, uint8 value)
