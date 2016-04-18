@@ -131,7 +131,7 @@ int main(int argc, char** argv)
                 ClearConsole();
                 if (!gameboy->LoadRom(event.drop.file))
                 {
-                    quit = true;
+                    gameboy->Reset(false);
                 }
 
                 SDL_SetWindowTitle(window, std::string("RetroGB: " + gameboy->GetCartridge()->GetTitle()).c_str());

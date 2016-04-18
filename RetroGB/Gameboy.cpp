@@ -61,8 +61,8 @@ void Gameboy::Run()
         {
             cycles += processor->Run();
             video->Run(cycles);
-            //timer->Run(cycles);
-            //input->Run(cycles);
+            timer->Run(cycles);
+            input->Run(cycles);
         }
         
         if (screenFunc)
@@ -102,9 +102,8 @@ bool Gameboy::LoadRom(const std::string& fileName)
     if (cartridge->LoadRom(fileName))
     {
         Reset(cartridge->IsGameboyColor());
-        memory->LoadFromCartridge(cartridge);
 
-        return true;
+        return memory->LoadFromCartridge(cartridge);
     }
 
     return false;

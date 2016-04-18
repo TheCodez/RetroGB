@@ -35,7 +35,7 @@ public:
 
     void SetIOs(Cartridge* cartridge, Timer* timer, Input* input);
     void Reset(bool color);
-    void LoadFromCartridge(Cartridge* cartridge);
+    bool LoadFromCartridge(Cartridge* cartridge);
 
     // Software Read / Write
     void WriteByte(uint16 address, uint8 value);

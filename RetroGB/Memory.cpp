@@ -97,13 +97,15 @@ void Memory::Reset(bool color)
     Write(0xFFFF, 0x00); // IE
 }
 
-void Memory::LoadFromCartridge(Cartridge* cartridge)
+bool Memory::LoadFromCartridge(Cartridge* cartridge)
 {
     uint8* rom = cartridge->GetROM();
     for (int i = 0; i < 0x8000; i++)
     {
         data[i] = rom[i];
     }
+
+    bool supported = true;
 
     // TODO set mbc here
     switch (cartridge->GetCartridgeType())
@@ -134,10 +136,13 @@ void Memory::LoadFromCartridge(Cartridge* cartridge)
         case CartridgeType::MBC5_RUMBLE_RAM:
         case CartridgeType::MBC5_RUMBLE_RAM_BATTERY:
         default:
+            supported = false;
             memoryController = new MemoryController(this, cartridge);
             LogLine("Unsupported Cartridge: %02X", cartridge->GetCartridgeType());
             break;
     }
+
+    return supported;
 }
 
 void Memory::WriteByte(uint16 address, uint8 value)
