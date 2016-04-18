@@ -56,30 +56,24 @@ void Mbc1::Write(uint16 address, uint8 value)
     }
     else if (address >= 0x2000 && address <= 0x3FFF)
     {
-        if (bankMode == BankingMode::ROMBanking)
-        {
-            romBank = ((value & 0x03) << 5) | (romBank & 0x1F);
+        romBank = value & 0x1F;
             
-            if (romBank == 0)
-                romBank++;
+        if (romBank == 0x00 || romBank == 0x20 || romBank == 0x40 || romBank == 0x60)
+            romBank++;
 
-            romOffset = romBank * 0x4000;
-        }
-        else if (bankMode == BankingMode::RAMBanking)
-        {
-            ramBank = value & 0x03;
-            ramOffset = ramBank * 0x4000;
-        }
+        romOffset = romBank * 0x4000;
     }
     else if (address >= 0x4000 && address <= 0x5FFF) 
     {
         if (bankMode == BankingMode::ROMBanking)
         {
             romBank = ((value & 0x03) << 5) | (romBank & 0x1F);
+            romOffset = romBank * 0x4000;
         }
         else if (bankMode == BankingMode::RAMBanking)
         {
             ramBank = value & 0x03;
+            ramOffset = ramBank * 0x4000;
         }
     }
     else if (address >= 0xA000 && address <= 0xBFFF)
