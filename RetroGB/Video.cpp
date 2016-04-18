@@ -86,23 +86,23 @@ void Video::Run(int cycles)
                 {
                     mode = Mode::VBlank;
 
-                    /*processor->RequestInterrupt(Interrupts::VBlank);
+                    processor->RequestInterrupt(Interrupts::VBLANK);
 
                     uint8 stat = memory->Read(0xFF41);
                     if (IsBitSet(stat, 4))
                     {
                         processor->RequestInterrupt(Interrupts::LCDSTAT);
-                    }*/
+                    }
                 }
                 else
                 {
                     mode = Mode::Oam;
 
-                    /*uint8 stat = memory->Read(0xFF41);
+                    uint8 stat = memory->Read(0xFF41);
                     if (IsBitSet(stat, 5))
                     {
                         processor->RequestInterrupt(Interrupts::LCDSTAT);
-                    }*/
+                    }
                 }
             }
             break;
@@ -134,7 +134,7 @@ void Video::CompareLYToLYC()
 
         if (IsBitSet(stat, 6))
         {
-            //processor->RequestInterrupt(Interrupts::LCDSTAT);
+            processor->RequestInterrupt(Interrupts::LCDSTAT);
         }
     }
     else
