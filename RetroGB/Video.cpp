@@ -67,7 +67,7 @@ void Video::Run(int cycles)
                 // Enter hblank
                 mode = Mode::HBlank;
 
-                //processor->RequestInterrupt(Interrupts::LCDSTAT);
+                processor->RequestInterrupt(Interrupts::LCDSTAT);
 
                 ScanLine(scanline);
             }

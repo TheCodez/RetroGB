@@ -42,7 +42,7 @@ void Processor::Reset(bool color)
     BC = 0x0013;
     DE = 0x00D8;
     HL = 0x014D;
-    PC = 0x100; // TODO boot rom support
+    PC = 0x0000; // TODO boot rom support
     SP = 0xFFFE;
     ime = true;
     halted = false;

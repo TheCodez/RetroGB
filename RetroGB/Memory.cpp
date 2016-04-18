@@ -51,7 +51,7 @@ void Memory::SetIOs(Cartridge* cartridge, Timer* timer, Input* input)
 void Memory::Reset(bool color)
 {
     colorGameboy = color;
-    inBootRom = false;
+    inBootRom = true;
 
     for (int i = 0; i < 0x10000; i++)
     {
@@ -63,38 +63,41 @@ void Memory::Reset(bool color)
         memoryController->Reset(color);
     }
 
-    // Default values
-    Write(0xFF05, 0x00); // TIMA
-    Write(0xFF06, 0x00); // TMA
-    Write(0xFF07, 0x00); // TAC
-    Write(0xFF10, 0x80); // NR10
-    Write(0xFF11, 0xBF); // NR11
-    Write(0xFF12, 0xF3); // NR12
-    Write(0xFF14, 0xBF); // NR14
-    Write(0xFF16, 0x3F); // NR21
-    Write(0xFF17, 0x00); // NR22
-    Write(0xFF19, 0xBF); // NR24
-    Write(0xFF1A, 0x7F); // NR30
-    Write(0xFF1B, 0xFF); // NR31
-    Write(0xFF1C, 0x9F); // NR32
-    Write(0xFF1E, 0xBF); // NR33
-    Write(0xFF20, 0xFF); // NR41
-    Write(0xFF21, 0x00); // NR42
-    Write(0xFF22, 0x00); // NR43
-    Write(0xFF23, 0xBF); // NR30
-    Write(0xFF24, 0x77); // NR50
-    Write(0xFF25, 0xF3); // NR51
-    Write(0xFF26, 0xF1); // NR52
-    Write(0xFF40, 0x91); // LCDC
-    Write(0xFF42, 0x00); // SCY
-    Write(0xFF43, 0x00); // SCX
-    Write(0xFF45, 0x00); // LYC
-    Write(0xFF47, 0xFC); // BGP
-    Write(0xFF48, 0xFF); // OBP0
-    Write(0xFF49, 0xFF); // OBP1
-    Write(0xFF4A, 0x00); // WY
-    Write(0xFF4B, 0x00); // WX
-    Write(0xFFFF, 0x00); // IE
+    if (!inBootRom)
+    {
+        // Default values
+        Write(0xFF05, 0x00); // TIMA
+        Write(0xFF06, 0x00); // TMA
+        Write(0xFF07, 0x00); // TAC
+        Write(0xFF10, 0x80); // NR10
+        Write(0xFF11, 0xBF); // NR11
+        Write(0xFF12, 0xF3); // NR12
+        Write(0xFF14, 0xBF); // NR14
+        Write(0xFF16, 0x3F); // NR21
+        Write(0xFF17, 0x00); // NR22
+        Write(0xFF19, 0xBF); // NR24
+        Write(0xFF1A, 0x7F); // NR30
+        Write(0xFF1B, 0xFF); // NR31
+        Write(0xFF1C, 0x9F); // NR32
+        Write(0xFF1E, 0xBF); // NR33
+        Write(0xFF20, 0xFF); // NR41
+        Write(0xFF21, 0x00); // NR42
+        Write(0xFF22, 0x00); // NR43
+        Write(0xFF23, 0xBF); // NR30
+        Write(0xFF24, 0x77); // NR50
+        Write(0xFF25, 0xF3); // NR51
+        Write(0xFF26, 0xF1); // NR52
+        Write(0xFF40, 0x91); // LCDC
+        Write(0xFF42, 0x00); // SCY
+        Write(0xFF43, 0x00); // SCX
+        Write(0xFF45, 0x00); // LYC
+        Write(0xFF47, 0xFC); // BGP
+        Write(0xFF48, 0xFF); // OBP0
+        Write(0xFF49, 0xFF); // OBP1
+        Write(0xFF4A, 0x00); // WY
+        Write(0xFF4B, 0x00); // WX
+        Write(0xFFFF, 0x00); // IE
+    }
 }
 
 bool Memory::LoadFromCartridge(Cartridge* cartridge)
@@ -188,6 +191,12 @@ void Memory::WriteByte(uint16 address, uint8 value)
         // LYC
         Write(0xFF45, value);
     }
+    else if (address == 0xFF50)
+    {
+        // Disable bootrom
+        inBootRom = false;
+        Write(0xFF50, value);
+    }
     else if (address == 0xFF46)
     {
         // DMA
@@ -205,7 +214,14 @@ void Memory::WriteByte(uint16 address, uint8 value)
 
 uint8 Memory::ReadByte(uint16 address)
 {
-    if (address <= 0x7FFF)
+    if (address < 0x0100)
+    {
+        if (inBootRom)
+            return bootRom[address];
+        else
+            return Read(address);
+    }
+    else if (address <= 0x7FFF)
     {
         return memoryController->Read(address);
     }
