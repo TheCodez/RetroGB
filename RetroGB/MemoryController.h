@@ -29,7 +29,7 @@ class MemoryController
 {
 public:
     MemoryController(Memory* memory, Cartridge* cartridge);
-    ~MemoryController();
+    virtual ~MemoryController();
 
     virtual void Reset(bool color) {}
     virtual void Write(uint16 address, uint8 value);

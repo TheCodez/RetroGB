@@ -25,7 +25,6 @@
 #include "Cartridge.h"
 #include "Timer.h"
 #include "Input.h"
-#include "Color.h"
 
 Gameboy::Gameboy(const std::function<void(Color*)>& updateScreenFunc)
 {
