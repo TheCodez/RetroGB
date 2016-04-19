@@ -67,6 +67,10 @@ void HandleInput(SDL_Event& event)
         {
             enableFiltering = !enableFiltering;
         }
+        else if (event.key.keysym.scancode == SDL_SCANCODE_R)
+        {
+            gameboy->ResetRom();
+        }
     }
 }
 

@@ -96,6 +96,15 @@ void Gameboy::Reset(bool color)
     input->Reset(color);
 }
 
+void Gameboy::ResetRom()
+{
+    if (cartridge->IsROMLoaded())
+    {
+        Reset(cartridge->IsGameboyColor());
+        memory->LoadFromCartridge(cartridge);
+    }
+}
+
 bool Gameboy::LoadRom(const std::string& fileName)
 {
     if (cartridge->LoadRom(fileName))

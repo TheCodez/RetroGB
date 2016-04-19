@@ -43,6 +43,7 @@ public:
 
     Color* GetFrameBuffer() const;
     void Reset(bool color = false);
+    void ResetRom();
     bool LoadRom(const std::string& fileName);
 
     Cartridge* GetCartridge() const { return cartridge; }
