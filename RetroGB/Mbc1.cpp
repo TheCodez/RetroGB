@@ -19,7 +19,6 @@
 */
 
 #include "Mbc1.h"
-#include "Memory.h"
 #include "Cartridge.h"
 
 Mbc1::Mbc1(Memory* memory, Cartridge* cartridge)

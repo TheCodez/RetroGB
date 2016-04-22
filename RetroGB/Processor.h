@@ -22,7 +22,6 @@
 
 #include "Definitions.h"
 #include "Memory.h"
-#include <functional>
 
 enum Interrupts : uint8
 {
@@ -85,6 +84,7 @@ private:
     uint8 Sla(uint8 reg);
     uint8 Sra(uint8 reg);
     uint8 Srl(uint8 reg);
+    void Bit(uint8 reg, uint8 bit);
 
     Memory* memory;
     std::function<void()> opcodes[256];

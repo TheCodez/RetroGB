@@ -19,6 +19,7 @@
 */
 
 #include "Processor.h"
+#include "Processor.Helpers.h"
 #include "Processor.Timings.h"
 
 Processor::Processor(Memory* mem)
