@@ -218,10 +218,7 @@ namespace CpuGenerator
 
         public void WriteBit(TextWriter writer, Opcode opcode)
         {
-            writer.WriteLine("\tif ((({0} >> {1}) & 0x01) == 0) EnableFlag(Flags::ZERO);", GetLoadStub(opcode.SecondOperand), opcode.FirstOperand);
-            writer.WriteLine("\telse DisableFlag(Flags::ZERO);");
-            writer.WriteLine("\tDisableFlag(Flags::SUB);");
-            writer.WriteLine("\tEnableFlag(Flags::HALFCARRY);");
+            writer.WriteLine("\tBit({0}, {1});", GetLoadStub(opcode.SecondOperand), opcode.FirstOperand);
         }
 
         public void WriteSet(TextWriter writer, Opcode opcode)

@@ -2668,577 +2668,385 @@ void Processor::SRL_A() // 0x3F
 /* BIT 0 B */
 void Processor::BIT_0_B() // 0x40
 {
-	if (((B >> 0) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(B, 0);
 }
 
 /* BIT 0 C */
 void Processor::BIT_0_C() // 0x41
 {
-	if (((C >> 0) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(C, 0);
 }
 
 /* BIT 0 D */
 void Processor::BIT_0_D() // 0x42
 {
-	if (((D >> 0) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(D, 0);
 }
 
 /* BIT 0 E */
 void Processor::BIT_0_E() // 0x43
 {
-	if (((E >> 0) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(E, 0);
 }
 
 /* BIT 0 H */
 void Processor::BIT_0_H() // 0x44
 {
-	if (((H >> 0) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(H, 0);
 }
 
 /* BIT 0 L */
 void Processor::BIT_0_L() // 0x45
 {
-	if (((L >> 0) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(L, 0);
 }
 
 /* BIT 0 (HL) */
 void Processor::BIT_0_MEM_HL() // 0x46
 {
-	if (((memory->ReadByte(HL) >> 0) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(memory->ReadByte(HL), 0);
 }
 
 /* BIT 0 A */
 void Processor::BIT_0_A() // 0x47
 {
-	if (((A >> 0) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(A, 0);
 }
 
 /* BIT 1 B */
 void Processor::BIT_1_B() // 0x48
 {
-	if (((B >> 1) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(B, 1);
 }
 
 /* BIT 1 C */
 void Processor::BIT_1_C() // 0x49
 {
-	if (((C >> 1) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(C, 1);
 }
 
 /* BIT 1 D */
 void Processor::BIT_1_D() // 0x4A
 {
-	if (((D >> 1) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(D, 1);
 }
 
 /* BIT 1 E */
 void Processor::BIT_1_E() // 0x4B
 {
-	if (((E >> 1) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(E, 1);
 }
 
 /* BIT 1 H */
 void Processor::BIT_1_H() // 0x4C
 {
-	if (((H >> 1) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(H, 1);
 }
 
 /* BIT 1 L */
 void Processor::BIT_1_L() // 0x4D
 {
-	if (((L >> 1) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(L, 1);
 }
 
 /* BIT 1 (HL) */
 void Processor::BIT_1_MEM_HL() // 0x4E
 {
-	if (((memory->ReadByte(HL) >> 1) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(memory->ReadByte(HL), 1);
 }
 
 /* BIT 1 A */
 void Processor::BIT_1_A() // 0x4F
 {
-	if (((A >> 1) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(A, 1);
 }
 
 /* BIT 2 B */
 void Processor::BIT_2_B() // 0x50
 {
-	if (((B >> 2) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(B, 2);
 }
 
 /* BIT 2 C */
 void Processor::BIT_2_C() // 0x51
 {
-	if (((C >> 2) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(C, 2);
 }
 
 /* BIT 2 D */
 void Processor::BIT_2_D() // 0x52
 {
-	if (((D >> 2) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(D, 2);
 }
 
 /* BIT 2 E */
 void Processor::BIT_2_E() // 0x53
 {
-	if (((E >> 2) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(E, 2);
 }
 
 /* BIT 2 H */
 void Processor::BIT_2_H() // 0x54
 {
-	if (((H >> 2) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(H, 2);
 }
 
 /* BIT 2 L */
 void Processor::BIT_2_L() // 0x55
 {
-	if (((L >> 2) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(L, 2);
 }
 
 /* BIT 2 (HL) */
 void Processor::BIT_2_MEM_HL() // 0x56
 {
-	if (((memory->ReadByte(HL) >> 2) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(memory->ReadByte(HL), 2);
 }
 
 /* BIT 2 A */
 void Processor::BIT_2_A() // 0x57
 {
-	if (((A >> 2) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(A, 2);
 }
 
 /* BIT 3 B */
 void Processor::BIT_3_B() // 0x58
 {
-	if (((B >> 3) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(B, 3);
 }
 
 /* BIT 3 C */
 void Processor::BIT_3_C() // 0x59
 {
-	if (((C >> 3) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(C, 3);
 }
 
 /* BIT 3 D */
 void Processor::BIT_3_D() // 0x5A
 {
-	if (((D >> 3) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(D, 3);
 }
 
 /* BIT 3 E */
 void Processor::BIT_3_E() // 0x5B
 {
-	if (((E >> 3) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(E, 3);
 }
 
 /* BIT 3 H */
 void Processor::BIT_3_H() // 0x5C
 {
-	if (((H >> 3) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(H, 3);
 }
 
 /* BIT 3 L */
 void Processor::BIT_3_L() // 0x5D
 {
-	if (((L >> 3) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(L, 3);
 }
 
 /* BIT 3 (HL) */
 void Processor::BIT_3_MEM_HL() // 0x5E
 {
-	if (((memory->ReadByte(HL) >> 3) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(memory->ReadByte(HL), 3);
 }
 
 /* BIT 3 A */
 void Processor::BIT_3_A() // 0x5F
 {
-	if (((A >> 3) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(A, 3);
 }
 
 /* BIT 4 B */
 void Processor::BIT_4_B() // 0x60
 {
-	if (((B >> 4) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(B, 4);
 }
 
 /* BIT 4 C */
 void Processor::BIT_4_C() // 0x61
 {
-	if (((C >> 4) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(C, 4);
 }
 
 /* BIT 4 D */
 void Processor::BIT_4_D() // 0x62
 {
-	if (((D >> 4) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(D, 4);
 }
 
 /* BIT 4 E */
 void Processor::BIT_4_E() // 0x63
 {
-	if (((E >> 4) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(E, 4);
 }
 
 /* BIT 4 H */
 void Processor::BIT_4_H() // 0x64
 {
-	if (((H >> 4) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(H, 4);
 }
 
 /* BIT 4 L */
 void Processor::BIT_4_L() // 0x65
 {
-	if (((L >> 4) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(L, 4);
 }
 
 /* BIT 4 (HL) */
 void Processor::BIT_4_MEM_HL() // 0x66
 {
-	if (((memory->ReadByte(HL) >> 4) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(memory->ReadByte(HL), 4);
 }
 
 /* BIT 4 A */
 void Processor::BIT_4_A() // 0x67
 {
-	if (((A >> 4) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(A, 4);
 }
 
 /* BIT 5 B */
 void Processor::BIT_5_B() // 0x68
 {
-	if (((B >> 5) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(B, 5);
 }
 
 /* BIT 5 C */
 void Processor::BIT_5_C() // 0x69
 {
-	if (((C >> 5) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(C, 5);
 }
 
 /* BIT 5 D */
 void Processor::BIT_5_D() // 0x6A
 {
-	if (((D >> 5) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(D, 5);
 }
 
 /* BIT 5 E */
 void Processor::BIT_5_E() // 0x6B
 {
-	if (((E >> 5) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(E, 5);
 }
 
 /* BIT 5 H */
 void Processor::BIT_5_H() // 0x6C
 {
-	if (((H >> 5) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(H, 5);
 }
 
 /* BIT 5 L */
 void Processor::BIT_5_L() // 0x6D
 {
-	if (((L >> 5) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(L, 5);
 }
 
 /* BIT 5 (HL) */
 void Processor::BIT_5_MEM_HL() // 0x6E
 {
-	if (((memory->ReadByte(HL) >> 5) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(memory->ReadByte(HL), 5);
 }
 
 /* BIT 5 A */
 void Processor::BIT_5_A() // 0x6F
 {
-	if (((A >> 5) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(A, 5);
 }
 
 /* BIT 6 B */
 void Processor::BIT_6_B() // 0x70
 {
-	if (((B >> 6) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(B, 6);
 }
 
 /* BIT 6 C */
 void Processor::BIT_6_C() // 0x71
 {
-	if (((C >> 6) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(C, 6);
 }
 
 /* BIT 6 D */
 void Processor::BIT_6_D() // 0x72
 {
-	if (((D >> 6) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(D, 6);
 }
 
 /* BIT 6 E */
 void Processor::BIT_6_E() // 0x73
 {
-	if (((E >> 6) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(E, 6);
 }
 
 /* BIT 6 H */
 void Processor::BIT_6_H() // 0x74
 {
-	if (((H >> 6) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(H, 6);
 }
 
 /* BIT 6 L */
 void Processor::BIT_6_L() // 0x75
 {
-	if (((L >> 6) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(L, 6);
 }
 
 /* BIT 6 (HL) */
 void Processor::BIT_6_MEM_HL() // 0x76
 {
-	if (((memory->ReadByte(HL) >> 6) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(memory->ReadByte(HL), 6);
 }
 
 /* BIT 6 A */
 void Processor::BIT_6_A() // 0x77
 {
-	if (((A >> 6) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(A, 6);
 }
 
 /* BIT 7 B */
 void Processor::BIT_7_B() // 0x78
 {
-	if (((B >> 7) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(B, 7);
 }
 
 /* BIT 7 C */
 void Processor::BIT_7_C() // 0x79
 {
-	if (((C >> 7) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(C, 7);
 }
 
 /* BIT 7 D */
 void Processor::BIT_7_D() // 0x7A
 {
-	if (((D >> 7) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(D, 7);
 }
 
 /* BIT 7 E */
 void Processor::BIT_7_E() // 0x7B
 {
-	if (((E >> 7) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(E, 7);
 }
 
 /* BIT 7 H */
 void Processor::BIT_7_H() // 0x7C
 {
-	if (((H >> 7) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(H, 7);
 }
 
 /* BIT 7 L */
 void Processor::BIT_7_L() // 0x7D
 {
-	if (((L >> 7) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(L, 7);
 }
 
 /* BIT 7 (HL) */
 void Processor::BIT_7_MEM_HL() // 0x7E
 {
-	if (((memory->ReadByte(HL) >> 7) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(memory->ReadByte(HL), 7);
 }
 
 /* BIT 7 A */
 void Processor::BIT_7_A() // 0x7F
 {
-	if (((A >> 7) & 0x01) == 0) EnableFlag(Flags::ZERO);
-	else DisableFlag(Flags::ZERO);
-	DisableFlag(Flags::SUB);
-	EnableFlag(Flags::HALFCARRY);
+	Bit(A, 7);
 }
 
 /* RES 0 B */

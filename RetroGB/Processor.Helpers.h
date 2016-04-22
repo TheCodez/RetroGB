@@ -305,3 +305,15 @@ uint8 Processor::Srl(uint8 reg)
 
     return result;
 }
+
+void Processor::Bit(uint8 reg, uint8 bit)
+{
+    if (((reg >> bit) & 0x01) == 0) 
+        EnableFlag(Flags::ZERO);
+    else 
+        DisableFlag(Flags::ZERO);
+
+    DisableFlag(Flags::SUB);
+    EnableFlag(Flags::HALFCARRY);
+}
+
