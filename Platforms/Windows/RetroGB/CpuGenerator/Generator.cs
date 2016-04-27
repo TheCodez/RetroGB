@@ -58,7 +58,7 @@ namespace CpuGenerator
                 string line = opcodes.ElementAt(i);
 
                 if ((line != "UNDEFINED") && (line != "CB_OPCODE"))
-                    MapOpcodes(writer, i, line);
+                    MapOpcode(writer, i, line);
                 else
                     MapInvalid(writer, i, line);
             }
@@ -70,7 +70,7 @@ namespace CpuGenerator
             {
                 string line = opcodesCB.ElementAt(i);
 
-                MapCBOpcodes(writer, i, line);
+                MapCBOpcode(writer, i, line);
             }
 
             writer.WriteLine("}");
@@ -98,7 +98,7 @@ namespace CpuGenerator
         public void GenerateMethod(TextWriter writer, int op, string line)
         {
             Opcode opcode;
-            ParseOpcode(line, out opcode);
+            Utils.ParseOpcode(line, out opcode);
 
             writer.WriteLine("/* {0} */", line.Replace(",", ", "));
             writer.WriteLine("void Processor::{0}() // 0x{1:X2}", opcode.ToFunctionName(), op);
@@ -108,27 +108,6 @@ namespace CpuGenerator
 
             writer.WriteLine("}");
             writer.WriteLine();
-        }
-
-        public void ParseOpcode(string opString, out Opcode opcode)
-        {
-            var instr = opString.Split(' ', ',');
-            var instrLength = instr.Length;
-
-            opcode = new Opcode();
-            opcode.Operation = instr[0];
-            opcode.NumberOfOperands = instrLength - 1;
-
-            if (opcode.NumberOfOperands == 1)
-            {
-                opcode.FirstOperand = instr[1];
-                opcode.SecondOperand = string.Empty;
-            }
-            else if (opcode.NumberOfOperands == 2)
-            {
-                opcode.FirstOperand = instr[1];
-                opcode.SecondOperand = instr[2];
-            }
         }
 
         private void WriteOpcodeStub(TextWriter writer, Opcode opcode)
@@ -314,10 +293,10 @@ namespace CpuGenerator
             }
         }
 
-        public void MapOpcodes(TextWriter writer, int op, string line)
+        public void MapOpcode(TextWriter writer, int op, string line)
         {
             Opcode opcode;
-            ParseOpcode(line, out opcode);
+            Utils.ParseOpcode(line, out opcode);
 
             var funcName = opcode.ToFunctionName();
 
@@ -329,10 +308,10 @@ namespace CpuGenerator
             writer.WriteLine("\topcodes[0x{0:X2}] = std::bind(&Processor::InvalidOpcode, this);", op);
         }
 
-        public void MapCBOpcodes(TextWriter writer, int op, string line)
+        public void MapCBOpcode(TextWriter writer, int op, string line)
         {
             Opcode opcode;
-            ParseOpcode(line, out opcode);
+            Utils.ParseOpcode(line, out opcode);
 
             var funcName = opcode.ToFunctionName();
 

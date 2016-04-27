@@ -57,30 +57,9 @@ namespace CpuGenerator
         public void GenerateMethod(TextWriter writer, int op, string line)
         {
             Opcode opcode;
-            ParseOpcode(line, out opcode);
+            Utils.ParseOpcode(line, out opcode);
 
             writer.WriteLine("void {0}();", opcode.ToFunctionName());
-        }
-
-        public void ParseOpcode(string opString, out Opcode opcode)
-        {
-            var instr = opString.Split(' ', ',');
-            var instrLength = instr.Length;
-
-            opcode = new Opcode();
-            opcode.Operation = instr[0];
-            opcode.NumberOfOperands = instrLength - 1;
-
-            if (opcode.NumberOfOperands == 1)
-            {
-                opcode.FirstOperand = instr[1];
-                opcode.SecondOperand = string.Empty;
-            }
-            else if (opcode.NumberOfOperands == 2)
-            {
-                opcode.FirstOperand = instr[1];
-                opcode.SecondOperand = instr[2];
-            }
         }
     }
 }
