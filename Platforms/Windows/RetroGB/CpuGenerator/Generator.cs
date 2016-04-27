@@ -41,6 +41,7 @@ namespace CpuGenerator
             writer.WriteLine();
 
             writer.WriteLine("#include \"Processor.h\"");
+            writer.WriteLine("#include \"Processor.Helpers.h\"");
             writer.WriteLine();
 
             List<string> opcodes = Properties.Resources.Opcodes.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();

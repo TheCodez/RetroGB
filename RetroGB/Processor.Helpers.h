@@ -18,21 +18,23 @@
 *
 */
 
+#pragma once
+
 #include "Processor.h"
 
-void Processor::StackPush(uint16 reg)
+inline void Processor::StackPush(uint16 reg)
 {
     SP -= 2;
     memory->WriteWord(SP, reg);
 }
 
-void Processor::StackPop(uint16& reg)
+inline void Processor::StackPop(uint16& reg)
 {
     reg = memory->ReadWord(SP);
     SP += 2;
 }
 
-uint8 Processor::Inc(uint8 reg)
+inline uint8 Processor::Inc(uint8 reg)
 {
     uint8 result = reg + 1;
     
@@ -47,7 +49,7 @@ uint8 Processor::Inc(uint8 reg)
     return result;
 }
 
-uint8 Processor::Dec(uint8 reg)
+inline uint8 Processor::Dec(uint8 reg)
 {
     uint8 result = reg - 1;
     
@@ -63,7 +65,7 @@ uint8 Processor::Dec(uint8 reg)
     return result;
 }
 
-void Processor::Add(uint8 reg)
+inline void Processor::Add(uint8 reg)
 {
     int result = A + reg;
     int bits = A ^ reg ^ result;
@@ -81,7 +83,7 @@ void Processor::Add(uint8 reg)
         EnableFlag(Flags::HALFCARRY);
 }
 
-void Processor::Adc(uint8 reg)
+inline void Processor::Adc(uint8 reg)
 {
     uint8 carry = IsFlagSet(Flags::CARRY) ? 1 : 0;
     int result = A + reg + carry;
@@ -99,7 +101,7 @@ void Processor::Adc(uint8 reg)
     A += reg + carry;
 }
 
-void Processor::Sub(uint8 reg)
+inline void Processor::Sub(uint8 reg)
 {
     int result = A - reg;
     int bits = A ^ reg ^ result;
@@ -120,7 +122,7 @@ void Processor::Sub(uint8 reg)
     }
 }
 
-void Processor::Sbc(uint8 reg)
+inline void Processor::Sbc(uint8 reg)
 {
     uint8 carry = IsFlagSet(Flags::CARRY) ? 1 : 0;
     int result = A - reg - carry;
@@ -136,7 +138,7 @@ void Processor::Sbc(uint8 reg)
         EnableFlag(Flags::HALFCARRY);
 }
 
-void Processor::AddHL(uint16 val)
+inline void Processor::AddHL(uint16 val)
 {
     int result = HL + val;
 
@@ -150,7 +152,7 @@ void Processor::AddHL(uint16 val)
     HL += val;
 }
 
-void Processor::AddSP(uint8 val)
+inline void Processor::AddSP(uint8 val)
 {
     int result = SP + val;
 
@@ -165,7 +167,7 @@ void Processor::AddSP(uint8 val)
     SP += val;
 }
 
-uint8 Processor::Rl(uint8 reg)
+inline uint8 Processor::Rl(uint8 reg)
 {
     uint8 carry = IsFlagSet(Flags::CARRY) ? 1 : 0;
     uint8 result = reg;
@@ -184,7 +186,7 @@ uint8 Processor::Rl(uint8 reg)
     return result;
 }
 
-uint8 Processor::Rlc(uint8 reg)
+inline uint8 Processor::Rlc(uint8 reg)
 {
     uint8 result = reg;
     
@@ -206,7 +208,7 @@ uint8 Processor::Rlc(uint8 reg)
     return result;
 }
 
-uint8 Processor::Rr(uint8 reg)
+inline uint8 Processor::Rr(uint8 reg)
 {
     uint8 carry = IsFlagSet(Flags::CARRY) ? 1 : 0;
     uint8 result = reg;
@@ -225,7 +227,7 @@ uint8 Processor::Rr(uint8 reg)
     return result;
 }
 
-uint8 Processor::Rrc(uint8 reg)
+inline uint8 Processor::Rrc(uint8 reg)
 {
     uint8 result = reg;
 
@@ -247,7 +249,7 @@ uint8 Processor::Rrc(uint8 reg)
     return result;
 }
 
-uint8 Processor::Sla(uint8 reg)
+inline uint8 Processor::Sla(uint8 reg)
 {
     uint8 result = reg;
 
@@ -264,7 +266,7 @@ uint8 Processor::Sla(uint8 reg)
     return result;
 }
 
-uint8 Processor::Sra(uint8 reg)
+inline uint8 Processor::Sra(uint8 reg)
 {
     uint8 result = reg;
 
@@ -289,7 +291,7 @@ uint8 Processor::Sra(uint8 reg)
     return result;
 }
 
-uint8 Processor::Srl(uint8 reg)
+inline uint8 Processor::Srl(uint8 reg)
 {
     uint8 result = reg;
 
@@ -306,7 +308,7 @@ uint8 Processor::Srl(uint8 reg)
     return result;
 }
 
-void Processor::Bit(uint8 reg, uint8 bit)
+inline void Processor::Bit(uint8 reg, uint8 bit)
 {
     if (((reg >> bit) & 0x01) == 0) 
         EnableFlag(Flags::ZERO);

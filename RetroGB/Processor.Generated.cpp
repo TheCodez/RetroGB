@@ -4,6 +4,7 @@
 //-------------------------------------------------------------------------------------
 
 #include "Processor.h"
+#include "Processor.Helpers.h"
 
 void Processor::InitOpcodes()
 {
