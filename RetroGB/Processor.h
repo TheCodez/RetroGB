@@ -22,6 +22,7 @@
 
 #include "Definitions.h"
 #include "Memory.h"
+#include <array>
 
 enum Interrupts : uint8
 {
@@ -87,8 +88,8 @@ private:
     void Bit(uint8 reg, uint8 bit);
 
     Memory* memory;
-    std::function<void()> opcodes[256];
-    std::function<void()> opcodesCB[256];
+    std::array<std::function<void()>, 256> opcodes;
+    std::array<std::function<void()>, 256> opcodesCB;
 
 public:
     int clockCycles;
