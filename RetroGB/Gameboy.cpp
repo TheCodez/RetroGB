@@ -37,6 +37,7 @@ Gameboy::Gameboy(const std::function<void(Color*)>& updateScreenFunc)
     input = new Input(memory);
 
     memory->SetIOs(cartridge, timer, input);
+    paused = false;
 }
 
 Gameboy::~Gameboy()
@@ -51,7 +52,7 @@ Gameboy::~Gameboy()
 
 void Gameboy::Run()
 {
-    if (cartridge->IsROMLoaded())
+    if (!paused && cartridge->IsROMLoaded())
     {
         int cycles = 0;
         const int targetCycles = 70224;
@@ -94,6 +95,8 @@ void Gameboy::Reset(bool color)
     video->Reset(color);
     timer->Reset(color);
     input->Reset(color);
+
+    paused = false;
 }
 
 void Gameboy::ResetRom()

@@ -46,6 +46,9 @@ public:
     void ResetRom();
     bool LoadRom(const std::string& fileName);
 
+    void SetPaused(bool pause) { paused = pause; }
+    bool IsPaused() const { return paused; }
+
     Cartridge* GetCartridge() const { return cartridge; }
     Processor* GetProcessor() const { return processor; }
     Memory* GetMemory() const { return memory; }
@@ -58,4 +61,5 @@ private:
     Timer* timer;
     Input* input;
     std::function<void(Color*)> screenFunc;
+    bool paused;
 };
