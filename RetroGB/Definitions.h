@@ -1,7 +1,7 @@
-/*
+﻿/*
 * RetroGB
 
-* Copyright (C) 2016  Michael K�sel
+* Copyright (C) 2016  Michael Kösel
 
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,10 @@
 #include <stdint.h>
 #include <string>
 #include <functional>
+
+#if defined(__ANDROID__)
+#include <android/log.h>
+#endif
 
 constexpr int SCREEN_WIDTH = 160;
 constexpr int SCREEN_HEIGHT = 144;
@@ -56,14 +60,22 @@ inline uint8 GetBitValue(uint8 value, uint8 bit)
 template <typename ... Args>
 void Log(const char* msg, const Args& ... args)
 {
+#if defined(__ANDROID__)
+    __android_log_print(ANDROID_LOG_DEBUG, "RetroGB.Native", msg, args...);
+#else
     printf(msg, args...);
+#endif
 }
 
 template <typename ... Args>
 void LogLine(const char* msg, const Args& ... args)
 {
+#if defined(__ANDROID__)
+    __android_log_print(ANDROID_LOG_DEBUG, "RetroGB.Native", msg, args...);
+#else
     printf(msg, args...);
     printf("\n");
+#endif
 }
 #else
 template <typename ... Args>
