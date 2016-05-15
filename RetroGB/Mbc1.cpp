@@ -48,13 +48,13 @@ void Mbc1::Reset(bool color)
 
 void Mbc1::Write(uint16 address, uint8 value)
 {
-    if (address < 0x2000)
+    if (address <= 0x1FFF)
     {
         ramEnabled = (value & 0x0F) == 0xA;
     }
     else if (address >= 0x2000 && address <= 0x3FFF)
     {
-        romBank = value & 0x1F;
+        romBank = (romBank & 0xF0) | (value & 0x1F);
             
         if (romBank == 0x00 || romBank == 0x20 || romBank == 0x40 || romBank == 0x60)
             romBank++;
