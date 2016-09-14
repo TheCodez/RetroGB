@@ -118,6 +118,7 @@ void Processor::HandleInterrupts()
             ime = false;
             StackPush(PC);
             PC = 0x0040;
+            clockCycles = 20;
         }
         else if (interrupt & LCDSTAT)
         {
@@ -126,6 +127,7 @@ void Processor::HandleInterrupts()
             ime = false;
             StackPush(PC);
             PC = 0x0048;
+            clockCycles = 20;
         }
         else if (interrupt & TIMER)
         {
@@ -134,6 +136,7 @@ void Processor::HandleInterrupts()
             ime = false;
             StackPush(PC);
             PC = 0x0050;
+            clockCycles = 20;
         }
         else if (interrupt & SERIAL)
         {
@@ -142,6 +145,7 @@ void Processor::HandleInterrupts()
             ime = false;
             StackPush(PC);
             PC = 0x0058;
+            clockCycles = 20;
         }
         else if (interrupt & JOYPAD)
         {
@@ -150,6 +154,7 @@ void Processor::HandleInterrupts()
             ime = false;
             StackPush(PC);
             PC = 0x0060;
+            clockCycles = 20;
         }
     }
 }
