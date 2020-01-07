@@ -48,7 +48,6 @@ void Processor::Reset(bool color)
     ime = true;
     halted = false;
     clockCycles = 0;
-    condition = false;
 }
 
 int Processor::Run()
@@ -70,23 +69,11 @@ int Processor::Run()
         if (opcode == 0xCB)
         {
             opcode = memory->ReadByte(PC++);
-            opcodesCB[opcode]();
-
-            clockCycles += opcodeCBCycles[opcode] * 4;
+            clockCycles += opcodesCB[opcode]();
         }
         else
         {
-            opcodes[opcode]();
-
-            if (condition)
-            {
-                clockCycles += opcodeConditionalCycles[opcode] * 4;
-                condition = false;
-            }
-            else
-            {
-                clockCycles += opcodeCycles[opcode] * 4;
-            }
+			clockCycles += opcodes[opcode]();
         }
     }
     else
@@ -189,12 +176,16 @@ bool Processor::IsFlagSet(uint8 flag)
     return (F & flag) != 0;
 }
 
-void Processor::UnknownOpcode()
+int Processor::UnknownOpcode()
 {
     LogLine("Unimplemented opcode: PC: 0x%02X, Opode: 0x%02X", PC, memory->ReadByte(PC));
+
+	return 0;
 }
 
-void Processor::InvalidOpcode()
+int Processor::InvalidOpcode()
 {
     LogLine("Invalid opcode: Opcode: 0x%02X", memory->ReadByte(PC));
+
+	return 0;
 }

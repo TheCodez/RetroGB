@@ -525,252 +525,331 @@ void Processor::InitOpcodes()
 }
 
 /* NOP */
-void Processor::NOP() // 0x00
+int Processor::NOP() // 0x00
 {
+
+	return 4;
 }
 
 /* LD BC, nn */
-void Processor::LD_BC_nn() // 0x01
+int Processor::LD_BC_nn() // 0x01
 {
 	BC = memory->ReadWord(PC);
 	PC += 2;
+
+	return 12;
 }
 
 /* LD (BC), A */
-void Processor::LD_MEM_BC_A() // 0x02
+int Processor::LD_MEM_BC_A() // 0x02
 {
 	memory->WriteByte(BC, A);
+
+	return 8;
 }
 
 /* INC BC */
-void Processor::INC_BC() // 0x03
+int Processor::INC_BC() // 0x03
 {
 	BC++;
+
+	return 8;
 }
 
 /* INC B */
-void Processor::INC_B() // 0x04
+int Processor::INC_B() // 0x04
 {
 	B = Inc(B);
+
+	return 4;
 }
 
 /* DEC B */
-void Processor::DEC_B() // 0x05
+int Processor::DEC_B() // 0x05
 {
 	B = Dec(B);
+
+	return 4;
 }
 
 /* LD B, n */
-void Processor::LD_B_n() // 0x06
+int Processor::LD_B_n() // 0x06
 {
 	B = memory->ReadByte(PC++);
+
+	return 8;
 }
 
 /* RLCA */
-void Processor::RLCA() // 0x07
+int Processor::RLCA() // 0x07
 {
 	A = Rlc(A);
+
+	return 4;
 }
 
 /* LD (nn), SP */
-void Processor::LD_MEM_nn_SP() // 0x08
+int Processor::LD_MEM_nn_SP() // 0x08
 {
 	memory->WriteWord(memory->ReadWord(PC), SP);
 	PC += 2;
+
+	return 20;
 }
 
 /* ADD HL, BC */
-void Processor::ADD_HL_BC() // 0x09
+int Processor::ADD_HL_BC() // 0x09
 {
 	AddHL(BC);
+
+	return 8;
 }
 
 /* LD A, (BC) */
-void Processor::LD_A_MEM_BC() // 0x0A
+int Processor::LD_A_MEM_BC() // 0x0A
 {
 	A = memory->ReadByte(BC);
+
+	return 8;
 }
 
 /* DEC BC */
-void Processor::DEC_BC() // 0x0B
+int Processor::DEC_BC() // 0x0B
 {
 	BC--;
+
+	return 8;
 }
 
 /* INC C */
-void Processor::INC_C() // 0x0C
+int Processor::INC_C() // 0x0C
 {
 	C = Inc(C);
+
+	return 4;
 }
 
 /* DEC C */
-void Processor::DEC_C() // 0x0D
+int Processor::DEC_C() // 0x0D
 {
 	C = Dec(C);
+
+	return 4;
 }
 
 /* LD C, n */
-void Processor::LD_C_n() // 0x0E
+int Processor::LD_C_n() // 0x0E
 {
 	C = memory->ReadByte(PC++);
+
+	return 8;
 }
 
 /* RRCA */
-void Processor::RRCA() // 0x0F
+int Processor::RRCA() // 0x0F
 {
 	A = Rrc(A);
+
+	return 4;
 }
 
 /* STOP */
-void Processor::STOP() // 0x10
+int Processor::STOP() // 0x10
 {
 	PC++;
+
+	return 4;
 }
 
 /* LD DE, nn */
-void Processor::LD_DE_nn() // 0x11
+int Processor::LD_DE_nn() // 0x11
 {
 	DE = memory->ReadWord(PC);
 	PC += 2;
+
+	return 12;
 }
 
 /* LD (DE), A */
-void Processor::LD_MEM_DE_A() // 0x12
+int Processor::LD_MEM_DE_A() // 0x12
 {
 	memory->WriteByte(DE, A);
+
+	return 8;
 }
 
 /* INC DE */
-void Processor::INC_DE() // 0x13
+int Processor::INC_DE() // 0x13
 {
 	DE++;
+
+	return 8;
 }
 
 /* INC D */
-void Processor::INC_D() // 0x14
+int Processor::INC_D() // 0x14
 {
 	D = Inc(D);
+
+	return 4;
 }
 
 /* DEC D */
-void Processor::DEC_D() // 0x15
+int Processor::DEC_D() // 0x15
 {
 	D = Dec(D);
+
+	return 4;
 }
 
 /* LD D, n */
-void Processor::LD_D_n() // 0x16
+int Processor::LD_D_n() // 0x16
 {
 	D = memory->ReadByte(PC++);
+
+	return 8;
 }
 
 /* RLA */
-void Processor::RLA() // 0x17
+int Processor::RLA() // 0x17
 {
 	A = Rl(A);
+
+	return 4;
 }
 
 /* JR n */
-void Processor::JR_n() // 0x18
+int Processor::JR_n() // 0x18
 {
 	PC += 1 + static_cast<int8>(memory->ReadByte(PC));
+
+	return 12;
 }
 
 /* ADD HL, DE */
-void Processor::ADD_HL_DE() // 0x19
+int Processor::ADD_HL_DE() // 0x19
 {
 	AddHL(DE);
+
+	return 8;
 }
 
 /* LD A, (DE) */
-void Processor::LD_A_MEM_DE() // 0x1A
+int Processor::LD_A_MEM_DE() // 0x1A
 {
 	A = memory->ReadByte(DE);
+
+	return 8;
 }
 
 /* DEC DE */
-void Processor::DEC_DE() // 0x1B
+int Processor::DEC_DE() // 0x1B
 {
 	DE--;
+
+	return 8;
 }
 
 /* INC E */
-void Processor::INC_E() // 0x1C
+int Processor::INC_E() // 0x1C
 {
 	E = Inc(E);
+
+	return 4;
 }
 
 /* DEC E */
-void Processor::DEC_E() // 0x1D
+int Processor::DEC_E() // 0x1D
 {
 	E = Dec(E);
+
+	return 4;
 }
 
 /* LD E, n */
-void Processor::LD_E_n() // 0x1E
+int Processor::LD_E_n() // 0x1E
 {
 	E = memory->ReadByte(PC++);
+
+	return 8;
 }
 
 /* RRA */
-void Processor::RRA() // 0x1F
+int Processor::RRA() // 0x1F
 {
 	A = Rr(A);
+
+	return 4;
 }
 
 /* JR NZ, n */
-void Processor::JR_NZ_n() // 0x20
+int Processor::JR_NZ_n() // 0x20
 {
 	if (!IsFlagSet(Flags::ZERO))
 	{
-		condition = true;
 		PC += 1 + static_cast<int8>(memory->ReadByte(PC));
+
+		return 12;
 	}
 	else
 	{
 		PC++;
 	}
+
+	return 8;
 }
 
 /* LD HL, nn */
-void Processor::LD_HL_nn() // 0x21
+int Processor::LD_HL_nn() // 0x21
 {
 	HL = memory->ReadWord(PC);
 	PC += 2;
+
+	return 12;
 }
 
 /* LD (HLI), A */
-void Processor::LD_MEM_HLI_A() // 0x22
+int Processor::LD_MEM_HLI_A() // 0x22
 {
 	memory->WriteByte(HL++, A);
+
+	return 8;
 }
 
 /* INC HL */
-void Processor::INC_HL() // 0x23
+int Processor::INC_HL() // 0x23
 {
 	HL++;
+
+	return 8;
 }
 
 /* INC H */
-void Processor::INC_H() // 0x24
+int Processor::INC_H() // 0x24
 {
 	H = Inc(H);
+
+	return 4;
 }
 
 /* DEC H */
-void Processor::DEC_H() // 0x25
+int Processor::DEC_H() // 0x25
 {
 	H = Dec(H);
+
+	return 4;
 }
 
 /* LD H, n */
-void Processor::LD_H_n() // 0x26
+int Processor::LD_H_n() // 0x26
 {
 	H = memory->ReadByte(PC++);
+
+	return 8;
 }
 
 /* DAA */
-void Processor::DAA() // 0x27
+int Processor::DAA() // 0x27
 {
 	uint8 reg = A;
 
@@ -801,946 +880,1239 @@ void Processor::DAA() // 0x27
 	if (reg == 0) EnableFlag(Flags::ZERO);
 
 	A = reg;
+
+	return 4;
 }
 
 /* JR Z, n */
-void Processor::JR_Z_n() // 0x28
+int Processor::JR_Z_n() // 0x28
 {
 	if (IsFlagSet(Flags::ZERO))
 	{
-		condition = true;
 		PC += 1 + static_cast<int8>(memory->ReadByte(PC));
+
+		return 12;
 	}
 	else
 	{
 		PC++;
 	}
+
+	return 8;
 }
 
 /* ADD HL, HL */
-void Processor::ADD_HL_HL() // 0x29
+int Processor::ADD_HL_HL() // 0x29
 {
 	AddHL(HL);
+
+	return 8;
 }
 
 /* LD A, (HLI) */
-void Processor::LD_A_MEM_HLI() // 0x2A
+int Processor::LD_A_MEM_HLI() // 0x2A
 {
 	A = memory->ReadByte(HL++);
+
+	return 8;
 }
 
 /* DEC HL */
-void Processor::DEC_HL() // 0x2B
+int Processor::DEC_HL() // 0x2B
 {
 	HL--;
+
+	return 8;
 }
 
 /* INC L */
-void Processor::INC_L() // 0x2C
+int Processor::INC_L() // 0x2C
 {
 	L = Inc(L);
+
+	return 4;
 }
 
 /* DEC L */
-void Processor::DEC_L() // 0x2D
+int Processor::DEC_L() // 0x2D
 {
 	L = Dec(L);
+
+	return 4;
 }
 
 /* LD L, n */
-void Processor::LD_L_n() // 0x2E
+int Processor::LD_L_n() // 0x2E
 {
 	L = memory->ReadByte(PC++);
+
+	return 8;
 }
 
 /* CPL */
-void Processor::CPL() // 0x2F
+int Processor::CPL() // 0x2F
 {
 	A = ~A;
 	EnableFlag(Flags::HALFCARRY);
 	EnableFlag(Flags::SUB);
+
+	return 4;
 }
 
 /* JR NC, n */
-void Processor::JR_NC_n() // 0x30
+int Processor::JR_NC_n() // 0x30
 {
 	if (!IsFlagSet(Flags::CARRY))
 	{
-		condition = true;
 		PC += 1 + static_cast<int8>(memory->ReadByte(PC));
+
+		return 12;
 	}
 	else
 	{
 		PC++;
 	}
+
+	return 8;
 }
 
 /* LD SP, nn */
-void Processor::LD_SP_nn() // 0x31
+int Processor::LD_SP_nn() // 0x31
 {
 	SP = memory->ReadWord(PC);
 	PC += 2;
+
+	return 12;
 }
 
 /* LD (HLD), A */
-void Processor::LD_MEM_HLD_A() // 0x32
+int Processor::LD_MEM_HLD_A() // 0x32
 {
 	memory->WriteByte(HL--, A);
+
+	return 8;
 }
 
 /* INC SP */
-void Processor::INC_SP() // 0x33
+int Processor::INC_SP() // 0x33
 {
 	SP++;
+
+	return 8;
 }
 
 /* INC (HL) */
-void Processor::INC_MEM_HL() // 0x34
+int Processor::INC_MEM_HL() // 0x34
 {
 	memory->WriteByte(HL, Inc(memory->ReadByte(HL)));
+
+	return 12;
 }
 
 /* DEC (HL) */
-void Processor::DEC_MEM_HL() // 0x35
+int Processor::DEC_MEM_HL() // 0x35
 {
 	memory->WriteByte(HL, Dec(memory->ReadByte(HL)));
+
+	return 12;
 }
 
 /* LD (HL), n */
-void Processor::LD_MEM_HL_n() // 0x36
+int Processor::LD_MEM_HL_n() // 0x36
 {
 	memory->WriteByte(HL, memory->ReadByte(PC++));
+
+	return 12;
 }
 
 /* SCF */
-void Processor::SCF() // 0x37
+int Processor::SCF() // 0x37
 {
 	EnableFlag(Flags::CARRY);
 	DisableFlag(Flags::HALFCARRY);
 	DisableFlag(Flags::SUB);
+
+	return 4;
 }
 
 /* JR C, n */
-void Processor::JR_C_n() // 0x38
+int Processor::JR_C_n() // 0x38
 {
 	if (IsFlagSet(Flags::CARRY))
 	{
-		condition = true;
 		PC += 1 + static_cast<int8>(memory->ReadByte(PC));
+
+		return 12;
 	}
 	else
 	{
 		PC++;
 	}
+
+	return 8;
 }
 
 /* ADD HL, SP */
-void Processor::ADD_HL_SP() // 0x39
+int Processor::ADD_HL_SP() // 0x39
 {
 	AddHL(SP);
+
+	return 8;
 }
 
 /* LD A, (HLD) */
-void Processor::LD_A_MEM_HLD() // 0x3A
+int Processor::LD_A_MEM_HLD() // 0x3A
 {
 	A = memory->ReadByte(HL--);
+
+	return 8;
 }
 
 /* DEC SP */
-void Processor::DEC_SP() // 0x3B
+int Processor::DEC_SP() // 0x3B
 {
 	SP--;
+
+	return 8;
 }
 
 /* INC A */
-void Processor::INC_A() // 0x3C
+int Processor::INC_A() // 0x3C
 {
 	A = Inc(A);
+
+	return 4;
 }
 
 /* DEC A */
-void Processor::DEC_A() // 0x3D
+int Processor::DEC_A() // 0x3D
 {
 	A = Dec(A);
+
+	return 4;
 }
 
 /* LD A, n */
-void Processor::LD_A_n() // 0x3E
+int Processor::LD_A_n() // 0x3E
 {
 	A = memory->ReadByte(PC++);
+
+	return 8;
 }
 
 /* CCF */
-void Processor::CCF() // 0x3F
+int Processor::CCF() // 0x3F
 {
 	InvertFlag(Flags::CARRY);
 	DisableFlag(Flags::HALFCARRY);
 	DisableFlag(Flags::SUB);
+
+	return 4;
 }
 
 /* LD B, B */
-void Processor::LD_B_B() // 0x40
+int Processor::LD_B_B() // 0x40
 {
+
+	return 4;
 }
 
 /* LD B, C */
-void Processor::LD_B_C() // 0x41
+int Processor::LD_B_C() // 0x41
 {
 	B = C;
+
+	return 4;
 }
 
 /* LD B, D */
-void Processor::LD_B_D() // 0x42
+int Processor::LD_B_D() // 0x42
 {
 	B = D;
+
+	return 4;
 }
 
 /* LD B, E */
-void Processor::LD_B_E() // 0x43
+int Processor::LD_B_E() // 0x43
 {
 	B = E;
+
+	return 4;
 }
 
 /* LD B, H */
-void Processor::LD_B_H() // 0x44
+int Processor::LD_B_H() // 0x44
 {
 	B = H;
+
+	return 4;
 }
 
 /* LD B, L */
-void Processor::LD_B_L() // 0x45
+int Processor::LD_B_L() // 0x45
 {
 	B = L;
+
+	return 4;
 }
 
 /* LD B, (HL) */
-void Processor::LD_B_MEM_HL() // 0x46
+int Processor::LD_B_MEM_HL() // 0x46
 {
 	B = memory->ReadByte(HL);
+
+	return 8;
 }
 
 /* LD B, A */
-void Processor::LD_B_A() // 0x47
+int Processor::LD_B_A() // 0x47
 {
 	B = A;
+
+	return 4;
 }
 
 /* LD C, B */
-void Processor::LD_C_B() // 0x48
+int Processor::LD_C_B() // 0x48
 {
 	C = B;
+
+	return 4;
 }
 
 /* LD C, C */
-void Processor::LD_C_C() // 0x49
+int Processor::LD_C_C() // 0x49
 {
+
+	return 4;
 }
 
 /* LD C, D */
-void Processor::LD_C_D() // 0x4A
+int Processor::LD_C_D() // 0x4A
 {
 	C = D;
+
+	return 4;
 }
 
 /* LD C, E */
-void Processor::LD_C_E() // 0x4B
+int Processor::LD_C_E() // 0x4B
 {
 	C = E;
+
+	return 4;
 }
 
 /* LD C, H */
-void Processor::LD_C_H() // 0x4C
+int Processor::LD_C_H() // 0x4C
 {
 	C = H;
+
+	return 4;
 }
 
 /* LD C, L */
-void Processor::LD_C_L() // 0x4D
+int Processor::LD_C_L() // 0x4D
 {
 	C = L;
+
+	return 4;
 }
 
 /* LD C, (HL) */
-void Processor::LD_C_MEM_HL() // 0x4E
+int Processor::LD_C_MEM_HL() // 0x4E
 {
 	C = memory->ReadByte(HL);
+
+	return 8;
 }
 
 /* LD C, A */
-void Processor::LD_C_A() // 0x4F
+int Processor::LD_C_A() // 0x4F
 {
 	C = A;
+
+	return 4;
 }
 
 /* LD D, B */
-void Processor::LD_D_B() // 0x50
+int Processor::LD_D_B() // 0x50
 {
 	D = B;
+
+	return 4;
 }
 
 /* LD D, C */
-void Processor::LD_D_C() // 0x51
+int Processor::LD_D_C() // 0x51
 {
 	D = C;
+
+	return 4;
 }
 
 /* LD D, D */
-void Processor::LD_D_D() // 0x52
+int Processor::LD_D_D() // 0x52
 {
+
+	return 4;
 }
 
 /* LD D, E */
-void Processor::LD_D_E() // 0x53
+int Processor::LD_D_E() // 0x53
 {
 	D = E;
+
+	return 4;
 }
 
 /* LD D, H */
-void Processor::LD_D_H() // 0x54
+int Processor::LD_D_H() // 0x54
 {
 	D = H;
+
+	return 4;
 }
 
 /* LD D, L */
-void Processor::LD_D_L() // 0x55
+int Processor::LD_D_L() // 0x55
 {
 	D = L;
+
+	return 4;
 }
 
 /* LD D, (HL) */
-void Processor::LD_D_MEM_HL() // 0x56
+int Processor::LD_D_MEM_HL() // 0x56
 {
 	D = memory->ReadByte(HL);
+
+	return 8;
 }
 
 /* LD D, A */
-void Processor::LD_D_A() // 0x57
+int Processor::LD_D_A() // 0x57
 {
 	D = A;
+
+	return 4;
 }
 
 /* LD E, B */
-void Processor::LD_E_B() // 0x58
+int Processor::LD_E_B() // 0x58
 {
 	E = B;
+
+	return 4;
 }
 
 /* LD E, C */
-void Processor::LD_E_C() // 0x59
+int Processor::LD_E_C() // 0x59
 {
 	E = C;
+
+	return 4;
 }
 
 /* LD E, D */
-void Processor::LD_E_D() // 0x5A
+int Processor::LD_E_D() // 0x5A
 {
 	E = D;
+
+	return 4;
 }
 
 /* LD E, E */
-void Processor::LD_E_E() // 0x5B
+int Processor::LD_E_E() // 0x5B
 {
+
+	return 4;
 }
 
 /* LD E, H */
-void Processor::LD_E_H() // 0x5C
+int Processor::LD_E_H() // 0x5C
 {
 	E = H;
+
+	return 4;
 }
 
 /* LD E, L */
-void Processor::LD_E_L() // 0x5D
+int Processor::LD_E_L() // 0x5D
 {
 	E = L;
+
+	return 4;
 }
 
 /* LD E, (HL) */
-void Processor::LD_E_MEM_HL() // 0x5E
+int Processor::LD_E_MEM_HL() // 0x5E
 {
 	E = memory->ReadByte(HL);
+
+	return 8;
 }
 
 /* LD E, A */
-void Processor::LD_E_A() // 0x5F
+int Processor::LD_E_A() // 0x5F
 {
 	E = A;
+
+	return 4;
 }
 
 /* LD H, B */
-void Processor::LD_H_B() // 0x60
+int Processor::LD_H_B() // 0x60
 {
 	H = B;
+
+	return 4;
 }
 
 /* LD H, C */
-void Processor::LD_H_C() // 0x61
+int Processor::LD_H_C() // 0x61
 {
 	H = C;
+
+	return 4;
 }
 
 /* LD H, D */
-void Processor::LD_H_D() // 0x62
+int Processor::LD_H_D() // 0x62
 {
 	H = D;
+
+	return 4;
 }
 
 /* LD H, E */
-void Processor::LD_H_E() // 0x63
+int Processor::LD_H_E() // 0x63
 {
 	H = E;
+
+	return 4;
 }
 
 /* LD H, H */
-void Processor::LD_H_H() // 0x64
+int Processor::LD_H_H() // 0x64
 {
+
+	return 4;
 }
 
 /* LD H, L */
-void Processor::LD_H_L() // 0x65
+int Processor::LD_H_L() // 0x65
 {
 	H = L;
+
+	return 4;
 }
 
 /* LD H, (HL) */
-void Processor::LD_H_MEM_HL() // 0x66
+int Processor::LD_H_MEM_HL() // 0x66
 {
 	H = memory->ReadByte(HL);
+
+	return 8;
 }
 
 /* LD H, A */
-void Processor::LD_H_A() // 0x67
+int Processor::LD_H_A() // 0x67
 {
 	H = A;
+
+	return 4;
 }
 
 /* LD L, B */
-void Processor::LD_L_B() // 0x68
+int Processor::LD_L_B() // 0x68
 {
 	L = B;
+
+	return 4;
 }
 
 /* LD L, C */
-void Processor::LD_L_C() // 0x69
+int Processor::LD_L_C() // 0x69
 {
 	L = C;
+
+	return 4;
 }
 
 /* LD L, D */
-void Processor::LD_L_D() // 0x6A
+int Processor::LD_L_D() // 0x6A
 {
 	L = D;
+
+	return 4;
 }
 
 /* LD L, E */
-void Processor::LD_L_E() // 0x6B
+int Processor::LD_L_E() // 0x6B
 {
 	L = E;
+
+	return 4;
 }
 
 /* LD L, H */
-void Processor::LD_L_H() // 0x6C
+int Processor::LD_L_H() // 0x6C
 {
 	L = H;
+
+	return 4;
 }
 
 /* LD L, L */
-void Processor::LD_L_L() // 0x6D
+int Processor::LD_L_L() // 0x6D
 {
+
+	return 4;
 }
 
 /* LD L, (HL) */
-void Processor::LD_L_MEM_HL() // 0x6E
+int Processor::LD_L_MEM_HL() // 0x6E
 {
 	L = memory->ReadByte(HL);
+
+	return 8;
 }
 
 /* LD L, A */
-void Processor::LD_L_A() // 0x6F
+int Processor::LD_L_A() // 0x6F
 {
 	L = A;
+
+	return 4;
 }
 
 /* LD (HL), B */
-void Processor::LD_MEM_HL_B() // 0x70
+int Processor::LD_MEM_HL_B() // 0x70
 {
 	memory->WriteByte(HL, B);
+
+	return 8;
 }
 
 /* LD (HL), C */
-void Processor::LD_MEM_HL_C() // 0x71
+int Processor::LD_MEM_HL_C() // 0x71
 {
 	memory->WriteByte(HL, C);
+
+	return 8;
 }
 
 /* LD (HL), D */
-void Processor::LD_MEM_HL_D() // 0x72
+int Processor::LD_MEM_HL_D() // 0x72
 {
 	memory->WriteByte(HL, D);
+
+	return 8;
 }
 
 /* LD (HL), E */
-void Processor::LD_MEM_HL_E() // 0x73
+int Processor::LD_MEM_HL_E() // 0x73
 {
 	memory->WriteByte(HL, E);
+
+	return 8;
 }
 
 /* LD (HL), H */
-void Processor::LD_MEM_HL_H() // 0x74
+int Processor::LD_MEM_HL_H() // 0x74
 {
 	memory->WriteByte(HL, H);
+
+	return 8;
 }
 
 /* LD (HL), L */
-void Processor::LD_MEM_HL_L() // 0x75
+int Processor::LD_MEM_HL_L() // 0x75
 {
 	memory->WriteByte(HL, L);
+
+	return 8;
 }
 
 /* HALT */
-void Processor::HALT() // 0x76
+int Processor::HALT() // 0x76
 {
 	halted = true;
+
+	return 4;
 }
 
 /* LD (HL), A */
-void Processor::LD_MEM_HL_A() // 0x77
+int Processor::LD_MEM_HL_A() // 0x77
 {
 	memory->WriteByte(HL, A);
+
+	return 8;
 }
 
 /* LD A, B */
-void Processor::LD_A_B() // 0x78
+int Processor::LD_A_B() // 0x78
 {
 	A = B;
+
+	return 4;
 }
 
 /* LD A, C */
-void Processor::LD_A_C() // 0x79
+int Processor::LD_A_C() // 0x79
 {
 	A = C;
+
+	return 4;
 }
 
 /* LD A, D */
-void Processor::LD_A_D() // 0x7A
+int Processor::LD_A_D() // 0x7A
 {
 	A = D;
+
+	return 4;
 }
 
 /* LD A, E */
-void Processor::LD_A_E() // 0x7B
+int Processor::LD_A_E() // 0x7B
 {
 	A = E;
+
+	return 4;
 }
 
 /* LD A, H */
-void Processor::LD_A_H() // 0x7C
+int Processor::LD_A_H() // 0x7C
 {
 	A = H;
+
+	return 4;
 }
 
 /* LD A, L */
-void Processor::LD_A_L() // 0x7D
+int Processor::LD_A_L() // 0x7D
 {
 	A = L;
+
+	return 4;
 }
 
 /* LD A, (HL) */
-void Processor::LD_A_MEM_HL() // 0x7E
+int Processor::LD_A_MEM_HL() // 0x7E
 {
 	A = memory->ReadByte(HL);
+
+	return 8;
 }
 
 /* LD A, A */
-void Processor::LD_A_A() // 0x7F
+int Processor::LD_A_A() // 0x7F
 {
+
+	return 4;
 }
 
 /* ADD A, B */
-void Processor::ADD_A_B() // 0x80
+int Processor::ADD_A_B() // 0x80
 {
 	Add(B);
+
+	return 4;
 }
 
 /* ADD A, C */
-void Processor::ADD_A_C() // 0x81
+int Processor::ADD_A_C() // 0x81
 {
 	Add(C);
+
+	return 4;
 }
 
 /* ADD A, D */
-void Processor::ADD_A_D() // 0x82
+int Processor::ADD_A_D() // 0x82
 {
 	Add(D);
+
+	return 4;
 }
 
 /* ADD A, E */
-void Processor::ADD_A_E() // 0x83
+int Processor::ADD_A_E() // 0x83
 {
 	Add(E);
+
+	return 4;
 }
 
 /* ADD A, H */
-void Processor::ADD_A_H() // 0x84
+int Processor::ADD_A_H() // 0x84
 {
 	Add(H);
+
+	return 4;
 }
 
 /* ADD A, L */
-void Processor::ADD_A_L() // 0x85
+int Processor::ADD_A_L() // 0x85
 {
 	Add(L);
+
+	return 4;
 }
 
 /* ADD A, (HL) */
-void Processor::ADD_A_MEM_HL() // 0x86
+int Processor::ADD_A_MEM_HL() // 0x86
 {
 	Add(memory->ReadByte(HL));
+
+	return 8;
 }
 
 /* ADD A, A */
-void Processor::ADD_A_A() // 0x87
+int Processor::ADD_A_A() // 0x87
 {
 	Add(A);
+
+	return 4;
 }
 
 /* ADC A, B */
-void Processor::ADC_A_B() // 0x88
+int Processor::ADC_A_B() // 0x88
 {
 	Adc(B);
+
+	return 4;
 }
 
 /* ADC A, C */
-void Processor::ADC_A_C() // 0x89
+int Processor::ADC_A_C() // 0x89
 {
 	Adc(C);
+
+	return 4;
 }
 
 /* ADC A, D */
-void Processor::ADC_A_D() // 0x8A
+int Processor::ADC_A_D() // 0x8A
 {
 	Adc(D);
+
+	return 4;
 }
 
 /* ADC A, E */
-void Processor::ADC_A_E() // 0x8B
+int Processor::ADC_A_E() // 0x8B
 {
 	Adc(E);
+
+	return 4;
 }
 
 /* ADC A, H */
-void Processor::ADC_A_H() // 0x8C
+int Processor::ADC_A_H() // 0x8C
 {
 	Adc(H);
+
+	return 4;
 }
 
 /* ADC A, L */
-void Processor::ADC_A_L() // 0x8D
+int Processor::ADC_A_L() // 0x8D
 {
 	Adc(L);
+
+	return 4;
 }
 
 /* ADC A, (HL) */
-void Processor::ADC_A_MEM_HL() // 0x8E
+int Processor::ADC_A_MEM_HL() // 0x8E
 {
 	Adc(memory->ReadByte(HL));
+
+	return 8;
 }
 
 /* ADC A, A */
-void Processor::ADC_A_A() // 0x8F
+int Processor::ADC_A_A() // 0x8F
 {
 	Adc(A);
+
+	return 4;
 }
 
 /* SUB B */
-void Processor::SUB_B() // 0x90
+int Processor::SUB_B() // 0x90
 {
 	Sub(B);
+
+	return 4;
 }
 
 /* SUB C */
-void Processor::SUB_C() // 0x91
+int Processor::SUB_C() // 0x91
 {
 	Sub(C);
+
+	return 4;
 }
 
 /* SUB D */
-void Processor::SUB_D() // 0x92
+int Processor::SUB_D() // 0x92
 {
 	Sub(D);
+
+	return 4;
 }
 
 /* SUB E */
-void Processor::SUB_E() // 0x93
+int Processor::SUB_E() // 0x93
 {
 	Sub(E);
+
+	return 4;
 }
 
 /* SUB H */
-void Processor::SUB_H() // 0x94
+int Processor::SUB_H() // 0x94
 {
 	Sub(H);
+
+	return 4;
 }
 
 /* SUB L */
-void Processor::SUB_L() // 0x95
+int Processor::SUB_L() // 0x95
 {
 	Sub(L);
+
+	return 4;
 }
 
 /* SUB (HL) */
-void Processor::SUB_MEM_HL() // 0x96
+int Processor::SUB_MEM_HL() // 0x96
 {
 	Sub(memory->ReadByte(HL));
+
+	return 8;
 }
 
 /* SUB A */
-void Processor::SUB_A() // 0x97
+int Processor::SUB_A() // 0x97
 {
 	Sub(A);
+
+	return 4;
 }
 
 /* SBC A, B */
-void Processor::SBC_A_B() // 0x98
+int Processor::SBC_A_B() // 0x98
 {
 	Sbc(B);
+
+	return 4;
 }
 
 /* SBC A, C */
-void Processor::SBC_A_C() // 0x99
+int Processor::SBC_A_C() // 0x99
 {
 	Sbc(C);
+
+	return 4;
 }
 
 /* SBC A, D */
-void Processor::SBC_A_D() // 0x9A
+int Processor::SBC_A_D() // 0x9A
 {
 	Sbc(D);
+
+	return 4;
 }
 
 /* SBC A, E */
-void Processor::SBC_A_E() // 0x9B
+int Processor::SBC_A_E() // 0x9B
 {
 	Sbc(E);
+
+	return 4;
 }
 
 /* SBC A, H */
-void Processor::SBC_A_H() // 0x9C
+int Processor::SBC_A_H() // 0x9C
 {
 	Sbc(H);
+
+	return 4;
 }
 
 /* SBC A, L */
-void Processor::SBC_A_L() // 0x9D
+int Processor::SBC_A_L() // 0x9D
 {
 	Sbc(L);
+
+	return 4;
 }
 
 /* SBC A, (HL) */
-void Processor::SBC_A_MEM_HL() // 0x9E
+int Processor::SBC_A_MEM_HL() // 0x9E
 {
 	Sbc(memory->ReadByte(HL));
+
+	return 8;
 }
 
 /* SBC A, A */
-void Processor::SBC_A_A() // 0x9F
+int Processor::SBC_A_A() // 0x9F
 {
 	Sbc(A);
+
+	return 4;
 }
 
 /* AND B */
-void Processor::AND_B() // 0xA0
+int Processor::AND_B() // 0xA0
 {
 	A &= B;
 	SetFlag(Flags::HALFCARRY);
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 4;
 }
 
 /* AND C */
-void Processor::AND_C() // 0xA1
+int Processor::AND_C() // 0xA1
 {
 	A &= C;
 	SetFlag(Flags::HALFCARRY);
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 4;
 }
 
 /* AND D */
-void Processor::AND_D() // 0xA2
+int Processor::AND_D() // 0xA2
 {
 	A &= D;
 	SetFlag(Flags::HALFCARRY);
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 4;
 }
 
 /* AND E */
-void Processor::AND_E() // 0xA3
+int Processor::AND_E() // 0xA3
 {
 	A &= E;
 	SetFlag(Flags::HALFCARRY);
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 4;
 }
 
 /* AND H */
-void Processor::AND_H() // 0xA4
+int Processor::AND_H() // 0xA4
 {
 	A &= H;
 	SetFlag(Flags::HALFCARRY);
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 4;
 }
 
 /* AND L */
-void Processor::AND_L() // 0xA5
+int Processor::AND_L() // 0xA5
 {
 	A &= L;
 	SetFlag(Flags::HALFCARRY);
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 4;
 }
 
 /* AND (HL) */
-void Processor::AND_MEM_HL() // 0xA6
+int Processor::AND_MEM_HL() // 0xA6
 {
 	A &= memory->ReadByte(HL);
 	SetFlag(Flags::HALFCARRY);
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 8;
 }
 
 /* AND A */
-void Processor::AND_A() // 0xA7
+int Processor::AND_A() // 0xA7
 {
 	A &= A;
 	SetFlag(Flags::HALFCARRY);
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 4;
 }
 
 /* XOR B */
-void Processor::XOR_B() // 0xA8
+int Processor::XOR_B() // 0xA8
 {
 	A ^= B;
 	ClearFlags();
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 4;
 }
 
 /* XOR C */
-void Processor::XOR_C() // 0xA9
+int Processor::XOR_C() // 0xA9
 {
 	A ^= C;
 	ClearFlags();
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 4;
 }
 
 /* XOR D */
-void Processor::XOR_D() // 0xAA
+int Processor::XOR_D() // 0xAA
 {
 	A ^= D;
 	ClearFlags();
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 4;
 }
 
 /* XOR E */
-void Processor::XOR_E() // 0xAB
+int Processor::XOR_E() // 0xAB
 {
 	A ^= E;
 	ClearFlags();
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 4;
 }
 
 /* XOR H */
-void Processor::XOR_H() // 0xAC
+int Processor::XOR_H() // 0xAC
 {
 	A ^= H;
 	ClearFlags();
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 4;
 }
 
 /* XOR L */
-void Processor::XOR_L() // 0xAD
+int Processor::XOR_L() // 0xAD
 {
 	A ^= L;
 	ClearFlags();
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 4;
 }
 
 /* XOR (HL) */
-void Processor::XOR_MEM_HL() // 0xAE
+int Processor::XOR_MEM_HL() // 0xAE
 {
 	A ^= memory->ReadByte(HL);
 	ClearFlags();
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 8;
 }
 
 /* XOR A */
-void Processor::XOR_A() // 0xAF
+int Processor::XOR_A() // 0xAF
 {
 	A ^= A;
 	ClearFlags();
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 4;
 }
 
 /* OR B */
-void Processor::OR_B() // 0xB0
+int Processor::OR_B() // 0xB0
 {
 	A |= B;
 	ClearFlags();
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 4;
 }
 
 /* OR C */
-void Processor::OR_C() // 0xB1
+int Processor::OR_C() // 0xB1
 {
 	A |= C;
 	ClearFlags();
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 4;
 }
 
 /* OR D */
-void Processor::OR_D() // 0xB2
+int Processor::OR_D() // 0xB2
 {
 	A |= D;
 	ClearFlags();
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 4;
 }
 
 /* OR E */
-void Processor::OR_E() // 0xB3
+int Processor::OR_E() // 0xB3
 {
 	A |= E;
 	ClearFlags();
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 4;
 }
 
 /* OR H */
-void Processor::OR_H() // 0xB4
+int Processor::OR_H() // 0xB4
 {
 	A |= H;
 	ClearFlags();
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 4;
 }
 
 /* OR L */
-void Processor::OR_L() // 0xB5
+int Processor::OR_L() // 0xB5
 {
 	A |= L;
 	ClearFlags();
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 4;
 }
 
 /* OR (HL) */
-void Processor::OR_MEM_HL() // 0xB6
+int Processor::OR_MEM_HL() // 0xB6
 {
 	A |= memory->ReadByte(HL);
 	ClearFlags();
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 8;
 }
 
 /* OR A */
-void Processor::OR_A() // 0xB7
+int Processor::OR_A() // 0xB7
 {
 	A |= A;
 	ClearFlags();
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 4;
 }
 
 /* CP B */
-void Processor::CP_B() // 0xB8
+int Processor::CP_B() // 0xB8
 {
 	uint8 value = B;
 	uint8 result = A - value;
@@ -1748,10 +2120,12 @@ void Processor::CP_B() // 0xB8
 	if (A < value) EnableFlag(Flags::CARRY);
 	if (result == 0) EnableFlag(Flags::ZERO);
 	if (((A ^ value ^ result) & 0x10) != 0) EnableFlag(Flags::HALFCARRY);
+
+	return 4;
 }
 
 /* CP C */
-void Processor::CP_C() // 0xB9
+int Processor::CP_C() // 0xB9
 {
 	uint8 value = C;
 	uint8 result = A - value;
@@ -1759,10 +2133,12 @@ void Processor::CP_C() // 0xB9
 	if (A < value) EnableFlag(Flags::CARRY);
 	if (result == 0) EnableFlag(Flags::ZERO);
 	if (((A ^ value ^ result) & 0x10) != 0) EnableFlag(Flags::HALFCARRY);
+
+	return 4;
 }
 
 /* CP D */
-void Processor::CP_D() // 0xBA
+int Processor::CP_D() // 0xBA
 {
 	uint8 value = D;
 	uint8 result = A - value;
@@ -1770,10 +2146,12 @@ void Processor::CP_D() // 0xBA
 	if (A < value) EnableFlag(Flags::CARRY);
 	if (result == 0) EnableFlag(Flags::ZERO);
 	if (((A ^ value ^ result) & 0x10) != 0) EnableFlag(Flags::HALFCARRY);
+
+	return 4;
 }
 
 /* CP E */
-void Processor::CP_E() // 0xBB
+int Processor::CP_E() // 0xBB
 {
 	uint8 value = E;
 	uint8 result = A - value;
@@ -1781,10 +2159,12 @@ void Processor::CP_E() // 0xBB
 	if (A < value) EnableFlag(Flags::CARRY);
 	if (result == 0) EnableFlag(Flags::ZERO);
 	if (((A ^ value ^ result) & 0x10) != 0) EnableFlag(Flags::HALFCARRY);
+
+	return 4;
 }
 
 /* CP H */
-void Processor::CP_H() // 0xBC
+int Processor::CP_H() // 0xBC
 {
 	uint8 value = H;
 	uint8 result = A - value;
@@ -1792,10 +2172,12 @@ void Processor::CP_H() // 0xBC
 	if (A < value) EnableFlag(Flags::CARRY);
 	if (result == 0) EnableFlag(Flags::ZERO);
 	if (((A ^ value ^ result) & 0x10) != 0) EnableFlag(Flags::HALFCARRY);
+
+	return 4;
 }
 
 /* CP L */
-void Processor::CP_L() // 0xBD
+int Processor::CP_L() // 0xBD
 {
 	uint8 value = L;
 	uint8 result = A - value;
@@ -1803,10 +2185,12 @@ void Processor::CP_L() // 0xBD
 	if (A < value) EnableFlag(Flags::CARRY);
 	if (result == 0) EnableFlag(Flags::ZERO);
 	if (((A ^ value ^ result) & 0x10) != 0) EnableFlag(Flags::HALFCARRY);
+
+	return 4;
 }
 
 /* CP (HL) */
-void Processor::CP_MEM_HL() // 0xBE
+int Processor::CP_MEM_HL() // 0xBE
 {
 	uint8 value = memory->ReadByte(HL);
 	uint8 result = A - value;
@@ -1814,10 +2198,12 @@ void Processor::CP_MEM_HL() // 0xBE
 	if (A < value) EnableFlag(Flags::CARRY);
 	if (result == 0) EnableFlag(Flags::ZERO);
 	if (((A ^ value ^ result) & 0x10) != 0) EnableFlag(Flags::HALFCARRY);
+
+	return 8;
 }
 
 /* CP A */
-void Processor::CP_A() // 0xBF
+int Processor::CP_A() // 0xBF
 {
 	uint8 value = A;
 	uint8 result = A - value;
@@ -1825,397 +2211,503 @@ void Processor::CP_A() // 0xBF
 	if (A < value) EnableFlag(Flags::CARRY);
 	if (result == 0) EnableFlag(Flags::ZERO);
 	if (((A ^ value ^ result) & 0x10) != 0) EnableFlag(Flags::HALFCARRY);
+
+	return 4;
 }
 
 /* RET NZ */
-void Processor::RET_NZ() // 0xC0
+int Processor::RET_NZ() // 0xC0
 {
 	if (!IsFlagSet(Flags::ZERO))
 	{
-		condition = true;
 		StackPop(PC);
+
+		return 20;
 	}
+
+	return 8;
 }
 
 /* POP BC */
-void Processor::POP_BC() // 0xC1
+int Processor::POP_BC() // 0xC1
 {
 	StackPop(BC);
+
+	return 12;
 }
 
 /* JP NZ, nn */
-void Processor::JP_NZ_nn() // 0xC2
+int Processor::JP_NZ_nn() // 0xC2
 {
 	if (!IsFlagSet(Flags::ZERO))
 	{
-		condition = true;
 		PC = memory->ReadWord(PC);
+
+		return 16;
 	}
 	else
 	{
 		PC += 2;
 	}
+
+	return 12;
 }
 
 /* JP nn */
-void Processor::JP_nn() // 0xC3
+int Processor::JP_nn() // 0xC3
 {
 	PC = memory->ReadWord(PC);
+
+	return 16;
 }
 
 /* CALL NZ, nn */
-void Processor::CALL_NZ_nn() // 0xC4
+int Processor::CALL_NZ_nn() // 0xC4
 {
 	if (!IsFlagSet(Flags::ZERO))
 	{
-		condition = true;
 		uint16 address = memory->ReadWord(PC);
 		PC += 2;
 		StackPush(PC);
 		PC = address;
+
+		return 24;
 	}
 	else
 	{
 		PC += 2;
 	}
+
+	return 12;
 }
 
 /* PUSH BC */
-void Processor::PUSH_BC() // 0xC5
+int Processor::PUSH_BC() // 0xC5
 {
 	StackPush(BC);
+
+	return 16;
 }
 
 /* ADD A, n */
-void Processor::ADD_A_n() // 0xC6
+int Processor::ADD_A_n() // 0xC6
 {
 	Add(memory->ReadByte(PC++));
+
+	return 8;
 }
 
 /* RST  */
-void Processor::RST() // 0xC7
+int Processor::RST() // 0xC7
 {
 	StackPush(PC);
 	PC = 0x0000;
+
+	return 16;
 }
 
 /* RET Z */
-void Processor::RET_Z() // 0xC8
+int Processor::RET_Z() // 0xC8
 {
 	if (IsFlagSet(Flags::ZERO))
 	{
-		condition = true;
 		StackPop(PC);
+
+		return 20;
 	}
+
+	return 8;
 }
 
 /* RET */
-void Processor::RET() // 0xC9
+int Processor::RET() // 0xC9
 {
 	StackPop(PC);
+
+	return 16;
 }
 
 /* JP Z, nn */
-void Processor::JP_Z_nn() // 0xCA
+int Processor::JP_Z_nn() // 0xCA
 {
 	if (IsFlagSet(Flags::ZERO))
 	{
-		condition = true;
 		PC = memory->ReadWord(PC);
+
+		return 16;
 	}
 	else
 	{
 		PC += 2;
 	}
+
+	return 12;
 }
 
 /* CALL Z, nn */
-void Processor::CALL_Z_nn() // 0xCC
+int Processor::CALL_Z_nn() // 0xCC
 {
 	if (IsFlagSet(Flags::ZERO))
 	{
-		condition = true;
 		uint16 address = memory->ReadWord(PC);
 		PC += 2;
 		StackPush(PC);
 		PC = address;
+
+		return 24;
 	}
 	else
 	{
 		PC += 2;
 	}
+
+	return 12;
 }
 
 /* CALL nn */
-void Processor::CALL_nn() // 0xCD
+int Processor::CALL_nn() // 0xCD
 {
 	uint16 address = memory->ReadWord(PC);
 	PC += 2;
 	StackPush(PC);
 	PC = address;
+
+	return 24;
 }
 
 /* ADC A, n */
-void Processor::ADC_A_n() // 0xCE
+int Processor::ADC_A_n() // 0xCE
 {
 	Adc(memory->ReadByte(PC++));
+
+	return 8;
 }
 
 /* RST 0x0008 */
-void Processor::RST_0x0008() // 0xCF
+int Processor::RST_0x0008() // 0xCF
 {
 	StackPush(PC);
 	PC = 0x0008;
+
+	return 16;
 }
 
 /* RET NC */
-void Processor::RET_NC() // 0xD0
+int Processor::RET_NC() // 0xD0
 {
 	if (!IsFlagSet(Flags::CARRY))
 	{
-		condition = true;
 		StackPop(PC);
+
+		return 20;
 	}
+
+	return 8;
 }
 
 /* POP DE */
-void Processor::POP_DE() // 0xD1
+int Processor::POP_DE() // 0xD1
 {
 	StackPop(DE);
+
+	return 12;
 }
 
 /* JP NC, nn */
-void Processor::JP_NC_nn() // 0xD2
+int Processor::JP_NC_nn() // 0xD2
 {
 	if (!IsFlagSet(Flags::CARRY))
 	{
-		condition = true;
 		PC = memory->ReadWord(PC);
+
+		return 16;
 	}
 	else
 	{
 		PC += 2;
 	}
+
+	return 12;
 }
 
 /* CALL NC, nn */
-void Processor::CALL_NC_nn() // 0xD4
+int Processor::CALL_NC_nn() // 0xD4
 {
 	if (!IsFlagSet(Flags::CARRY))
 	{
-		condition = true;
 		uint16 address = memory->ReadWord(PC);
 		PC += 2;
 		StackPush(PC);
 		PC = address;
+
+		return 24;
 	}
 	else
 	{
 		PC += 2;
 	}
+
+	return 12;
 }
 
 /* PUSH DE */
-void Processor::PUSH_DE() // 0xD5
+int Processor::PUSH_DE() // 0xD5
 {
 	StackPush(DE);
+
+	return 16;
 }
 
 /* SUB n */
-void Processor::SUB_n() // 0xD6
+int Processor::SUB_n() // 0xD6
 {
 	Sub(memory->ReadByte(PC++));
+
+	return 8;
 }
 
 /* RST 0x0010 */
-void Processor::RST_0x0010() // 0xD7
+int Processor::RST_0x0010() // 0xD7
 {
 	StackPush(PC);
 	PC = 0x0010;
+
+	return 16;
 }
 
 /* RET C */
-void Processor::RET_C() // 0xD8
+int Processor::RET_C() // 0xD8
 {
 	if (IsFlagSet(Flags::CARRY))
 	{
-		condition = true;
 		StackPop(PC);
+
+		return 20;
 	}
+
+	return 8;
 }
 
 /* RETI */
-void Processor::RETI() // 0xD9
+int Processor::RETI() // 0xD9
 {
 	StackPop(PC);
 	ime = true;
+
+	return 16;
 }
 
 /* JP C, nn */
-void Processor::JP_C_nn() // 0xDA
+int Processor::JP_C_nn() // 0xDA
 {
 	if (IsFlagSet(Flags::CARRY))
 	{
-		condition = true;
 		PC = memory->ReadWord(PC);
+
+		return 16;
 	}
 	else
 	{
 		PC += 2;
 	}
+
+	return 12;
 }
 
 /* CALL C, nn */
-void Processor::CALL_C_nn() // 0xDC
+int Processor::CALL_C_nn() // 0xDC
 {
 	if (IsFlagSet(Flags::CARRY))
 	{
-		condition = true;
 		uint16 address = memory->ReadWord(PC);
 		PC += 2;
 		StackPush(PC);
 		PC = address;
+
+		return 24;
 	}
 	else
 	{
 		PC += 2;
 	}
+
+	return 12;
 }
 
 /* SBC A, n */
-void Processor::SBC_A_n() // 0xDE
+int Processor::SBC_A_n() // 0xDE
 {
 	Sbc(memory->ReadByte(PC++));
+
+	return 8;
 }
 
 /* RST 0x0018 */
-void Processor::RST_0x0018() // 0xDF
+int Processor::RST_0x0018() // 0xDF
 {
 	StackPush(PC);
 	PC = 0x0018;
+
+	return 16;
 }
 
 /* LD (0xFF00+n), A */
-void Processor::LD_MEM_0xFF00_n_A() // 0xE0
+int Processor::LD_MEM_0xFF00_n_A() // 0xE0
 {
 	memory->WriteByte(0xFF00 + memory->ReadByte(PC++), A);
+
+	return 12;
 }
 
 /* POP HL */
-void Processor::POP_HL() // 0xE1
+int Processor::POP_HL() // 0xE1
 {
 	StackPop(HL);
+
+	return 12;
 }
 
 /* LD (0xFF00+C), A */
-void Processor::LD_MEM_0xFF00_C_A() // 0xE2
+int Processor::LD_MEM_0xFF00_C_A() // 0xE2
 {
 	memory->WriteByte(0xFF00 + C, A);
+
+	return 8;
 }
 
 /* PUSH HL */
-void Processor::PUSH_HL() // 0xE5
+int Processor::PUSH_HL() // 0xE5
 {
 	StackPush(HL);
+
+	return 16;
 }
 
 /* AND n */
-void Processor::AND_n() // 0xE6
+int Processor::AND_n() // 0xE6
 {
 	A &= memory->ReadByte(PC++);
 	SetFlag(Flags::HALFCARRY);
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 8;
 }
 
 /* RST 0x0020 */
-void Processor::RST_0x0020() // 0xE7
+int Processor::RST_0x0020() // 0xE7
 {
 	StackPush(PC);
 	PC = 0x0020;
+
+	return 16;
 }
 
 /* ADD SP, n */
-void Processor::ADD_SP_n() // 0xE8
+int Processor::ADD_SP_n() // 0xE8
 {
 	AddSP(memory->ReadByte(PC++));
+
+	return 16;
 }
 
 /* JP (HL) */
-void Processor::JP_MEM_HL() // 0xE9
+int Processor::JP_MEM_HL() // 0xE9
 {
 	PC = HL;
+
+	return 4;
 }
 
 /* LD (nn), A */
-void Processor::LD_MEM_nn_A() // 0xEA
+int Processor::LD_MEM_nn_A() // 0xEA
 {
 	memory->WriteByte(memory->ReadWord(PC), A);
 	PC += 2;
+
+	return 16;
 }
 
 /* XOR n */
-void Processor::XOR_n() // 0xEE
+int Processor::XOR_n() // 0xEE
 {
 	A ^= memory->ReadByte(PC++);
 	ClearFlags();
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 8;
 }
 
 /* RST 0x0028 */
-void Processor::RST_0x0028() // 0xEF
+int Processor::RST_0x0028() // 0xEF
 {
 	StackPush(PC);
 	PC = 0x0028;
+
+	return 16;
 }
 
 /* LD A, (0xFF00+n) */
-void Processor::LD_A_MEM_0xFF00_n() // 0xF0
+int Processor::LD_A_MEM_0xFF00_n() // 0xF0
 {
 	A = memory->ReadByte(0xFF00 + memory->ReadByte(PC++));
+
+	return 12;
 }
 
 /* POP AF */
-void Processor::POP_AF() // 0xF1
+int Processor::POP_AF() // 0xF1
 {
 	StackPop(AF);
 	F &= 0xF0;
+
+	return 12;
 }
 
 /* LD A, (0xFF00+C) */
-void Processor::LD_A_MEM_0xFF00_C() // 0xF2
+int Processor::LD_A_MEM_0xFF00_C() // 0xF2
 {
 	A = memory->ReadByte(0xFF00 + C);
+
+	return 8;
 }
 
 /* DI */
-void Processor::DI() // 0xF3
+int Processor::DI() // 0xF3
 {
 	ime = false;
+
+	return 4;
 }
 
 /* PUSH AF */
-void Processor::PUSH_AF() // 0xF5
+int Processor::PUSH_AF() // 0xF5
 {
 	StackPush(AF);
+
+	return 16;
 }
 
 /* OR n */
-void Processor::OR_n() // 0xF6
+int Processor::OR_n() // 0xF6
 {
 	A |= memory->ReadByte(PC++);
 	ClearFlags();
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 8;
 }
 
 /* RST 0x0030 */
-void Processor::RST_0x0030() // 0xF7
+int Processor::RST_0x0030() // 0xF7
 {
 	StackPush(PC);
 	PC = 0x0030;
+
+	return 16;
 }
 
 /* LD HL, SP+n */
-void Processor::LD_HL_SP_n() // 0xF8
+int Processor::LD_HL_SP_n() // 0xF8
 {
 	int8 n = static_cast<int8>(memory->ReadByte(PC++));
 	HL = SP + n;
@@ -2224,29 +2716,37 @@ void Processor::LD_HL_SP_n() // 0xF8
 		EnableFlag(Flags::CARRY);
 	if (((SP ^ n ^ HL) & 0x10) == 0x10)
 		EnableFlag(Flags::HALFCARRY);
+
+	return 12;
 }
 
 /* LD SP, HL */
-void Processor::LD_SP_HL() // 0xF9
+int Processor::LD_SP_HL() // 0xF9
 {
 	SP = HL;
+
+	return 8;
 }
 
 /* LD A, (nn) */
-void Processor::LD_A_MEM_nn() // 0xFA
+int Processor::LD_A_MEM_nn() // 0xFA
 {
 	A = memory->ReadByte(memory->ReadWord(PC));
 	PC += 2;
+
+	return 16;
 }
 
 /* EI */
-void Processor::EI() // 0xFB
+int Processor::EI() // 0xFB
 {
 	ime = true;
+
+	return 4;
 }
 
 /* CP n */
-void Processor::CP_n() // 0xFE
+int Processor::CP_n() // 0xFE
 {
 	uint8 value = memory->ReadByte(PC++);
 	uint8 result = A - value;
@@ -2254,1599 +2754,2115 @@ void Processor::CP_n() // 0xFE
 	if (A < value) EnableFlag(Flags::CARRY);
 	if (result == 0) EnableFlag(Flags::ZERO);
 	if (((A ^ value ^ result) & 0x10) != 0) EnableFlag(Flags::HALFCARRY);
+
+	return 8;
 }
 
 /* RST 0x0038 */
-void Processor::RST_0x0038() // 0xFF
+int Processor::RST_0x0038() // 0xFF
 {
 	StackPush(PC);
 	PC = 0x0038;
+
+	return 16;
 }
 
 // CB Obcodes
 
 /* RLC B */
-void Processor::RLC_B() // 0x00
+int Processor::RLC_B() // 0x00
 {
 	B = Rlc(B);
+
+	return 8;
 }
 
 /* RLC C */
-void Processor::RLC_C() // 0x01
+int Processor::RLC_C() // 0x01
 {
 	C = Rlc(C);
+
+	return 8;
 }
 
 /* RLC D */
-void Processor::RLC_D() // 0x02
+int Processor::RLC_D() // 0x02
 {
 	D = Rlc(D);
+
+	return 8;
 }
 
 /* RLC E */
-void Processor::RLC_E() // 0x03
+int Processor::RLC_E() // 0x03
 {
 	E = Rlc(E);
+
+	return 8;
 }
 
 /* RLC H */
-void Processor::RLC_H() // 0x04
+int Processor::RLC_H() // 0x04
 {
 	H = Rlc(H);
+
+	return 8;
 }
 
 /* RLC L */
-void Processor::RLC_L() // 0x05
+int Processor::RLC_L() // 0x05
 {
 	L = Rlc(L);
+
+	return 8;
 }
 
 /* RLC (HL) */
-void Processor::RLC_MEM_HL() // 0x06
+int Processor::RLC_MEM_HL() // 0x06
 {
 	memory->WriteByte(HL, Rlc(memory->ReadByte(HL)));
+
+	return 16;
 }
 
 /* RLC A */
-void Processor::RLC_A() // 0x07
+int Processor::RLC_A() // 0x07
 {
 	A = Rlc(A);
+
+	return 8;
 }
 
 /* RRC B */
-void Processor::RRC_B() // 0x08
+int Processor::RRC_B() // 0x08
 {
 	B = Rrc(B);
+
+	return 8;
 }
 
 /* RRC C */
-void Processor::RRC_C() // 0x09
+int Processor::RRC_C() // 0x09
 {
 	C = Rrc(C);
+
+	return 8;
 }
 
 /* RRC D */
-void Processor::RRC_D() // 0x0A
+int Processor::RRC_D() // 0x0A
 {
 	D = Rrc(D);
+
+	return 8;
 }
 
 /* RRC E */
-void Processor::RRC_E() // 0x0B
+int Processor::RRC_E() // 0x0B
 {
 	E = Rrc(E);
+
+	return 8;
 }
 
 /* RRC H */
-void Processor::RRC_H() // 0x0C
+int Processor::RRC_H() // 0x0C
 {
 	H = Rrc(H);
+
+	return 8;
 }
 
 /* RRC L */
-void Processor::RRC_L() // 0x0D
+int Processor::RRC_L() // 0x0D
 {
 	L = Rrc(L);
+
+	return 8;
 }
 
 /* RRC (HL) */
-void Processor::RRC_MEM_HL() // 0x0E
+int Processor::RRC_MEM_HL() // 0x0E
 {
 	memory->WriteByte(HL, Rrc(memory->ReadByte(HL)));
+
+	return 16;
 }
 
 /* RRC A */
-void Processor::RRC_A() // 0x0F
+int Processor::RRC_A() // 0x0F
 {
 	A = Rrc(A);
+
+	return 8;
 }
 
 /* RL B */
-void Processor::RL_B() // 0x10
+int Processor::RL_B() // 0x10
 {
 	B = Rl(B);
+
+	return 8;
 }
 
 /* RL C */
-void Processor::RL_C() // 0x11
+int Processor::RL_C() // 0x11
 {
 	C = Rl(C);
+
+	return 8;
 }
 
 /* RL D */
-void Processor::RL_D() // 0x12
+int Processor::RL_D() // 0x12
 {
 	D = Rl(D);
+
+	return 8;
 }
 
 /* RL E */
-void Processor::RL_E() // 0x13
+int Processor::RL_E() // 0x13
 {
 	E = Rl(E);
+
+	return 8;
 }
 
 /* RL H */
-void Processor::RL_H() // 0x14
+int Processor::RL_H() // 0x14
 {
 	H = Rl(H);
+
+	return 8;
 }
 
-/* RL L  */
-void Processor::RL_L() // 0x15
+/* RL L,  */
+int Processor::RL_L() // 0x15
 {
 	L = Rl(L);
+
+	return 8;
 }
 
 /* RL (HL) */
-void Processor::RL_MEM_HL() // 0x16
+int Processor::RL_MEM_HL() // 0x16
 {
 	memory->WriteByte(HL, Rl(memory->ReadByte(HL)));
+
+	return 16;
 }
 
 /* RL A */
-void Processor::RL_A() // 0x17
+int Processor::RL_A() // 0x17
 {
 	A = Rl(A);
+
+	return 8;
 }
 
 /* RR B */
-void Processor::RR_B() // 0x18
+int Processor::RR_B() // 0x18
 {
 	B = Rr(B);
+
+	return 8;
 }
 
 /* RR C */
-void Processor::RR_C() // 0x19
+int Processor::RR_C() // 0x19
 {
 	C = Rr(C);
+
+	return 8;
 }
 
 /* RR D */
-void Processor::RR_D() // 0x1A
+int Processor::RR_D() // 0x1A
 {
 	D = Rr(D);
+
+	return 8;
 }
 
 /* RR E */
-void Processor::RR_E() // 0x1B
+int Processor::RR_E() // 0x1B
 {
 	E = Rr(E);
+
+	return 8;
 }
 
 /* RR H */
-void Processor::RR_H() // 0x1C
+int Processor::RR_H() // 0x1C
 {
 	H = Rr(H);
+
+	return 8;
 }
 
 /* RR L */
-void Processor::RR_L() // 0x1D
+int Processor::RR_L() // 0x1D
 {
 	L = Rr(L);
+
+	return 8;
 }
 
 /* RR (HL) */
-void Processor::RR_MEM_HL() // 0x1E
+int Processor::RR_MEM_HL() // 0x1E
 {
 	memory->WriteByte(HL, Rr(memory->ReadByte(HL)));
+
+	return 16;
 }
 
 /* RR A */
-void Processor::RR_A() // 0x1F
+int Processor::RR_A() // 0x1F
 {
 	A = Rr(A);
+
+	return 8;
 }
 
 /* SLA B */
-void Processor::SLA_B() // 0x20
+int Processor::SLA_B() // 0x20
 {
 	B = Sla(B);
+
+	return 8;
 }
 
 /* SLA C */
-void Processor::SLA_C() // 0x21
+int Processor::SLA_C() // 0x21
 {
 	C = Sla(C);
+
+	return 8;
 }
 
 /* SLA D */
-void Processor::SLA_D() // 0x22
+int Processor::SLA_D() // 0x22
 {
 	D = Sla(D);
+
+	return 8;
 }
 
 /* SLA E */
-void Processor::SLA_E() // 0x23
+int Processor::SLA_E() // 0x23
 {
 	E = Sla(E);
+
+	return 8;
 }
 
 /* SLA H */
-void Processor::SLA_H() // 0x24
+int Processor::SLA_H() // 0x24
 {
 	H = Sla(H);
+
+	return 8;
 }
 
 /* SLA L */
-void Processor::SLA_L() // 0x25
+int Processor::SLA_L() // 0x25
 {
 	L = Sla(L);
+
+	return 8;
 }
 
 /* SLA (HL) */
-void Processor::SLA_MEM_HL() // 0x26
+int Processor::SLA_MEM_HL() // 0x26
 {
 	memory->WriteByte(HL, Sla(memory->ReadByte(HL)));
+
+	return 16;
 }
 
 /* SLA A */
-void Processor::SLA_A() // 0x27
+int Processor::SLA_A() // 0x27
 {
 	A = Sla(A);
+
+	return 8;
 }
 
 /* SRA B */
-void Processor::SRA_B() // 0x28
+int Processor::SRA_B() // 0x28
 {
 	B = Sra(B);
+
+	return 8;
 }
 
 /* SRA C */
-void Processor::SRA_C() // 0x29
+int Processor::SRA_C() // 0x29
 {
 	C = Sra(C);
+
+	return 8;
 }
 
 /* SRA D */
-void Processor::SRA_D() // 0x2A
+int Processor::SRA_D() // 0x2A
 {
 	D = Sra(D);
+
+	return 8;
 }
 
 /* SRA E */
-void Processor::SRA_E() // 0x2B
+int Processor::SRA_E() // 0x2B
 {
 	E = Sra(E);
+
+	return 8;
 }
 
 /* SRA H */
-void Processor::SRA_H() // 0x2C
+int Processor::SRA_H() // 0x2C
 {
 	H = Sra(H);
+
+	return 8;
 }
 
 /* SRA L */
-void Processor::SRA_L() // 0x2D
+int Processor::SRA_L() // 0x2D
 {
 	L = Sra(L);
+
+	return 8;
 }
 
 /* SRA (HL) */
-void Processor::SRA_MEM_HL() // 0x2E
+int Processor::SRA_MEM_HL() // 0x2E
 {
 	memory->WriteByte(HL, Sra(memory->ReadByte(HL)));
+
+	return 16;
 }
 
 /* SRA A */
-void Processor::SRA_A() // 0x2F
+int Processor::SRA_A() // 0x2F
 {
 	A = Sra(A);
+
+	return 8;
 }
 
 /* SWAP B */
-void Processor::SWAP_B() // 0x30
+int Processor::SWAP_B() // 0x30
 {
 	B = ((B >> 4) & 0x0F) | ((B << 4) & 0xF0);
 	ClearFlags();
 	if (B == 0) EnableFlag(Flags::ZERO);
+
+	return 8;
 }
 
 /* SWAP C */
-void Processor::SWAP_C() // 0x31
+int Processor::SWAP_C() // 0x31
 {
 	C = ((C >> 4) & 0x0F) | ((C << 4) & 0xF0);
 	ClearFlags();
 	if (C == 0) EnableFlag(Flags::ZERO);
+
+	return 8;
 }
 
 /* SWAP D */
-void Processor::SWAP_D() // 0x32
+int Processor::SWAP_D() // 0x32
 {
 	D = ((D >> 4) & 0x0F) | ((D << 4) & 0xF0);
 	ClearFlags();
 	if (D == 0) EnableFlag(Flags::ZERO);
+
+	return 8;
 }
 
 /* SWAP E */
-void Processor::SWAP_E() // 0x33
+int Processor::SWAP_E() // 0x33
 {
 	E = ((E >> 4) & 0x0F) | ((E << 4) & 0xF0);
 	ClearFlags();
 	if (E == 0) EnableFlag(Flags::ZERO);
+
+	return 8;
 }
 
 /* SWAP H */
-void Processor::SWAP_H() // 0x34
+int Processor::SWAP_H() // 0x34
 {
 	H = ((H >> 4) & 0x0F) | ((H << 4) & 0xF0);
 	ClearFlags();
 	if (H == 0) EnableFlag(Flags::ZERO);
+
+	return 8;
 }
 
 /* SWAP L */
-void Processor::SWAP_L() // 0x35
+int Processor::SWAP_L() // 0x35
 {
 	L = ((L >> 4) & 0x0F) | ((L << 4) & 0xF0);
 	ClearFlags();
 	if (L == 0) EnableFlag(Flags::ZERO);
+
+	return 8;
 }
 
 /* SWAP (HL) */
-void Processor::SWAP_MEM_HL() // 0x36
+int Processor::SWAP_MEM_HL() // 0x36
 {
 	uint8 val = memory->ReadByte(HL);
 	memory->WriteByte(HL, ((val >> 4) & 0x0F) | ((val << 4) & 0xF0));
 	ClearFlags();
 	if (memory->ReadByte(HL) == 0) EnableFlag(ZERO);
+
+	return 16;
 }
 
 /* SWAP A */
-void Processor::SWAP_A() // 0x37
+int Processor::SWAP_A() // 0x37
 {
 	A = ((A >> 4) & 0x0F) | ((A << 4) & 0xF0);
 	ClearFlags();
 	if (A == 0) EnableFlag(Flags::ZERO);
+
+	return 8;
 }
 
 /* SRL B */
-void Processor::SRL_B() // 0x38
+int Processor::SRL_B() // 0x38
 {
 	B = Srl(B);
+
+	return 8;
 }
 
 /* SRL C */
-void Processor::SRL_C() // 0x39
+int Processor::SRL_C() // 0x39
 {
 	C = Srl(C);
+
+	return 8;
 }
 
 /* SRL D */
-void Processor::SRL_D() // 0x3A
+int Processor::SRL_D() // 0x3A
 {
 	D = Srl(D);
+
+	return 8;
 }
 
 /* SRL E */
-void Processor::SRL_E() // 0x3B
+int Processor::SRL_E() // 0x3B
 {
 	E = Srl(E);
+
+	return 8;
 }
 
 /* SRL H */
-void Processor::SRL_H() // 0x3C
+int Processor::SRL_H() // 0x3C
 {
 	H = Srl(H);
+
+	return 8;
 }
 
 /* SRL L */
-void Processor::SRL_L() // 0x3D
+int Processor::SRL_L() // 0x3D
 {
 	L = Srl(L);
+
+	return 8;
 }
 
 /* SRL (HL) */
-void Processor::SRL_MEM_HL() // 0x3E
+int Processor::SRL_MEM_HL() // 0x3E
 {
 	memory->WriteByte(HL, Srl(memory->ReadByte(HL)));
+
+	return 16;
 }
 
 /* SRL A */
-void Processor::SRL_A() // 0x3F
+int Processor::SRL_A() // 0x3F
 {
 	A = Srl(A);
+
+	return 8;
 }
 
-/* BIT 0 B */
-void Processor::BIT_0_B() // 0x40
+/* BIT 0, B */
+int Processor::BIT_0_B() // 0x40
 {
 	Bit(B, 0);
+
+	return 8;
 }
 
-/* BIT 0 C */
-void Processor::BIT_0_C() // 0x41
+/* BIT 0, C */
+int Processor::BIT_0_C() // 0x41
 {
 	Bit(C, 0);
+
+	return 8;
 }
 
-/* BIT 0 D */
-void Processor::BIT_0_D() // 0x42
+/* BIT 0, D */
+int Processor::BIT_0_D() // 0x42
 {
 	Bit(D, 0);
+
+	return 8;
 }
 
-/* BIT 0 E */
-void Processor::BIT_0_E() // 0x43
+/* BIT 0, E */
+int Processor::BIT_0_E() // 0x43
 {
 	Bit(E, 0);
+
+	return 8;
 }
 
-/* BIT 0 H */
-void Processor::BIT_0_H() // 0x44
+/* BIT 0, H */
+int Processor::BIT_0_H() // 0x44
 {
 	Bit(H, 0);
+
+	return 8;
 }
 
-/* BIT 0 L */
-void Processor::BIT_0_L() // 0x45
+/* BIT 0, L */
+int Processor::BIT_0_L() // 0x45
 {
 	Bit(L, 0);
+
+	return 8;
 }
 
-/* BIT 0 (HL) */
-void Processor::BIT_0_MEM_HL() // 0x46
+/* BIT 0, (HL) */
+int Processor::BIT_0_MEM_HL() // 0x46
 {
 	Bit(memory->ReadByte(HL), 0);
+
+	return 12;
 }
 
-/* BIT 0 A */
-void Processor::BIT_0_A() // 0x47
+/* BIT 0, A */
+int Processor::BIT_0_A() // 0x47
 {
 	Bit(A, 0);
+
+	return 8;
 }
 
-/* BIT 1 B */
-void Processor::BIT_1_B() // 0x48
+/* BIT 1, B */
+int Processor::BIT_1_B() // 0x48
 {
 	Bit(B, 1);
+
+	return 8;
 }
 
-/* BIT 1 C */
-void Processor::BIT_1_C() // 0x49
+/* BIT 1, C */
+int Processor::BIT_1_C() // 0x49
 {
 	Bit(C, 1);
+
+	return 8;
 }
 
-/* BIT 1 D */
-void Processor::BIT_1_D() // 0x4A
+/* BIT 1, D */
+int Processor::BIT_1_D() // 0x4A
 {
 	Bit(D, 1);
+
+	return 8;
 }
 
-/* BIT 1 E */
-void Processor::BIT_1_E() // 0x4B
+/* BIT 1, E */
+int Processor::BIT_1_E() // 0x4B
 {
 	Bit(E, 1);
+
+	return 8;
 }
 
-/* BIT 1 H */
-void Processor::BIT_1_H() // 0x4C
+/* BIT 1, H */
+int Processor::BIT_1_H() // 0x4C
 {
 	Bit(H, 1);
+
+	return 8;
 }
 
-/* BIT 1 L */
-void Processor::BIT_1_L() // 0x4D
+/* BIT 1, L */
+int Processor::BIT_1_L() // 0x4D
 {
 	Bit(L, 1);
+
+	return 8;
 }
 
-/* BIT 1 (HL) */
-void Processor::BIT_1_MEM_HL() // 0x4E
+/* BIT 1, (HL) */
+int Processor::BIT_1_MEM_HL() // 0x4E
 {
 	Bit(memory->ReadByte(HL), 1);
+
+	return 12;
 }
 
-/* BIT 1 A */
-void Processor::BIT_1_A() // 0x4F
+/* BIT 1, A */
+int Processor::BIT_1_A() // 0x4F
 {
 	Bit(A, 1);
+
+	return 8;
 }
 
-/* BIT 2 B */
-void Processor::BIT_2_B() // 0x50
+/* BIT 2, B */
+int Processor::BIT_2_B() // 0x50
 {
 	Bit(B, 2);
+
+	return 8;
 }
 
-/* BIT 2 C */
-void Processor::BIT_2_C() // 0x51
+/* BIT 2, C */
+int Processor::BIT_2_C() // 0x51
 {
 	Bit(C, 2);
+
+	return 8;
 }
 
-/* BIT 2 D */
-void Processor::BIT_2_D() // 0x52
+/* BIT 2, D */
+int Processor::BIT_2_D() // 0x52
 {
 	Bit(D, 2);
+
+	return 8;
 }
 
-/* BIT 2 E */
-void Processor::BIT_2_E() // 0x53
+/* BIT 2, E */
+int Processor::BIT_2_E() // 0x53
 {
 	Bit(E, 2);
+
+	return 8;
 }
 
-/* BIT 2 H */
-void Processor::BIT_2_H() // 0x54
+/* BIT 2, H */
+int Processor::BIT_2_H() // 0x54
 {
 	Bit(H, 2);
+
+	return 8;
 }
 
-/* BIT 2 L */
-void Processor::BIT_2_L() // 0x55
+/* BIT 2, L */
+int Processor::BIT_2_L() // 0x55
 {
 	Bit(L, 2);
+
+	return 8;
 }
 
-/* BIT 2 (HL) */
-void Processor::BIT_2_MEM_HL() // 0x56
+/* BIT 2, (HL) */
+int Processor::BIT_2_MEM_HL() // 0x56
 {
 	Bit(memory->ReadByte(HL), 2);
+
+	return 12;
 }
 
-/* BIT 2 A */
-void Processor::BIT_2_A() // 0x57
+/* BIT 2, A */
+int Processor::BIT_2_A() // 0x57
 {
 	Bit(A, 2);
+
+	return 8;
 }
 
-/* BIT 3 B */
-void Processor::BIT_3_B() // 0x58
+/* BIT 3, B */
+int Processor::BIT_3_B() // 0x58
 {
 	Bit(B, 3);
+
+	return 8;
 }
 
-/* BIT 3 C */
-void Processor::BIT_3_C() // 0x59
+/* BIT 3, C */
+int Processor::BIT_3_C() // 0x59
 {
 	Bit(C, 3);
+
+	return 8;
 }
 
-/* BIT 3 D */
-void Processor::BIT_3_D() // 0x5A
+/* BIT 3, D */
+int Processor::BIT_3_D() // 0x5A
 {
 	Bit(D, 3);
+
+	return 8;
 }
 
-/* BIT 3 E */
-void Processor::BIT_3_E() // 0x5B
+/* BIT 3, E */
+int Processor::BIT_3_E() // 0x5B
 {
 	Bit(E, 3);
+
+	return 8;
 }
 
-/* BIT 3 H */
-void Processor::BIT_3_H() // 0x5C
+/* BIT 3, H */
+int Processor::BIT_3_H() // 0x5C
 {
 	Bit(H, 3);
+
+	return 8;
 }
 
-/* BIT 3 L */
-void Processor::BIT_3_L() // 0x5D
+/* BIT 3, L */
+int Processor::BIT_3_L() // 0x5D
 {
 	Bit(L, 3);
+
+	return 8;
 }
 
-/* BIT 3 (HL) */
-void Processor::BIT_3_MEM_HL() // 0x5E
+/* BIT 3, (HL) */
+int Processor::BIT_3_MEM_HL() // 0x5E
 {
 	Bit(memory->ReadByte(HL), 3);
+
+	return 12;
 }
 
-/* BIT 3 A */
-void Processor::BIT_3_A() // 0x5F
+/* BIT 3, A */
+int Processor::BIT_3_A() // 0x5F
 {
 	Bit(A, 3);
+
+	return 8;
 }
 
-/* BIT 4 B */
-void Processor::BIT_4_B() // 0x60
+/* BIT 4, B */
+int Processor::BIT_4_B() // 0x60
 {
 	Bit(B, 4);
+
+	return 8;
 }
 
-/* BIT 4 C */
-void Processor::BIT_4_C() // 0x61
+/* BIT 4, C */
+int Processor::BIT_4_C() // 0x61
 {
 	Bit(C, 4);
+
+	return 8;
 }
 
-/* BIT 4 D */
-void Processor::BIT_4_D() // 0x62
+/* BIT 4, D */
+int Processor::BIT_4_D() // 0x62
 {
 	Bit(D, 4);
+
+	return 8;
 }
 
-/* BIT 4 E */
-void Processor::BIT_4_E() // 0x63
+/* BIT 4, E */
+int Processor::BIT_4_E() // 0x63
 {
 	Bit(E, 4);
+
+	return 8;
 }
 
-/* BIT 4 H */
-void Processor::BIT_4_H() // 0x64
+/* BIT 4, H */
+int Processor::BIT_4_H() // 0x64
 {
 	Bit(H, 4);
+
+	return 8;
 }
 
-/* BIT 4 L */
-void Processor::BIT_4_L() // 0x65
+/* BIT 4, L */
+int Processor::BIT_4_L() // 0x65
 {
 	Bit(L, 4);
+
+	return 8;
 }
 
-/* BIT 4 (HL) */
-void Processor::BIT_4_MEM_HL() // 0x66
+/* BIT 4, (HL) */
+int Processor::BIT_4_MEM_HL() // 0x66
 {
 	Bit(memory->ReadByte(HL), 4);
+
+	return 12;
 }
 
-/* BIT 4 A */
-void Processor::BIT_4_A() // 0x67
+/* BIT 4, A */
+int Processor::BIT_4_A() // 0x67
 {
 	Bit(A, 4);
+
+	return 8;
 }
 
-/* BIT 5 B */
-void Processor::BIT_5_B() // 0x68
+/* BIT 5, B */
+int Processor::BIT_5_B() // 0x68
 {
 	Bit(B, 5);
+
+	return 8;
 }
 
-/* BIT 5 C */
-void Processor::BIT_5_C() // 0x69
+/* BIT 5, C */
+int Processor::BIT_5_C() // 0x69
 {
 	Bit(C, 5);
+
+	return 8;
 }
 
-/* BIT 5 D */
-void Processor::BIT_5_D() // 0x6A
+/* BIT 5, D */
+int Processor::BIT_5_D() // 0x6A
 {
 	Bit(D, 5);
+
+	return 8;
 }
 
-/* BIT 5 E */
-void Processor::BIT_5_E() // 0x6B
+/* BIT 5, E */
+int Processor::BIT_5_E() // 0x6B
 {
 	Bit(E, 5);
+
+	return 8;
 }
 
-/* BIT 5 H */
-void Processor::BIT_5_H() // 0x6C
+/* BIT 5, H */
+int Processor::BIT_5_H() // 0x6C
 {
 	Bit(H, 5);
+
+	return 8;
 }
 
-/* BIT 5 L */
-void Processor::BIT_5_L() // 0x6D
+/* BIT 5, L */
+int Processor::BIT_5_L() // 0x6D
 {
 	Bit(L, 5);
+
+	return 8;
 }
 
-/* BIT 5 (HL) */
-void Processor::BIT_5_MEM_HL() // 0x6E
+/* BIT 5, (HL) */
+int Processor::BIT_5_MEM_HL() // 0x6E
 {
 	Bit(memory->ReadByte(HL), 5);
+
+	return 12;
 }
 
-/* BIT 5 A */
-void Processor::BIT_5_A() // 0x6F
+/* BIT 5, A */
+int Processor::BIT_5_A() // 0x6F
 {
 	Bit(A, 5);
+
+	return 8;
 }
 
-/* BIT 6 B */
-void Processor::BIT_6_B() // 0x70
+/* BIT 6, B */
+int Processor::BIT_6_B() // 0x70
 {
 	Bit(B, 6);
+
+	return 8;
 }
 
-/* BIT 6 C */
-void Processor::BIT_6_C() // 0x71
+/* BIT 6, C */
+int Processor::BIT_6_C() // 0x71
 {
 	Bit(C, 6);
+
+	return 8;
 }
 
-/* BIT 6 D */
-void Processor::BIT_6_D() // 0x72
+/* BIT 6, D */
+int Processor::BIT_6_D() // 0x72
 {
 	Bit(D, 6);
+
+	return 8;
 }
 
-/* BIT 6 E */
-void Processor::BIT_6_E() // 0x73
+/* BIT 6, E */
+int Processor::BIT_6_E() // 0x73
 {
 	Bit(E, 6);
+
+	return 8;
 }
 
-/* BIT 6 H */
-void Processor::BIT_6_H() // 0x74
+/* BIT 6, H */
+int Processor::BIT_6_H() // 0x74
 {
 	Bit(H, 6);
+
+	return 8;
 }
 
-/* BIT 6 L */
-void Processor::BIT_6_L() // 0x75
+/* BIT 6, L */
+int Processor::BIT_6_L() // 0x75
 {
 	Bit(L, 6);
+
+	return 8;
 }
 
-/* BIT 6 (HL) */
-void Processor::BIT_6_MEM_HL() // 0x76
+/* BIT 6, (HL) */
+int Processor::BIT_6_MEM_HL() // 0x76
 {
 	Bit(memory->ReadByte(HL), 6);
+
+	return 12;
 }
 
-/* BIT 6 A */
-void Processor::BIT_6_A() // 0x77
+/* BIT 6, A */
+int Processor::BIT_6_A() // 0x77
 {
 	Bit(A, 6);
+
+	return 8;
 }
 
-/* BIT 7 B */
-void Processor::BIT_7_B() // 0x78
+/* BIT 7, B */
+int Processor::BIT_7_B() // 0x78
 {
 	Bit(B, 7);
+
+	return 8;
 }
 
-/* BIT 7 C */
-void Processor::BIT_7_C() // 0x79
+/* BIT 7, C */
+int Processor::BIT_7_C() // 0x79
 {
 	Bit(C, 7);
+
+	return 8;
 }
 
-/* BIT 7 D */
-void Processor::BIT_7_D() // 0x7A
+/* BIT 7, D */
+int Processor::BIT_7_D() // 0x7A
 {
 	Bit(D, 7);
+
+	return 8;
 }
 
-/* BIT 7 E */
-void Processor::BIT_7_E() // 0x7B
+/* BIT 7, E */
+int Processor::BIT_7_E() // 0x7B
 {
 	Bit(E, 7);
+
+	return 8;
 }
 
-/* BIT 7 H */
-void Processor::BIT_7_H() // 0x7C
+/* BIT 7, H */
+int Processor::BIT_7_H() // 0x7C
 {
 	Bit(H, 7);
+
+	return 8;
 }
 
-/* BIT 7 L */
-void Processor::BIT_7_L() // 0x7D
+/* BIT 7, L */
+int Processor::BIT_7_L() // 0x7D
 {
 	Bit(L, 7);
+
+	return 8;
 }
 
-/* BIT 7 (HL) */
-void Processor::BIT_7_MEM_HL() // 0x7E
+/* BIT 7, (HL) */
+int Processor::BIT_7_MEM_HL() // 0x7E
 {
 	Bit(memory->ReadByte(HL), 7);
+
+	return 12;
 }
 
-/* BIT 7 A */
-void Processor::BIT_7_A() // 0x7F
+/* BIT 7, A */
+int Processor::BIT_7_A() // 0x7F
 {
 	Bit(A, 7);
+
+	return 8;
 }
 
-/* RES 0 B */
-void Processor::RES_0_B() // 0x80
+/* RES 0, B */
+int Processor::RES_0_B() // 0x80
 {
 	ResetBit(B, 0);
+
+	return 8;
 }
 
-/* RES 0 C */
-void Processor::RES_0_C() // 0x81
+/* RES 0, C */
+int Processor::RES_0_C() // 0x81
 {
 	ResetBit(C, 0);
+
+	return 8;
 }
 
-/* RES 0 D */
-void Processor::RES_0_D() // 0x82
+/* RES 0, D */
+int Processor::RES_0_D() // 0x82
 {
 	ResetBit(D, 0);
+
+	return 8;
 }
 
-/* RES 0 E */
-void Processor::RES_0_E() // 0x83
+/* RES 0, E */
+int Processor::RES_0_E() // 0x83
 {
 	ResetBit(E, 0);
+
+	return 8;
 }
 
-/* RES 0 H */
-void Processor::RES_0_H() // 0x84
+/* RES 0, H */
+int Processor::RES_0_H() // 0x84
 {
 	ResetBit(H, 0);
+
+	return 8;
 }
 
-/* RES 0 L */
-void Processor::RES_0_L() // 0x85
+/* RES 0, L */
+int Processor::RES_0_L() // 0x85
 {
 	ResetBit(L, 0);
+
+	return 8;
 }
 
-/* RES 0 (HL) */
-void Processor::RES_0_MEM_HL() // 0x86
+/* RES 0, (HL) */
+int Processor::RES_0_MEM_HL() // 0x86
 {
 	uint8 result = memory->ReadByte(HL);
 	ResetBit(result, 0);
 	memory->WriteByte(HL, result);
+
+	return 16;
 }
 
-/* RES 0 A */
-void Processor::RES_0_A() // 0x87
+/* RES 0, A */
+int Processor::RES_0_A() // 0x87
 {
 	ResetBit(A, 0);
+
+	return 8;
 }
 
-/* RES 1 B */
-void Processor::RES_1_B() // 0x88
+/* RES 1, B */
+int Processor::RES_1_B() // 0x88
 {
 	ResetBit(B, 1);
+
+	return 8;
 }
 
-/* RES 1 C */
-void Processor::RES_1_C() // 0x89
+/* RES 1, C */
+int Processor::RES_1_C() // 0x89
 {
 	ResetBit(C, 1);
+
+	return 8;
 }
 
-/* RES 1 D */
-void Processor::RES_1_D() // 0x8A
+/* RES 1, D */
+int Processor::RES_1_D() // 0x8A
 {
 	ResetBit(D, 1);
+
+	return 8;
 }
 
-/* RES 1 E */
-void Processor::RES_1_E() // 0x8B
+/* RES 1, E */
+int Processor::RES_1_E() // 0x8B
 {
 	ResetBit(E, 1);
+
+	return 8;
 }
 
-/* RES 1 H */
-void Processor::RES_1_H() // 0x8C
+/* RES 1, H */
+int Processor::RES_1_H() // 0x8C
 {
 	ResetBit(H, 1);
+
+	return 8;
 }
 
-/* RES 1 L */
-void Processor::RES_1_L() // 0x8D
+/* RES 1, L */
+int Processor::RES_1_L() // 0x8D
 {
 	ResetBit(L, 1);
+
+	return 8;
 }
 
-/* RES 1 (HL) */
-void Processor::RES_1_MEM_HL() // 0x8E
+/* RES 1, (HL) */
+int Processor::RES_1_MEM_HL() // 0x8E
 {
 	uint8 result = memory->ReadByte(HL);
 	ResetBit(result, 1);
 	memory->WriteByte(HL, result);
+
+	return 16;
 }
 
-/* RES 1 A */
-void Processor::RES_1_A() // 0x8F
+/* RES 1, A */
+int Processor::RES_1_A() // 0x8F
 {
 	ResetBit(A, 1);
+
+	return 8;
 }
 
-/* RES 2 B */
-void Processor::RES_2_B() // 0x90
+/* RES 2, B */
+int Processor::RES_2_B() // 0x90
 {
 	ResetBit(B, 2);
+
+	return 8;
 }
 
-/* RES 2 C */
-void Processor::RES_2_C() // 0x91
+/* RES 2, C */
+int Processor::RES_2_C() // 0x91
 {
 	ResetBit(C, 2);
+
+	return 8;
 }
 
-/* RES 2 D */
-void Processor::RES_2_D() // 0x92
+/* RES 2, D */
+int Processor::RES_2_D() // 0x92
 {
 	ResetBit(D, 2);
+
+	return 8;
 }
 
-/* RES 2 E */
-void Processor::RES_2_E() // 0x93
+/* RES 2, E */
+int Processor::RES_2_E() // 0x93
 {
 	ResetBit(E, 2);
+
+	return 8;
 }
 
-/* RES 2 H */
-void Processor::RES_2_H() // 0x94
+/* RES 2, H */
+int Processor::RES_2_H() // 0x94
 {
 	ResetBit(H, 2);
+
+	return 8;
 }
 
-/* RES 2 L */
-void Processor::RES_2_L() // 0x95
+/* RES 2, L */
+int Processor::RES_2_L() // 0x95
 {
 	ResetBit(L, 2);
+
+	return 8;
 }
 
-/* RES 2 (HL) */
-void Processor::RES_2_MEM_HL() // 0x96
+/* RES 2, (HL) */
+int Processor::RES_2_MEM_HL() // 0x96
 {
 	uint8 result = memory->ReadByte(HL);
 	ResetBit(result, 2);
 	memory->WriteByte(HL, result);
+
+	return 16;
 }
 
-/* RES 2 A */
-void Processor::RES_2_A() // 0x97
+/* RES 2, A */
+int Processor::RES_2_A() // 0x97
 {
 	ResetBit(A, 2);
+
+	return 8;
 }
 
-/* RES 3 B */
-void Processor::RES_3_B() // 0x98
+/* RES 3, B */
+int Processor::RES_3_B() // 0x98
 {
 	ResetBit(B, 3);
+
+	return 8;
 }
 
-/* RES 3 C */
-void Processor::RES_3_C() // 0x99
+/* RES 3, C */
+int Processor::RES_3_C() // 0x99
 {
 	ResetBit(C, 3);
+
+	return 8;
 }
 
-/* RES 3 D */
-void Processor::RES_3_D() // 0x9A
+/* RES 3, D */
+int Processor::RES_3_D() // 0x9A
 {
 	ResetBit(D, 3);
+
+	return 8;
 }
 
-/* RES 3 E */
-void Processor::RES_3_E() // 0x9B
+/* RES 3, E */
+int Processor::RES_3_E() // 0x9B
 {
 	ResetBit(E, 3);
+
+	return 8;
 }
 
-/* RES 3 H */
-void Processor::RES_3_H() // 0x9C
+/* RES 3, H */
+int Processor::RES_3_H() // 0x9C
 {
 	ResetBit(H, 3);
+
+	return 8;
 }
 
-/* RES 3 L */
-void Processor::RES_3_L() // 0x9D
+/* RES 3, L */
+int Processor::RES_3_L() // 0x9D
 {
 	ResetBit(L, 3);
+
+	return 8;
 }
 
-/* RES 3 (HL) */
-void Processor::RES_3_MEM_HL() // 0x9E
+/* RES 3, (HL) */
+int Processor::RES_3_MEM_HL() // 0x9E
 {
 	uint8 result = memory->ReadByte(HL);
 	ResetBit(result, 3);
 	memory->WriteByte(HL, result);
+
+	return 16;
 }
 
-/* RES 3 A */
-void Processor::RES_3_A() // 0x9F
+/* RES 3, A */
+int Processor::RES_3_A() // 0x9F
 {
 	ResetBit(A, 3);
+
+	return 8;
 }
 
-/* RES 4 B */
-void Processor::RES_4_B() // 0xA0
+/* RES 4, B */
+int Processor::RES_4_B() // 0xA0
 {
 	ResetBit(B, 4);
+
+	return 8;
 }
 
-/* RES 4 C */
-void Processor::RES_4_C() // 0xA1
+/* RES 4, C */
+int Processor::RES_4_C() // 0xA1
 {
 	ResetBit(C, 4);
+
+	return 8;
 }
 
-/* RES 4 D */
-void Processor::RES_4_D() // 0xA2
+/* RES 4, D */
+int Processor::RES_4_D() // 0xA2
 {
 	ResetBit(D, 4);
+
+	return 8;
 }
 
-/* RES 4 E */
-void Processor::RES_4_E() // 0xA3
+/* RES 4, E */
+int Processor::RES_4_E() // 0xA3
 {
 	ResetBit(E, 4);
+
+	return 8;
 }
 
-/* RES 4 H */
-void Processor::RES_4_H() // 0xA4
+/* RES 4, H */
+int Processor::RES_4_H() // 0xA4
 {
 	ResetBit(H, 4);
+
+	return 8;
 }
 
-/* RES 4 L */
-void Processor::RES_4_L() // 0xA5
+/* RES 4, L */
+int Processor::RES_4_L() // 0xA5
 {
 	ResetBit(L, 4);
+
+	return 8;
 }
 
-/* RES 4 (HL) */
-void Processor::RES_4_MEM_HL() // 0xA6
+/* RES 4, (HL) */
+int Processor::RES_4_MEM_HL() // 0xA6
 {
 	uint8 result = memory->ReadByte(HL);
 	ResetBit(result, 4);
 	memory->WriteByte(HL, result);
+
+	return 16;
 }
 
-/* RES 4 A */
-void Processor::RES_4_A() // 0xA7
+/* RES 4, A */
+int Processor::RES_4_A() // 0xA7
 {
 	ResetBit(A, 4);
+
+	return 8;
 }
 
-/* RES 5 B */
-void Processor::RES_5_B() // 0xA8
+/* RES 5, B */
+int Processor::RES_5_B() // 0xA8
 {
 	ResetBit(B, 5);
+
+	return 8;
 }
 
-/* RES 5 C */
-void Processor::RES_5_C() // 0xA9
+/* RES 5, C */
+int Processor::RES_5_C() // 0xA9
 {
 	ResetBit(C, 5);
+
+	return 8;
 }
 
-/* RES 5 D */
-void Processor::RES_5_D() // 0xAA
+/* RES 5, D */
+int Processor::RES_5_D() // 0xAA
 {
 	ResetBit(D, 5);
+
+	return 8;
 }
 
-/* RES 5 E */
-void Processor::RES_5_E() // 0xAB
+/* RES 5, E */
+int Processor::RES_5_E() // 0xAB
 {
 	ResetBit(E, 5);
+
+	return 8;
 }
 
-/* RES 5 H */
-void Processor::RES_5_H() // 0xAC
+/* RES 5, H */
+int Processor::RES_5_H() // 0xAC
 {
 	ResetBit(H, 5);
+
+	return 8;
 }
 
-/* RES 5 L */
-void Processor::RES_5_L() // 0xAD
+/* RES 5, L */
+int Processor::RES_5_L() // 0xAD
 {
 	ResetBit(L, 5);
+
+	return 8;
 }
 
-/* RES 5 (HL) */
-void Processor::RES_5_MEM_HL() // 0xAE
+/* RES 5, (HL) */
+int Processor::RES_5_MEM_HL() // 0xAE
 {
 	uint8 result = memory->ReadByte(HL);
 	ResetBit(result, 5);
 	memory->WriteByte(HL, result);
+
+	return 16;
 }
 
-/* RES 5 A */
-void Processor::RES_5_A() // 0xAF
+/* RES 5, A */
+int Processor::RES_5_A() // 0xAF
 {
 	ResetBit(A, 5);
+
+	return 8;
 }
 
-/* RES 6 B */
-void Processor::RES_6_B() // 0xB0
+/* RES 6, B */
+int Processor::RES_6_B() // 0xB0
 {
 	ResetBit(B, 6);
+
+	return 8;
 }
 
-/* RES 6 C */
-void Processor::RES_6_C() // 0xB1
+/* RES 6, C */
+int Processor::RES_6_C() // 0xB1
 {
 	ResetBit(C, 6);
+
+	return 8;
 }
 
-/* RES 6 D */
-void Processor::RES_6_D() // 0xB2
+/* RES 6, D */
+int Processor::RES_6_D() // 0xB2
 {
 	ResetBit(D, 6);
+
+	return 8;
 }
 
-/* RES 6 E */
-void Processor::RES_6_E() // 0xB3
+/* RES 6, E */
+int Processor::RES_6_E() // 0xB3
 {
 	ResetBit(E, 6);
+
+	return 8;
 }
 
-/* RES 6 H */
-void Processor::RES_6_H() // 0xB4
+/* RES 6, H */
+int Processor::RES_6_H() // 0xB4
 {
 	ResetBit(H, 6);
+
+	return 8;
 }
 
-/* RES 6 L */
-void Processor::RES_6_L() // 0xB5
+/* RES 6, L */
+int Processor::RES_6_L() // 0xB5
 {
 	ResetBit(L, 6);
+
+	return 8;
 }
 
-/* RES 6 (HL) */
-void Processor::RES_6_MEM_HL() // 0xB6
+/* RES 6, (HL) */
+int Processor::RES_6_MEM_HL() // 0xB6
 {
 	uint8 result = memory->ReadByte(HL);
 	ResetBit(result, 6);
 	memory->WriteByte(HL, result);
+
+	return 16;
 }
 
-/* RES 6 A */
-void Processor::RES_6_A() // 0xB7
+/* RES 6, A */
+int Processor::RES_6_A() // 0xB7
 {
 	ResetBit(A, 6);
+
+	return 8;
 }
 
-/* RES 7 B */
-void Processor::RES_7_B() // 0xB8
+/* RES 7, B */
+int Processor::RES_7_B() // 0xB8
 {
 	ResetBit(B, 7);
+
+	return 8;
 }
 
-/* RES 7 C */
-void Processor::RES_7_C() // 0xB9
+/* RES 7, C */
+int Processor::RES_7_C() // 0xB9
 {
 	ResetBit(C, 7);
+
+	return 8;
 }
 
-/* RES 7 D */
-void Processor::RES_7_D() // 0xBA
+/* RES 7, D */
+int Processor::RES_7_D() // 0xBA
 {
 	ResetBit(D, 7);
+
+	return 8;
 }
 
-/* RES 7 E */
-void Processor::RES_7_E() // 0xBB
+/* RES 7, E */
+int Processor::RES_7_E() // 0xBB
 {
 	ResetBit(E, 7);
+
+	return 8;
 }
 
-/* RES 7 H */
-void Processor::RES_7_H() // 0xBC
+/* RES 7, H */
+int Processor::RES_7_H() // 0xBC
 {
 	ResetBit(H, 7);
+
+	return 8;
 }
 
-/* RES 7 L */
-void Processor::RES_7_L() // 0xBD
+/* RES 7, L */
+int Processor::RES_7_L() // 0xBD
 {
 	ResetBit(L, 7);
+
+	return 8;
 }
 
-/* RES 7 (HL) */
-void Processor::RES_7_MEM_HL() // 0xBE
+/* RES 7, (HL) */
+int Processor::RES_7_MEM_HL() // 0xBE
 {
 	uint8 result = memory->ReadByte(HL);
 	ResetBit(result, 7);
 	memory->WriteByte(HL, result);
+
+	return 16;
 }
 
-/* RES 7 A */
-void Processor::RES_7_A() // 0xBF
+/* RES 7, A */
+int Processor::RES_7_A() // 0xBF
 {
 	ResetBit(A, 7);
+
+	return 8;
 }
 
-/* SET 0 B */
-void Processor::SET_0_B() // 0xC0
+/* SET 0, B */
+int Processor::SET_0_B() // 0xC0
 {
 	SetBit(B, 0);
+
+	return 8;
 }
 
-/* SET 0 C */
-void Processor::SET_0_C() // 0xC1
+/* SET 0, C */
+int Processor::SET_0_C() // 0xC1
 {
 	SetBit(C, 0);
+
+	return 8;
 }
 
-/* SET 0 D */
-void Processor::SET_0_D() // 0xC2
+/* SET 0, D */
+int Processor::SET_0_D() // 0xC2
 {
 	SetBit(D, 0);
+
+	return 8;
 }
 
-/* SET 0 E */
-void Processor::SET_0_E() // 0xC3
+/* SET 0, E */
+int Processor::SET_0_E() // 0xC3
 {
 	SetBit(E, 0);
+
+	return 8;
 }
 
-/* SET 0 H */
-void Processor::SET_0_H() // 0xC4
+/* SET 0, H */
+int Processor::SET_0_H() // 0xC4
 {
 	SetBit(H, 0);
+
+	return 8;
 }
 
-/* SET 0 L */
-void Processor::SET_0_L() // 0xC5
+/* SET 0, L */
+int Processor::SET_0_L() // 0xC5
 {
 	SetBit(L, 0);
+
+	return 8;
 }
 
-/* SET 0 (HL) */
-void Processor::SET_0_MEM_HL() // 0xC6
+/* SET 0, (HL) */
+int Processor::SET_0_MEM_HL() // 0xC6
 {
 	uint8 result = memory->ReadByte(HL);
 	SetBit(result, 0);
 	memory->WriteByte(HL, result);
+
+	return 16;
 }
 
-/* SET 0 A */
-void Processor::SET_0_A() // 0xC7
+/* SET 0, A */
+int Processor::SET_0_A() // 0xC7
 {
 	SetBit(A, 0);
+
+	return 8;
 }
 
-/* SET 1 B */
-void Processor::SET_1_B() // 0xC8
+/* SET 1, B */
+int Processor::SET_1_B() // 0xC8
 {
 	SetBit(B, 1);
+
+	return 8;
 }
 
-/* SET 1 C */
-void Processor::SET_1_C() // 0xC9
+/* SET 1, C */
+int Processor::SET_1_C() // 0xC9
 {
 	SetBit(C, 1);
+
+	return 8;
 }
 
-/* SET 1 D */
-void Processor::SET_1_D() // 0xCA
+/* SET 1, D */
+int Processor::SET_1_D() // 0xCA
 {
 	SetBit(D, 1);
+
+	return 8;
 }
 
-/* SET 1 E */
-void Processor::SET_1_E() // 0xCB
+/* SET 1, E */
+int Processor::SET_1_E() // 0xCB
 {
 	SetBit(E, 1);
+
+	return 8;
 }
 
-/* SET 1 H */
-void Processor::SET_1_H() // 0xCC
+/* SET 1, H */
+int Processor::SET_1_H() // 0xCC
 {
 	SetBit(H, 1);
+
+	return 8;
 }
 
-/* SET 1 L */
-void Processor::SET_1_L() // 0xCD
+/* SET 1, L */
+int Processor::SET_1_L() // 0xCD
 {
 	SetBit(L, 1);
+
+	return 8;
 }
 
-/* SET 1 (HL) */
-void Processor::SET_1_MEM_HL() // 0xCE
+/* SET 1, (HL) */
+int Processor::SET_1_MEM_HL() // 0xCE
 {
 	uint8 result = memory->ReadByte(HL);
 	SetBit(result, 1);
 	memory->WriteByte(HL, result);
+
+	return 16;
 }
 
-/* SET 1 A */
-void Processor::SET_1_A() // 0xCF
+/* SET 1, A */
+int Processor::SET_1_A() // 0xCF
 {
 	SetBit(A, 1);
+
+	return 8;
 }
 
-/* SET 2 B */
-void Processor::SET_2_B() // 0xD0
+/* SET 2, B */
+int Processor::SET_2_B() // 0xD0
 {
 	SetBit(B, 2);
+
+	return 8;
 }
 
-/* SET 2 C */
-void Processor::SET_2_C() // 0xD1
+/* SET 2, C */
+int Processor::SET_2_C() // 0xD1
 {
 	SetBit(C, 2);
+
+	return 8;
 }
 
-/* SET 2 D */
-void Processor::SET_2_D() // 0xD2
+/* SET 2, D */
+int Processor::SET_2_D() // 0xD2
 {
 	SetBit(D, 2);
+
+	return 8;
 }
 
-/* SET 2 E */
-void Processor::SET_2_E() // 0xD3
+/* SET 2, E */
+int Processor::SET_2_E() // 0xD3
 {
 	SetBit(E, 2);
+
+	return 8;
 }
 
-/* SET 2 H */
-void Processor::SET_2_H() // 0xD4
+/* SET 2, H */
+int Processor::SET_2_H() // 0xD4
 {
 	SetBit(H, 2);
+
+	return 8;
 }
 
-/* SET 2 L */
-void Processor::SET_2_L() // 0xD5
+/* SET 2, L */
+int Processor::SET_2_L() // 0xD5
 {
 	SetBit(L, 2);
+
+	return 8;
 }
 
-/* SET 2 (HL) */
-void Processor::SET_2_MEM_HL() // 0xD6
+/* SET 2, (HL) */
+int Processor::SET_2_MEM_HL() // 0xD6
 {
 	uint8 result = memory->ReadByte(HL);
 	SetBit(result, 2);
 	memory->WriteByte(HL, result);
+
+	return 16;
 }
 
-/* SET 2 A */
-void Processor::SET_2_A() // 0xD7
+/* SET 2, A */
+int Processor::SET_2_A() // 0xD7
 {
 	SetBit(A, 2);
+
+	return 8;
 }
 
-/* SET 3 B */
-void Processor::SET_3_B() // 0xD8
+/* SET 3, B */
+int Processor::SET_3_B() // 0xD8
 {
 	SetBit(B, 3);
+
+	return 8;
 }
 
-/* SET 3 C */
-void Processor::SET_3_C() // 0xD9
+/* SET 3, C */
+int Processor::SET_3_C() // 0xD9
 {
 	SetBit(C, 3);
+
+	return 8;
 }
 
-/* SET 3 D */
-void Processor::SET_3_D() // 0xDA
+/* SET 3, D */
+int Processor::SET_3_D() // 0xDA
 {
 	SetBit(D, 3);
+
+	return 8;
 }
 
-/* SET 3 E */
-void Processor::SET_3_E() // 0xDB
+/* SET 3, E */
+int Processor::SET_3_E() // 0xDB
 {
 	SetBit(E, 3);
+
+	return 8;
 }
 
-/* SET 3 H */
-void Processor::SET_3_H() // 0xDC
+/* SET 3, H */
+int Processor::SET_3_H() // 0xDC
 {
 	SetBit(H, 3);
+
+	return 8;
 }
 
-/* SET 3 L */
-void Processor::SET_3_L() // 0xDD
+/* SET 3, L */
+int Processor::SET_3_L() // 0xDD
 {
 	SetBit(L, 3);
+
+	return 8;
 }
 
-/* SET 3 (HL) */
-void Processor::SET_3_MEM_HL() // 0xDE
+/* SET 3, (HL) */
+int Processor::SET_3_MEM_HL() // 0xDE
 {
 	uint8 result = memory->ReadByte(HL);
 	SetBit(result, 3);
 	memory->WriteByte(HL, result);
+
+	return 16;
 }
 
-/* SET 3 A */
-void Processor::SET_3_A() // 0xDF
+/* SET 3, A */
+int Processor::SET_3_A() // 0xDF
 {
 	SetBit(A, 3);
+
+	return 8;
 }
 
-/* SET 4 B */
-void Processor::SET_4_B() // 0xE0
+/* SET 4, B */
+int Processor::SET_4_B() // 0xE0
 {
 	SetBit(B, 4);
+
+	return 8;
 }
 
-/* SET 4 C */
-void Processor::SET_4_C() // 0xE1
+/* SET 4, C */
+int Processor::SET_4_C() // 0xE1
 {
 	SetBit(C, 4);
+
+	return 8;
 }
 
-/* SET 4 D */
-void Processor::SET_4_D() // 0xE2
+/* SET 4, D */
+int Processor::SET_4_D() // 0xE2
 {
 	SetBit(D, 4);
+
+	return 8;
 }
 
-/* SET 4 E */
-void Processor::SET_4_E() // 0xE3
+/* SET 4, E */
+int Processor::SET_4_E() // 0xE3
 {
 	SetBit(E, 4);
+
+	return 8;
 }
 
-/* SET 4 H */
-void Processor::SET_4_H() // 0xE4
+/* SET 4, H */
+int Processor::SET_4_H() // 0xE4
 {
 	SetBit(H, 4);
+
+	return 8;
 }
 
-/* SET 4 L */
-void Processor::SET_4_L() // 0xE5
+/* SET 4, L */
+int Processor::SET_4_L() // 0xE5
 {
 	SetBit(L, 4);
+
+	return 8;
 }
 
-/* SET 4 (HL) */
-void Processor::SET_4_MEM_HL() // 0xE6
+/* SET 4, (HL) */
+int Processor::SET_4_MEM_HL() // 0xE6
 {
 	uint8 result = memory->ReadByte(HL);
 	SetBit(result, 4);
 	memory->WriteByte(HL, result);
+
+	return 16;
 }
 
-/* SET 4 A */
-void Processor::SET_4_A() // 0xE7
+/* SET 4, A */
+int Processor::SET_4_A() // 0xE7
 {
 	SetBit(A, 4);
+
+	return 8;
 }
 
-/* SET 5 B */
-void Processor::SET_5_B() // 0xE8
+/* SET 5, B */
+int Processor::SET_5_B() // 0xE8
 {
 	SetBit(B, 5);
+
+	return 8;
 }
 
-/* SET 5 C */
-void Processor::SET_5_C() // 0xE9
+/* SET 5, C */
+int Processor::SET_5_C() // 0xE9
 {
 	SetBit(C, 5);
+
+	return 8;
 }
 
-/* SET 5 D */
-void Processor::SET_5_D() // 0xEA
+/* SET 5, D */
+int Processor::SET_5_D() // 0xEA
 {
 	SetBit(D, 5);
+
+	return 8;
 }
 
-/* SET 5 E */
-void Processor::SET_5_E() // 0xEB
+/* SET 5, E */
+int Processor::SET_5_E() // 0xEB
 {
 	SetBit(E, 5);
+
+	return 8;
 }
 
-/* SET 5 H */
-void Processor::SET_5_H() // 0xEC
+/* SET 5, H */
+int Processor::SET_5_H() // 0xEC
 {
 	SetBit(H, 5);
+
+	return 8;
 }
 
-/* SET 5 L */
-void Processor::SET_5_L() // 0xED
+/* SET 5, L */
+int Processor::SET_5_L() // 0xED
 {
 	SetBit(L, 5);
+
+	return 8;
 }
 
-/* SET 5 (HL) */
-void Processor::SET_5_MEM_HL() // 0xEE
+/* SET 5, (HL) */
+int Processor::SET_5_MEM_HL() // 0xEE
 {
 	uint8 result = memory->ReadByte(HL);
 	SetBit(result, 5);
 	memory->WriteByte(HL, result);
+
+	return 16;
 }
 
-/* SET 5 A */
-void Processor::SET_5_A() // 0xEF
+/* SET 5, A */
+int Processor::SET_5_A() // 0xEF
 {
 	SetBit(A, 5);
+
+	return 8;
 }
 
-/* SET 6 B */
-void Processor::SET_6_B() // 0xF0
+/* SET 6, B */
+int Processor::SET_6_B() // 0xF0
 {
 	SetBit(B, 6);
+
+	return 8;
 }
 
-/* SET 6 C */
-void Processor::SET_6_C() // 0xF1
+/* SET 6, C */
+int Processor::SET_6_C() // 0xF1
 {
 	SetBit(C, 6);
+
+	return 8;
 }
 
-/* SET 6 D */
-void Processor::SET_6_D() // 0xF2
+/* SET 6, D */
+int Processor::SET_6_D() // 0xF2
 {
 	SetBit(D, 6);
+
+	return 8;
 }
 
-/* SET 6 E */
-void Processor::SET_6_E() // 0xF3
+/* SET 6, E */
+int Processor::SET_6_E() // 0xF3
 {
 	SetBit(E, 6);
+
+	return 8;
 }
 
-/* SET 6 H */
-void Processor::SET_6_H() // 0xF4
+/* SET 6, H */
+int Processor::SET_6_H() // 0xF4
 {
 	SetBit(H, 6);
+
+	return 8;
 }
 
-/* SET 6 L */
-void Processor::SET_6_L() // 0xF5
+/* SET 6, L */
+int Processor::SET_6_L() // 0xF5
 {
 	SetBit(L, 6);
+
+	return 8;
 }
 
-/* SET 6 (HL) */
-void Processor::SET_6_MEM_HL() // 0xF6
+/* SET 6, (HL) */
+int Processor::SET_6_MEM_HL() // 0xF6
 {
 	uint8 result = memory->ReadByte(HL);
 	SetBit(result, 6);
 	memory->WriteByte(HL, result);
+
+	return 16;
 }
 
-/* SET 6 A */
-void Processor::SET_6_A() // 0xF7
+/* SET 6, A */
+int Processor::SET_6_A() // 0xF7
 {
 	SetBit(A, 6);
+
+	return 8;
 }
 
-/* SET 7 B */
-void Processor::SET_7_B() // 0xF8
+/* SET 7, B */
+int Processor::SET_7_B() // 0xF8
 {
 	SetBit(B, 7);
+
+	return 8;
 }
 
-/* SET 7 C */
-void Processor::SET_7_C() // 0xF9
+/* SET 7, C */
+int Processor::SET_7_C() // 0xF9
 {
 	SetBit(C, 7);
+
+	return 8;
 }
 
-/* SET 7 D */
-void Processor::SET_7_D() // 0xFA
+/* SET 7, D */
+int Processor::SET_7_D() // 0xFA
 {
 	SetBit(D, 7);
+
+	return 8;
 }
 
-/* SET 7 E */
-void Processor::SET_7_E() // 0xFB
+/* SET 7, E */
+int Processor::SET_7_E() // 0xFB
 {
 	SetBit(E, 7);
+
+	return 8;
 }
 
-/* SET 7 H */
-void Processor::SET_7_H() // 0xFC
+/* SET 7, H */
+int Processor::SET_7_H() // 0xFC
 {
 	SetBit(H, 7);
+
+	return 8;
 }
 
-/* SET 7 L */
-void Processor::SET_7_L() // 0xFD
+/* SET 7, L */
+int Processor::SET_7_L() // 0xFD
 {
 	SetBit(L, 7);
+
+	return 8;
 }
 
-/* SET 7 (HL) */
-void Processor::SET_7_MEM_HL() // 0xFE
+/* SET 7, (HL) */
+int Processor::SET_7_MEM_HL() // 0xFE
 {
 	uint8 result = memory->ReadByte(HL);
 	SetBit(result, 7);
 	memory->WriteByte(HL, result);
+
+	return 16;
 }
 
-/* SET 7 A */
-void Processor::SET_7_A() // 0xFF
+/* SET 7, A */
+int Processor::SET_7_A() // 0xFF
 {
 	SetBit(A, 7);
+
+	return 8;
 }
 
