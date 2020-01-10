@@ -26,36 +26,28 @@
 #include "Timer.h"
 #include "Input.h"
 
-Gameboy::Gameboy(const std::function<void(Color*)>& updateScreenFunc)
+Gameboy::Gameboy(const std::function<void(Color*)>& renderFunction)
+	: renderCallback(renderFunction), paused(false)
 {
-    screenFunc = updateScreenFunc;
-    memory = new Memory();
-    processor = new Processor(memory);
-    video = new Video(memory, processor);
-    cartridge = new Cartridge();
-    timer = new Timer(memory, processor);
-    input = new Input(memory);
+	memory = std::make_shared<Memory>();
+    processor = std::make_shared<Processor>(memory);
+    video = std::make_shared<Video>(memory, processor);
+    timer = std::make_shared<Timer>(memory, processor);
+    input = std::make_shared<Input>(memory);
 
-    memory->SetIOs(cartridge, timer, input);
-    paused = false;
+	cartridge = std::make_shared<Cartridge>();
+
+    memory->RegisterInputs(cartridge, timer, input);
 }
 
-Gameboy::~Gameboy()
-{
-    delete memory;
-    delete processor;
-    delete video;
-    delete cartridge;
-    delete timer;
-    delete input;
-}
+Gameboy::~Gameboy() = default;
 
 void Gameboy::Run()
 {
     if (!paused && cartridge->IsROMLoaded())
     {
-        int cycles = 0;
-        const int targetCycles = 70224;
+		unsigned int cycles = 0;
+        const unsigned int targetCycles = 70224;
 
         while (cycles < targetCycles)
         {
@@ -65,8 +57,10 @@ void Gameboy::Run()
             input->Run(cycles);
         }
         
-        if (screenFunc)
-            screenFunc(video->GetFrameBuffer());
+		if (renderCallback)
+		{
+			renderCallback(video->GetFrameBuffer());
+		}
     }
 }
 
@@ -108,16 +102,14 @@ void Gameboy::ResetRom()
     }
 }
 
-bool Gameboy::LoadRom(const std::string& fileName)
+void Gameboy::LoadRom(const std::string& fileName)
 {
     if (cartridge->LoadRom(fileName))
     {
         Reset(cartridge->IsGameboyColor());
 
-        return memory->LoadFromCartridge(cartridge);
+        memory->LoadFromCartridge(cartridge);
     }
-
-    return false;
 }
 
 Color* Gameboy::GetFrameBuffer() const

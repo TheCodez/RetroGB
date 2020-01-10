@@ -21,6 +21,7 @@
 #pragma once
 
 #include "Definitions.h"
+#include "BitUtil.h"
 #include "Gameboy.h"
 #include "Cartridge.h"
 #include "Processor.h"

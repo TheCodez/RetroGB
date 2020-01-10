@@ -22,16 +22,18 @@
 
 #include "Definitions.h"
 
+#include <memory>
+
 class Memory;
 
 class Input
 {
 public:
-    Input(Memory* mem);
+    Input(std::shared_ptr<Memory> memory);
     ~Input();
 
     void Reset(bool color);
-    void Run(int cycles);
+    void Run(unsigned int cycles);
 
     void KeyPressed(int key);
     void KeyReleased(int key);
@@ -40,6 +42,6 @@ public:
     uint8 Read();
 
 private:
-    Memory* memory;
+	std::shared_ptr<Memory> memory;
 };
 

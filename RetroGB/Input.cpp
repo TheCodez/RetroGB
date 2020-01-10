@@ -21,8 +21,8 @@
 #include "Input.h"
 #include "Memory.h"
 
-Input::Input(Memory* mem)
-    : memory(mem)
+Input::Input(std::shared_ptr<Memory> memory)
+    : memory(memory)
 {
     Reset(false);
 }
@@ -35,7 +35,7 @@ void Input::Reset(bool color)
 {
 }
 
-void Input::Run(int cycles)
+void Input::Run(unsigned int cycles)
 {
 }
 

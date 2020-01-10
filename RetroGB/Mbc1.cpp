@@ -21,11 +21,10 @@
 #include "Mbc1.h"
 #include "Cartridge.h"
 
-Mbc1::Mbc1(Memory* memory, Cartridge* cartridge)
+Mbc1::Mbc1(Memory* memory, std::shared_ptr<Cartridge> cartridge)
     : MemoryController(memory, cartridge)
 {
     ramBanks = new uint8[0x8000];
-    Reset(false);
 }
 
 Mbc1::~Mbc1()
@@ -43,7 +42,9 @@ void Mbc1::Reset(bool color)
     bankMode = BankingMode::ROMBanking;
 
     for (int i = 0; i < 0x8000; i++)
+    {
         ramBanks[i] = 0xFF;
+    }
 }
 
 void Mbc1::Write(uint16 address, uint8 value)
@@ -57,7 +58,9 @@ void Mbc1::Write(uint16 address, uint8 value)
         romBank = (romBank & 0xF0) | (value & 0x1F);
             
         if (romBank == 0x00 || romBank == 0x20 || romBank == 0x40 || romBank == 0x60)
+        {
             romBank++;
+        }
 
         romOffset = romBank * 0x4000;
     }
@@ -83,7 +86,7 @@ void Mbc1::Write(uint16 address, uint8 value)
     }
     else if (0x6000 >= address && address <= 0x7FFF)
     {
-        bankMode = (BankingMode)(value & 0x01);
+        bankMode = static_cast<BankingMode>(value & 0x01);
     }
     else
     {
@@ -101,9 +104,13 @@ uint8 Mbc1::Read(uint16 address) const
     else if (address >= 0xA000 && address <= 0xBFFF)
     {
         if (ramEnabled)
+        {
             return ramBanks[(address - 0xA000) + ramOffset];
+        }
         else
+        {
             return 0xFF;
+        }
     }
     else
     {

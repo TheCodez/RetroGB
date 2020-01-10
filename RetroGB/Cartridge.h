@@ -74,12 +74,14 @@ public:
     bool IsJapanese() const { return japanese; }
     int GetVersion() const { return version; }
     int GetOldLicenseeCode() const { return oldLicenseeCode; }
+
     uint8* GetROM() const { return rom; }
     
     bool IsROMLoaded() const { return rom != nullptr; }
 
 private:
     uint8* rom;
+
     std::string title;
     int licenseeCode;
     bool colorGameboy;

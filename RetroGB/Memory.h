@@ -22,6 +22,9 @@
 
 #include "Definitions.h"
 
+#include <memory>
+#include <array>
+
 class Cartridge;
 class Timer;
 class Input;
@@ -33,28 +36,33 @@ public:
     Memory();
     ~Memory();
 
-    void SetIOs(Cartridge* cartridge, Timer* timer, Input* input);
     void Reset(bool color);
-    bool LoadFromCartridge(Cartridge* cartridge);
+
+    void RegisterInputs(std::shared_ptr<Cartridge> cartridge, std::shared_ptr<Timer> timer, std::shared_ptr<Input> input);
+    void LoadFromCartridge(std::shared_ptr<Cartridge> cartridge);
 
     // Software Read / Write
     void WriteByte(uint16 address, uint8 value);
     void WriteWord(uint16 address, uint16 value);
-    uint8 ReadByte(uint16 address);
-    uint16 ReadWord(uint16 address);
+    uint8 ReadByte(uint16 address) const;
+    uint16 ReadWord(uint16 address) const;
 
     // Hardware Read / Write
     void Write(uint16 address, uint8 value);
     uint8 Read(uint16 address) const;
 
-    void Save();
 private:
-    uint8 data[0x10000]; // 65536
+    void WriteDefaultValues();
+
+private:
+    uint8* data; // 65536
+    
     bool inBootRom;
     bool colorGameboy;
-    Timer* timer;
-    Cartridge* cartridge;
-    Input* input;
-    MemoryController* memoryController;
-};
 
+	std::shared_ptr<Timer> timer;
+    std::shared_ptr<Cartridge> cartridge;
+    std::shared_ptr<Input> input;
+    
+	std::unique_ptr<MemoryController> memoryBankController;
+};

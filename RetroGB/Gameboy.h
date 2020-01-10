@@ -22,6 +22,8 @@
 
 #include "Definitions.h"
 
+#include <memory>
+
 class Processor;
 class Memory;
 class Video;
@@ -33,7 +35,7 @@ struct Color;
 class Gameboy
 {
 public:
-    Gameboy(const std::function<void(Color*)>& updateScreenFunc);
+    Gameboy(const std::function<void(Color*)>& renderFunction);
     ~Gameboy();
 
     void Run();
@@ -44,22 +46,24 @@ public:
     Color* GetFrameBuffer() const;
     void Reset(bool color = false);
     void ResetRom();
-    bool LoadRom(const std::string& fileName);
+    void LoadRom(const std::string& fileName);
 
     void SetPaused(bool pause) { paused = pause; }
     bool IsPaused() const { return paused; }
 
-    Cartridge* GetCartridge() const { return cartridge; }
-    Processor* GetProcessor() const { return processor; }
-    Memory* GetMemory() const { return memory; }
+	const std::shared_ptr<Cartridge>& GetCartridge() const { return cartridge; }
+	const std::shared_ptr<Processor>& GetProcessor() const { return processor; }
+	const std::shared_ptr<Memory>& GetMemory() const { return memory; }
 
 private:
-    Memory* memory;
-    Processor* processor;
-    Video* video;
-    Cartridge* cartridge;
-    Timer* timer;
-    Input* input;
-    std::function<void(Color*)> screenFunc;
-    bool paused;
+    std::shared_ptr<Memory> memory;
+	std::shared_ptr<Processor> processor;
+	std::shared_ptr<Video> video;
+	std::shared_ptr<Cartridge> cartridge;
+	std::shared_ptr<Timer> timer;
+	std::shared_ptr<Input> input;
+    
+	std::function<void(Color*)> renderCallback;
+    
+	bool paused;
 };

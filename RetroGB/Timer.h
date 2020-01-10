@@ -22,22 +22,24 @@
 
 #include "Definitions.h"
 
+#include <memory>
+
 class Memory;
 class Processor;
 
 class Timer
 {
 public:
-    Timer(Memory* mem, Processor* cpu);
+    Timer(std::shared_ptr<Memory> memory, std::shared_ptr<Processor> cpu);
     ~Timer();
 
     void Reset(bool color);
-    void Run(int cycles);
+    void Run(unsigned int cycles);
 
     void ResetDIV();
 
 private:
-    Memory* memory;
-    Processor* processor;
+    std::shared_ptr<Memory> memory;
+	std::shared_ptr<Processor> processor;
 };
 

@@ -19,27 +19,19 @@
 */
 
 #include "Processor.h"
-#include "Processor.Helpers.h"
-#include "Processor.Timings.h"
 
-Processor::Processor(Memory* mem)
-    : memory(mem)
+Processor::Processor(std::shared_ptr<Memory> memory)
+    : memory(memory)
 {
-    Reset(false);
-    InitOpcodes();
+	InitOpcodes();
+	Reset(false);
 }
 
-Processor::~Processor()
-{
-}
+Processor::~Processor() = default;
 
 void Processor::Reset(bool color)
 {
-    if (color)
-        AF = 0x11B0;
-    else
-        AF = 0x01B0;
-
+	AF = color ? 0x11B0 : 0x01B0;
     BC = 0x0013;
     DE = 0x00D8;
     HL = 0x014D;
@@ -50,21 +42,21 @@ void Processor::Reset(bool color)
     clockCycles = 0;
 }
 
-int Processor::Run()
+unsigned int Processor::Run()
 {
     clockCycles = 0;
 
     if (!halted)
     {
-        HandleInterrupts();
+        clockCycles += HandleInterrupts();
 
         uint8 opcode = memory->ReadByte(PC++);
 
-        //int c = IsFlagSet(Flags::CARRY);
-        //int n = IsFlagSet(Flags::SUB);
-        //int h = IsFlagSet(Flags::HALFCARRY);
-        //int z = IsFlagSet(Flags::ZERO);
-        //LOG_LINE("PC:%02X, OP:%02X, AF:%04X, BC:%04X, DE:%04X, HL:%04X, SP:%04X, Z:%d, N:%d, H:%d, C:%d", PC - 1, opcode, AF, BC, DE, HL, SP, z, n, h, c);
+		//int c = IsFlagSet(Flag::Carry);
+        //int n = IsFlagSet(Flag::Sub);
+        //int h = IsFlagSet(Flag::Half_Carry);
+        //int z = IsFlagSet(Flag::Zero);
+        //LogLine("PC:%02X, OP:%02X, AF:%04X, BC:%04X, DE:%04X, HL:%04X, SP:%04X, Z:%d, N:%d, H:%d, C:%d", PC - 1, opcode, AF, BC, DE, HL, SP, z, n, h, c);
         
         if (opcode == 0xCB)
         {
@@ -84,13 +76,15 @@ int Processor::Run()
     return clockCycles;
 }
 
-void Processor::RequestInterrupt(Interrupts interrupt)
+void Processor::RequestInterrupt(Interrupt interrupt)
 {
     memory->Write(0xFF0F, memory->Read(0xFF0F) | interrupt);
 }
 
-void Processor::HandleInterrupts()
+unsigned int Processor::HandleInterrupts()
 {
+	unsigned int cycles = 0;
+
     if (ime)
     {
         uint8 interruptEnable = memory->Read(0xFFFF);
@@ -98,94 +92,53 @@ void Processor::HandleInterrupts()
 
         uint8 interrupt = interruptEnable & interruptFlag;
 
-        if (interrupt & VBLANK)
+		halted = false;
+		ime = false;
+		PushToStack(PC);
+		cycles = 20;
+
+        if (interrupt & Interrupt::VBlank)
         {
-            halted = false;
-            memory->Write(0xFF0F, interruptFlag & ~VBLANK);
-            ime = false;
-            StackPush(PC);
+			interruptFlag &= ~Interrupt::VBlank;
             PC = 0x0040;
-            clockCycles = 20;
         }
-        else if (interrupt & LCDSTAT)
+        else if (interrupt & Interrupt::LCD_Stat)
         {
-            halted = false;
-            memory->Write(0xFF0F, interruptFlag & ~LCDSTAT);
-            ime = false;
-            StackPush(PC);
+			interruptFlag &= ~Interrupt::LCD_Stat;
             PC = 0x0048;
-            clockCycles = 20;
         }
-        else if (interrupt & TIMER)
+        else if (interrupt & Interrupt::Time)
         {
-            halted = false;
-            memory->Write(0xFF0F, interruptFlag & ~TIMER);
-            ime = false;
-            StackPush(PC);
+			interruptFlag &= ~Interrupt::Time;
             PC = 0x0050;
-            clockCycles = 20;
         }
-        else if (interrupt & SERIAL)
+        else if (interrupt & Interrupt::Serial)
         {
-            halted = false;
-            memory->Write(0xFF0F, interruptFlag & ~SERIAL);
-            ime = false;
-            StackPush(PC);
+			interruptFlag &= ~Interrupt::Serial;
             PC = 0x0058;
-            clockCycles = 20;
         }
-        else if (interrupt & JOYPAD)
+        else if (interrupt & Interrupt::Joypad)
         {
-            halted = false;
-            memory->Write(0xFF0F, interruptFlag & ~JOYPAD);
-            ime = false;
-            StackPush(PC);
+			interruptFlag &= ~Interrupt::Joypad;
             PC = 0x0060;
-            clockCycles = 20;
         }
+
+		memory->Write(0xFF0F, interruptFlag);
     }
-}
 
-void Processor::SetFlag(Flags flag)
-{
-    F = flag;
-}
-
-void Processor::EnableFlag(Flags flag)
-{
-    F |= flag;
-}
-
-void Processor::DisableFlag(Flags flag)
-{
-    F &= ~flag;
-}
-
-void Processor::InvertFlag(Flags flag)
-{
-    F ^= flag;
-}
-
-void Processor::ClearFlags()
-{
-    SetFlag(NONE);
-}
-
-bool Processor::IsFlagSet(uint8 flag)
-{
-    return (F & flag) != 0;
+	return cycles;
 }
 
 int Processor::UnknownOpcode()
 {
     LogLine("Unimplemented opcode: PC: 0x%02X, Opode: 0x%02X", PC, memory->ReadByte(PC));
 
-	return 0;
+	return 4;
 }
 
 int Processor::InvalidOpcode()
 {
     LogLine("Invalid opcode: Opcode: 0x%02X", memory->ReadByte(PC));
 
-	return 0;
+	return 4;
 }

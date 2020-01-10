@@ -22,13 +22,15 @@
 
 #include "Definitions.h"
 
+#include <memory>
+
 class Cartridge; 
 class Memory;
 
 class MemoryController
 {
 public:
-    MemoryController(Memory* memory, Cartridge* cartridge);
+    MemoryController(Memory* memory, std::shared_ptr<Cartridge> cartridge);
     virtual ~MemoryController();
 
     virtual void Reset(bool color) {}
@@ -36,6 +38,6 @@ public:
     virtual uint8 Read(uint16 address) const;
 
 protected:
-    Memory* memory;
-    Cartridge* cartridge;
+	Memory* memory;
+	std::shared_ptr<Cartridge> cartridge;
 };

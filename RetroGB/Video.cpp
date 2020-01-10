@@ -21,9 +21,10 @@
 #include "Video.h"
 #include "Memory.h"
 #include "Processor.h"
+#include "BitUtil.h"
 
-Video::Video(Memory* mem, Processor* cpu)
-    : memory(mem), processor(cpu)
+Video::Video(std::shared_ptr<Memory> memory, std::shared_ptr<Processor> cpu)
+    : memory(memory), processor(cpu)
 {
     frameBuffer = new Color[SCREEN_WIDTH * SCREEN_HEIGHT];
     Reset(false);
@@ -37,18 +38,20 @@ Video::~Video()
 void Video::Reset(bool color)
 {
     scanline = 0;
-    gameBoycolor = color;
+    gameBoyColor = color;
     modeCounter = 0;
     mode = Mode::VBlank;
 
-    int size = SCREEN_WIDTH * SCREEN_HEIGHT;
+    const int size = SCREEN_WIDTH * SCREEN_HEIGHT;
+    const Color backgroundColor = color ? Color::BLACK : Color::WHITE;
+
     for (int i = 0; i < size; i++)
     {
-        frameBuffer[i] = color ? Color::BLACK : Color::WHITE;
+        frameBuffer[i] = backgroundColor;
     }
 }
 
-void Video::Run(int cycles)
+void Video::Run(unsigned int cycles)
 {
     modeCounter += cycles;
 
@@ -67,7 +70,7 @@ void Video::Run(int cycles)
                 // Enter hblank
                 mode = Mode::HBlank;
 
-                processor->RequestInterrupt(Interrupts::LCDSTAT);
+                processor->RequestInterrupt(Interrupt::LCD_Stat);
 
                 ScanLine(scanline);
             }
@@ -86,12 +89,12 @@ void Video::Run(int cycles)
                 {
                     mode = Mode::VBlank;
 
-                    processor->RequestInterrupt(Interrupts::VBLANK);
+                    processor->RequestInterrupt(Interrupt::VBlank);
 
                     uint8 stat = memory->Read(0xFF41);
                     if (IsBitSet(stat, 4))
                     {
-                        processor->RequestInterrupt(Interrupts::LCDSTAT);
+                        processor->RequestInterrupt(Interrupt::LCD_Stat);
                     }
                 }
                 else
@@ -101,7 +104,7 @@ void Video::Run(int cycles)
                     uint8 stat = memory->Read(0xFF41);
                     if (IsBitSet(stat, 5))
                     {
-                        processor->RequestInterrupt(Interrupts::LCDSTAT);
+                        processor->RequestInterrupt(Interrupt::LCD_Stat);
                     }
                 }
             }
@@ -134,7 +137,7 @@ void Video::CompareLYToLYC()
 
         if (IsBitSet(stat, 6))
         {
-            processor->RequestInterrupt(Interrupts::LCDSTAT);
+            processor->RequestInterrupt(Interrupt::LCD_Stat);
         }
     }
     else
@@ -159,7 +162,7 @@ void Video::ScanLine(int scanLine)
     {
         for (int x = 0; x < SCREEN_WIDTH; x++)
         {
-            frameBuffer[x + scanLine * SCREEN_WIDTH] = gameBoycolor ? Color::BLACK : Color::WHITE;
+            frameBuffer[x + scanLine * SCREEN_WIDTH] = gameBoyColor ? Color::BLACK : Color::WHITE;
         }
     }
 }
@@ -203,7 +206,9 @@ void Video::RenderBackground(int scanLine)
                 int posX = offsetX + pixelX - scrollX;
 
                 if (posX >= SCREEN_WIDTH)
+                {
                     continue;
+                }
 
                 int colorBit = 7 - pixelX;
                 int colorNum = GetBitValue(data1, colorBit) | (GetBitValue(data2, colorBit) * 2);
@@ -219,7 +224,7 @@ void Video::RenderBackground(int scanLine)
     {
         for (int x = 0; x < SCREEN_WIDTH; x++)
         {
-            frameBuffer[x + scanLine * SCREEN_WIDTH] = Color::WHITE;
+            frameBuffer[x + scanLine * SCREEN_WIDTH] = gameBoyColor ? Color::BLACK : Color::WHITE;
         }
     }
 }
@@ -246,10 +251,17 @@ void Video::RenderSprites(int scanLine)
     {
         int spriteWidth = 8;
         int spriteHeight = IsBitSet(lcdc, 2) ? 16 : 8;
+        int count = 0;
 
         // 40 sprites
         for (int sprite = 39; sprite >= 0; sprite--)
         {
+            // a maximum of 10 sprites per scanline
+            if (count > 10)
+            {
+                break;
+            }
+
             // Every sprite has 4 bytes of memory assigned
             int index = sprite * 4;
             int spriteY = memory->Read(0xFE00 + index + 0) - 16;
@@ -289,14 +301,18 @@ void Video::RenderSprites(int scanLine)
                     continue;
                 }
 
-                if (colorNum == 0)
-                    continue;
+				if (colorNum == 0)
+				{
+					continue;
+				}
 
                 uint8 palette = memory->Read(paletteNumber);
                 Color color = GetColor(colorNum, palette);
                 
                 frameBuffer[posX + scanLine * SCREEN_WIDTH] = color;
             }
+
+            count++;
         }
     }
 }

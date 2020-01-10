@@ -27,21 +27,17 @@
 #include "Mbc1.h"
 
 Memory::Memory()
-    : memoryController(nullptr)
 {
+    data = new uint8[0x10000];
     Reset(false);
 }
 
 Memory::~Memory()
 {
-    delete memoryController;
+    delete[] data;
 }
 
-void Memory::Save()
-{
-}
-
-void Memory::SetIOs(Cartridge* cartridge, Timer* timer, Input* input)
+void Memory::RegisterInputs(std::shared_ptr<Cartridge> cartridge, std::shared_ptr<Timer> timer, std::shared_ptr<Input> input)
 {
     this->cartridge = cartridge;
     this->timer = timer;
@@ -58,46 +54,15 @@ void Memory::Reset(bool color)
         data[i] = 0x00;
     }
 
-    if (memoryController != nullptr)
+    if (memoryBankController != nullptr)
     {
-        memoryController->Reset(color);
+        memoryBankController->Reset(color);
     }
 
-    // Default values
-    Write(0xFF05, 0x00); // TIMA
-    Write(0xFF06, 0x00); // TMA
-    Write(0xFF07, 0x00); // TAC
-    Write(0xFF10, 0x80); // NR10
-    Write(0xFF11, 0xBF); // NR11
-    Write(0xFF12, 0xF3); // NR12
-    Write(0xFF14, 0xBF); // NR14
-    Write(0xFF16, 0x3F); // NR21
-    Write(0xFF17, 0x00); // NR22
-    Write(0xFF19, 0xBF); // NR24
-    Write(0xFF1A, 0x7F); // NR30
-    Write(0xFF1B, 0xFF); // NR31
-    Write(0xFF1C, 0x9F); // NR32
-    Write(0xFF1E, 0xBF); // NR33
-    Write(0xFF20, 0xFF); // NR41
-    Write(0xFF21, 0x00); // NR42
-    Write(0xFF22, 0x00); // NR43
-    Write(0xFF23, 0xBF); // NR30
-    Write(0xFF24, 0x77); // NR50
-    Write(0xFF25, 0xF3); // NR51
-    Write(0xFF26, 0xF1); // NR52
-    Write(0xFF40, 0x91); // LCDC
-    Write(0xFF42, 0x00); // SCY
-    Write(0xFF43, 0x00); // SCX
-    Write(0xFF45, 0x00); // LYC
-    Write(0xFF47, 0xFC); // BGP
-    Write(0xFF48, 0xFF); // OBP0
-    Write(0xFF49, 0xFF); // OBP1
-    Write(0xFF4A, 0x00); // WY
-    Write(0xFF4B, 0x00); // WX
-    Write(0xFFFF, 0x00); // IE
+    WriteDefaultValues();
 }
 
-bool Memory::LoadFromCartridge(Cartridge* cartridge)
+void Memory::LoadFromCartridge(std::shared_ptr<Cartridge> cartridge)
 {
     uint8* rom = cartridge->GetROM();
     for (int i = 0; i < 0x8000; i++)
@@ -105,20 +70,19 @@ bool Memory::LoadFromCartridge(Cartridge* cartridge)
         data[i] = rom[i];
     }
 
-    bool supported = true;
-
-    // TODO set mbc here
     switch (cartridge->GetCartridgeType())
     {
         case CartridgeType::ROMONLY:
         case CartridgeType::ROM_RAM:
         case CartridgeType::ROM_RAM_BATTERY:
-            memoryController = new MemoryController(this, cartridge);
+            memoryBankController.reset(new MemoryController(this, cartridge));
+            memoryBankController->Reset(cartridge->IsGameboyColor());
             break;
         case CartridgeType::MBC1:
         case CartridgeType::MBC1_RAM:
         case CartridgeType::MBC1_RAM_BATTERY:
-            memoryController = new Mbc1(this, cartridge);
+			memoryBankController.reset(new Mbc1(this, cartridge));
+            memoryBankController->Reset(cartridge->IsGameboyColor());
             break;
         case CartridgeType::MBC2:
         case CartridgeType::MBC2_BATTERY:
@@ -136,20 +100,16 @@ bool Memory::LoadFromCartridge(Cartridge* cartridge)
         case CartridgeType::MBC5_RUMBLE_RAM:
         case CartridgeType::MBC5_RUMBLE_RAM_BATTERY:
         default:
-            supported = false;
-            memoryController = new MemoryController(this, cartridge);
-            LogLine("Unsupported Cartridge: %02X", cartridge->GetCartridgeType());
+            throw std::runtime_error("Unsupported cartridge type.");
             break;
     }
-
-    return supported;
 }
 
 void Memory::WriteByte(uint16 address, uint8 value)
 {
     if (address <= 0x7FFF)
     {
-        memoryController->Write(address, value);
+        memoryBankController->Write(address, value);
     }
     else if (address >= 0xC000 && address <= 0xDFFF)
     {
@@ -209,18 +169,22 @@ void Memory::WriteByte(uint16 address, uint8 value)
     }
 }
 
-uint8 Memory::ReadByte(uint16 address)
+uint8 Memory::ReadByte(uint16 address) const
 {
     if (address < 0x0100)
     {
         if (inBootRom)
+        {
             return bootRom[address];
+        }
         else
+        {
             return Read(address);
+        }
     }
     else if (address <= 0x7FFF)
     {
-        return memoryController->Read(address);
+        return memoryBankController->Read(address);
     }
     else if (address == 0xFF00)
     {
@@ -238,7 +202,7 @@ void Memory::WriteWord(uint16 address, uint16 value)
     WriteByte(address + 1, value >> 8);
 }
 
-uint16 Memory::ReadWord(uint16 address)
+uint16 Memory::ReadWord(uint16 address) const
 {
     return (ReadByte(address) | (ReadByte(address + 1) << 8));
 }
@@ -251,4 +215,39 @@ void Memory::Write(uint16 address, uint8 value)
 uint8 Memory::Read(uint16 address) const
 {
     return data[address];
+}
+
+void Memory::WriteDefaultValues()
+{
+    Write(0xFF05, 0x00); // TIMA
+    Write(0xFF06, 0x00); // TMA
+    Write(0xFF07, 0x00); // TAC
+    Write(0xFF10, 0x80); // NR10
+    Write(0xFF11, 0xBF); // NR11
+    Write(0xFF12, 0xF3); // NR12
+    Write(0xFF14, 0xBF); // NR14
+    Write(0xFF16, 0x3F); // NR21
+    Write(0xFF17, 0x00); // NR22
+    Write(0xFF19, 0xBF); // NR24
+    Write(0xFF1A, 0x7F); // NR30
+    Write(0xFF1B, 0xFF); // NR31
+    Write(0xFF1C, 0x9F); // NR32
+    Write(0xFF1E, 0xBF); // NR33
+    Write(0xFF20, 0xFF); // NR41
+    Write(0xFF21, 0x00); // NR42
+    Write(0xFF22, 0x00); // NR43
+    Write(0xFF23, 0xBF); // NR30
+    Write(0xFF24, 0x77); // NR50
+    Write(0xFF25, 0xF3); // NR51
+    Write(0xFF26, 0xF1); // NR52
+    Write(0xFF40, 0x91); // LCDC
+    Write(0xFF42, 0x00); // SCY
+    Write(0xFF43, 0x00); // SCX
+    Write(0xFF45, 0x00); // LYC
+    Write(0xFF47, 0xFC); // BGP
+    Write(0xFF48, 0xFF); // OBP0
+    Write(0xFF49, 0xFF); // OBP1
+    Write(0xFF4A, 0x00); // WY
+    Write(0xFF4B, 0x00); // WX
+    Write(0xFFFF, 0x00); // IE
 }

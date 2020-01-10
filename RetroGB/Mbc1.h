@@ -23,6 +23,8 @@
 #include "Definitions.h"
 #include "MemoryController.h"
 
+#include <memory>
+
 class Cartridge;
 class Memory;
 
@@ -34,9 +36,8 @@ class Mbc1 : public MemoryController
         RAMBanking
     };
 
-
 public:
-    Mbc1(Memory* memory, Cartridge* cartridge);
+    Mbc1(Memory* memory, std::shared_ptr<Cartridge> cartridge);
     ~Mbc1();
 
     virtual void Reset(bool color) override;

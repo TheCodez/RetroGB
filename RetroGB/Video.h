@@ -23,6 +23,8 @@
 #include "Definitions.h"
 #include "Color.h"
 
+#include <memory>
+
 class Processor;
 class Memory;
 
@@ -37,28 +39,30 @@ enum class Mode
 class Video
 {
 public:
-    Video(Memory* mem, Processor* cpu);
+    Video(std::shared_ptr<Memory> memory, std::shared_ptr<Processor> cpu);
     ~Video();
 
     void Reset(bool color);
 
-    void Run(int cycles);
+    void Run(unsigned int cycles);
     void ScanLine(int scanLine);
     void RenderBackground(int scanLine);
     void RenderWindow(int scanLine);
     void RenderSprites(int scanLine);
 
     Color* GetFrameBuffer() const { return frameBuffer; }
+
 private:
     Color GetColor(int colorNum, uint8 palette);
     void CompareLYToLYC();
 
 private:
-    Memory* memory;
-    Processor* processor;
-    Mode mode;
-    bool gameBoycolor;
-    int modeCounter;
+    std::shared_ptr<Memory> memory;
+	std::shared_ptr<Processor> processor;
+    
+	Mode mode;
+    bool gameBoyColor;
+    unsigned int modeCounter;
     int scanline;
 
     Color* frameBuffer;

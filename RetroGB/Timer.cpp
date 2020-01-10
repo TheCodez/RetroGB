@@ -22,8 +22,8 @@
 #include "Memory.h"
 #include "Processor.h"
 
-Timer::Timer(Memory* mem, Processor* cpu)
-    : memory(mem), processor(cpu)
+Timer::Timer(std::shared_ptr<Memory> memory, std::shared_ptr<Processor> cpu)
+    : memory(memory), processor(cpu)
 {
     Reset(false);
 }
@@ -36,7 +36,7 @@ void Timer::Reset(bool color)
 {
 }
 
-void Timer::Run(int cycles)
+void Timer::Run(unsigned int cycles)
 {
     //uint8 div = memory->Read(0xFF04);
     //div++;
@@ -48,7 +48,7 @@ void Timer::Run(int cycles)
     //if (tima == 0xFF)
     //{
     //    tima = memory->Read(0xFF06);
-    //    processor->RequestInterrupt(Interrupts::TIMER);
+    //    processor->RequestInterrupt(Interrupt::Time);
     //}
 
     //memory->Write(0xFF05, tima);

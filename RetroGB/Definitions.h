@@ -36,25 +36,17 @@ using uint16 = uint16_t;
 using int8 = int8_t;
 using int16 = int16_t;
 
-inline void SetBit(uint8& value, uint8 bit)
-{
-    value |= 1 << bit;
-}
+#define ENUM_FLAG_OPERATOR(T, X) \
+	inline T operator X (T lhs, T rhs) { return (T) (static_cast<std::underlying_type_t<T>>(lhs) X static_cast<std::underlying_type_t<T>>(rhs)); } 
 
-inline void ResetBit(uint8& value, uint8 bit)
-{
-    value &= ~(1 << bit);
-}
+#define ENUM_FLAGS(T) \
+	enum class T; \
+	inline T operator ~ (T t) { return (T) (~static_cast<std::underlying_type_t<T>>(t)); } \
+	ENUM_FLAG_OPERATOR(T, |) \
+	ENUM_FLAG_OPERATOR(T, ^) \
+	ENUM_FLAG_OPERATOR(T, &)
 
-inline bool IsBitSet(uint8 value, uint8 bit)
-{
-    return (value & (1 << bit)) != 0;
-}
-
-inline uint8 GetBitValue(uint8 value, uint8 bit)
-{
-    return (value & (1 << bit)) ? 1 : 0;
-}
+#define DEBUG
 
 #ifdef DEBUG
 template <typename ... Args>

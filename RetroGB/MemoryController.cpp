@@ -23,7 +23,7 @@
 #include "Cartridge.h"
 
 
-MemoryController::MemoryController(Memory* memory, Cartridge* cartridge)
+MemoryController::MemoryController(Memory* memory, std::shared_ptr<Cartridge> cartridge)
     : memory(memory), cartridge(cartridge)
 {
 }
