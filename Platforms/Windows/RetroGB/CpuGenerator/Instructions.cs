@@ -30,13 +30,13 @@ namespace CpuGenerator
             switch (operand)
             {
                 case "NZ":
-                    return "!IsFlagSet(Flags::ZERO)";
+                    return "!IsFlagSet(Flag::Zero)";
                 case "Z":
-                    return "IsFlagSet(Flags::ZERO)";
+                    return "IsFlagSet(Flag::Zero)";
                 case "NC":
-                    return "!IsFlagSet(Flags::CARRY)";
+                    return "!IsFlagSet(Flag::Carry)";
                 case "C":
-                    return "IsFlagSet(Flags::CARRY)";
+                    return "IsFlagSet(Flag::Carry)";
                 default:
                     return "";
             }
@@ -47,9 +47,9 @@ namespace CpuGenerator
             switch (operand)
             {
                 case "(0xFF00+n)":
-                    return "memory->WriteByte(0xFF00 + memory->ReadByte(PC++), {0});";
+                    return "memory->WriteByte(static_cast<uint16>(0xFF00 + memory->ReadByte(PC++)), {0});";
                 case "(0xFF00+C)":
-                    return "memory->WriteByte(0xFF00 + C, {0});";
+                    return "memory->WriteByte(static_cast<uint16>(0xFF00 + C), {0});";
                 case "(nn)":
                     return "memory->WriteWord(memory->ReadWord(PC), {0});";
                 case "(BC)":
@@ -79,9 +79,9 @@ namespace CpuGenerator
             switch (operand)
             {
                 case "(0xFF00+n)":
-                    return "memory->ReadByte(0xFF00 + memory->ReadByte(PC++))";
+                    return "memory->ReadByte(static_cast<uint16>(0xFF00 + memory->ReadByte(PC++)))";
                 case "(0xFF00+C)":
-                    return "memory->ReadByte(0xFF00 + C)";
+                    return "memory->ReadByte(static_cast<uint16>(0xFF00 + C))";
                 case "n":
                     return "memory->ReadByte(PC++)";
                 case "nn":
@@ -93,17 +93,17 @@ namespace CpuGenerator
                 case "(HL)":
                 {
                     string op = operand.Replace("(", "").Replace(")", "");
-                    return "memory->ReadByte(" + op + ")";
+                    return $"memory->ReadByte({op})";
                 }
                 case "(HLD)":
                 {
                     string op = operand.Replace("(", "").Replace(")", "").Replace("D", "");
-                    return "memory->ReadByte(" + op + "--)";
+                    return $"memory->ReadByte({op}--)";
                 }
                 case "(HLI)":
                 {
                     string op = operand.Replace("(", "").Replace(")", "").Replace("I", "");
-                    return "memory->ReadByte(" + op + "++)";
+                    return $"memory->ReadByte({op}++)";
                 }
                 default:
                     return operand;
@@ -135,27 +135,34 @@ namespace CpuGenerator
         public void WriteAnd(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\tA &= {0};", GetLoadStub(opcode.FirstOperand));
-            writer.WriteLine("\tSetFlag(Flags::HALFCARRY);");
-            writer.WriteLine("\tif (A == 0) EnableFlag(Flags::ZERO);");
+            writer.WriteLine("\tSetFlags(Flag::Half_Carry);");
+            writer.WriteLine("\tToggleFlag(Flag::Zero, A == 0);");
         }
 
         public void WriteOr(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\tA |= {0};", GetLoadStub(opcode.FirstOperand));
             writer.WriteLine("\tClearFlags();");
-            writer.WriteLine("\tif (A == 0) EnableFlag(Flags::ZERO);");
+            writer.WriteLine("\tToggleFlag(Flag::Zero, A == 0);");
         }
 
         public void WriteXor(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\tA ^= {0};", GetLoadStub(opcode.FirstOperand));
             writer.WriteLine("\tClearFlags();");
-            writer.WriteLine("\tif (A == 0) EnableFlag(Flags::ZERO);");
+            writer.WriteLine("\tToggleFlag(Flag::Zero, A == 0);");
         }
 
         public void WriteAddWord(TextWriter writer, Opcode opcode)
         {
-            writer.WriteLine("\tAdd{0}({1});", opcode.FirstOperand, GetLoadStub(opcode.SecondOperand));
+            if (opcode.FirstOperand == "SP")
+            {
+                writer.WriteLine("\tAddSP(static_cast<int8>({0}));", GetLoadStub(opcode.SecondOperand));
+            }
+            else
+            {
+                writer.WriteLine("\tAdd{0}({1});", opcode.FirstOperand, GetLoadStub(opcode.SecondOperand));
+            }
         }
 
         public void WriteAdd(TextWriter writer, Opcode opcode)
@@ -181,28 +188,28 @@ namespace CpuGenerator
         public void WriteDaa(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\tuint8 reg = A;\n");
-            writer.WriteLine("\tif (IsFlagSet(Flags::SUB))\n\t{");
-            writer.WriteLine("\t\tif ((reg & 0x0F) > 9 || IsFlagSet(Flags::HALFCARRY))");
+            writer.WriteLine("\tif (IsFlagSet(Flag::Sub))\n\t{");
+            writer.WriteLine("\t\tif ((reg & 0x0F) > 9 || IsFlagSet(Flag::Half_Carry))");
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\treg -= 0x06;");
             writer.WriteLine("\t\t}");
-            writer.WriteLine("\t\telse if ((reg & 0x9F) > 9 || IsFlagSet(Flags::CARRY))");
+            writer.WriteLine("\t\telse if ((reg & 0x9F) > 9 || IsFlagSet(Flag::Carry))");
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\treg -= 0x60;");
             writer.WriteLine("\t\t}");
             writer.WriteLine("\t}");
             writer.WriteLine("\telse\n\t{");
-            writer.WriteLine("\t\tif ((reg & 0x0F) > 9 || IsFlagSet(Flags::HALFCARRY))");
+            writer.WriteLine("\t\tif ((reg & 0x0F) > 9 || IsFlagSet(Flag::Half_Carry))");
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\treg += 0x06;");
             writer.WriteLine("\t\t}");
-            writer.WriteLine("\t\telse if ((reg & 0x9F) > 9 || IsFlagSet(Flags::CARRY))");
+            writer.WriteLine("\t\telse if ((reg & 0x9F) > 9 || IsFlagSet(Flag::Carry))");
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\treg += 0x60;");
             writer.WriteLine("\t\t}\n");
             writer.WriteLine("\t}");
-            writer.WriteLine("\tDisableFlag(Flags::HALFCARRY);");
-            writer.WriteLine("\tif (reg == 0) EnableFlag(Flags::ZERO);\n");
+            writer.WriteLine("\tDisableFlag(Flag::Half_Carry);");
+            writer.WriteLine("\tToggleFlag(Flag::Zero, reg == 0);\n");
             writer.WriteLine("\tA = reg;");
         }
 
@@ -218,30 +225,30 @@ namespace CpuGenerator
 
         public void WriteBit(TextWriter writer, Opcode opcode)
         {
-            writer.WriteLine("\tBit({0}, {1});", GetLoadStub(opcode.SecondOperand), opcode.FirstOperand);
+            writer.WriteLine($"\tBit({GetLoadStub(opcode.SecondOperand)}, {opcode.FirstOperand});");
         }
 
         public void WriteSet(TextWriter writer, Opcode opcode)
         {
-            writer.WriteLine("\tSetBit({0}, {1});", opcode.SecondOperand, opcode.FirstOperand);
+            writer.WriteLine($"\tSetBit({opcode.SecondOperand}, {opcode.FirstOperand});");
         }
 
         public void WriteRes(TextWriter writer, Opcode opcode)
         {
-            writer.WriteLine("\tResetBit({0}, {1});", opcode.SecondOperand, opcode.FirstOperand);
+            writer.WriteLine($"\tResetBit({opcode.SecondOperand}, {opcode.FirstOperand});");
         }
 
         public void WriteHLSet(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\tuint8 result = memory->ReadByte(HL);");
-            writer.WriteLine("\tSetBit(result, {0});", opcode.FirstOperand);
+            writer.WriteLine($"\tSetBit(result, {opcode.FirstOperand});");
             writer.WriteLine("\tmemory->WriteByte(HL, result);");
         }
 
         public void WriteHLRes(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\tuint8 result = memory->ReadByte(HL);");
-            writer.WriteLine("\tResetBit(result, {0});", opcode.FirstOperand);
+            writer.WriteLine($"\tResetBit(result, {opcode.FirstOperand});");
             writer.WriteLine("\tmemory->WriteByte(HL, result);");
         }
 
@@ -252,15 +259,17 @@ namespace CpuGenerator
             if (!string.IsNullOrEmpty(cond))
             {
                 tabs += "\t";
-                writer.WriteLine("\tif (" + cond + ")\n\t{");
-                writer.WriteLine(tabs + "condition = true;");
+                writer.WriteLine($"\tif ({cond})");
+                writer.WriteLine("\t{");
             }
             writer.WriteLine(tabs + "uint16 address = memory->ReadWord(PC);");
             writer.WriteLine(tabs + "PC += 2;");
-            writer.WriteLine(tabs + "StackPush(PC);");
+            writer.WriteLine(tabs + "PushToStack(PC);");
             writer.WriteLine(tabs + "PC = address;");
             if (cond != string.Empty)
             {
+                writer.WriteLine();
+                writer.WriteLine(tabs + $"return {opcode.ConditionalCycles};");
                 writer.WriteLine("\t}\n\telse\n\t{\n\t\tPC += 2;\n\t}");
             }
         }
@@ -272,12 +281,14 @@ namespace CpuGenerator
             if (!string.IsNullOrEmpty(cond))
             {
                 tabs += "\t";
-                writer.WriteLine("\tif (" + cond + ")\n\t{");
-                writer.WriteLine(tabs + "condition = true;");
+                writer.WriteLine($"\tif ({cond})");
+                writer.WriteLine("\t{");
             }
-            writer.WriteLine(tabs + "StackPop(PC);");
+            writer.WriteLine(tabs + "PopFromStack(PC);");
             if (cond != string.Empty)
             {
+                writer.WriteLine();
+                writer.WriteLine(tabs + $"return {opcode.ConditionalCycles};");
                 writer.WriteLine("\t}");
             }
         }
@@ -290,15 +301,17 @@ namespace CpuGenerator
 
         public void WritePush(TextWriter writer, Opcode opcode)
         {
-            writer.WriteLine("\tStackPush({0});", opcode.FirstOperand);
+            writer.WriteLine($"\tPushToStack({opcode.FirstOperand});");
         }
 
         public void WritePop(TextWriter writer, Opcode opcode)
         {
-            writer.WriteLine("\tStackPop({0});", opcode.FirstOperand);
+            writer.WriteLine($"\tPopFromStack({opcode.FirstOperand});");
 
             if (opcode.FirstOperand == "AF")
+            {
                 writer.WriteLine("\tF &= 0xF0;");
+            }
         }
 
         public void WriteJr(TextWriter writer, Opcode opcode)
@@ -308,13 +321,15 @@ namespace CpuGenerator
             if (!string.IsNullOrEmpty(cond))
             {
                 tabs += "\t";
-                writer.WriteLine("\tif (" + cond + ")\n\t{");
-                writer.WriteLine(tabs + "condition = true;");
+                writer.WriteLine($"\tif ({cond})");
+                writer.WriteLine("\t{");
             }
 
             writer.WriteLine(tabs + "PC += 1 + static_cast<int8>(memory->ReadByte(PC));");
             if (cond != string.Empty)
             {
+                writer.WriteLine();
+                writer.WriteLine(tabs + "return " + opcode.ConditionalCycles + ";");
                 writer.WriteLine("\t}\n\telse\n\t{\n\t\tPC++;\n\t}");
             }
         }
@@ -326,13 +341,15 @@ namespace CpuGenerator
             if (!string.IsNullOrEmpty(cond))
             {
                 tabs += "\t";
-                writer.WriteLine("\tif (" + cond + ")\n\t{");
-                writer.WriteLine(tabs + "condition = true;");
+                writer.WriteLine($"\tif ({cond})");
+                writer.WriteLine("\t{");
             }
 
             writer.WriteLine(tabs + "PC = memory->ReadWord(PC);");
             if (cond != string.Empty)
             {
+                writer.WriteLine();
+                writer.WriteLine(tabs + "return " + opcode.ConditionalCycles + ";");
                 writer.WriteLine("\t}\n\telse\n\t{\n\t\tPC += 2;\n\t}");
             }
         }
@@ -340,32 +357,39 @@ namespace CpuGenerator
         public void WriteCpl(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\tA = ~A;");
-            writer.WriteLine("\tEnableFlag(Flags::HALFCARRY);");
-            writer.WriteLine("\tEnableFlag(Flags::SUB);");
+            writer.WriteLine("\tEnableFlag(Flag::Half_Carry);");
+            writer.WriteLine("\tEnableFlag(Flag::Sub);");
         }
 
         public void WriteCcf(TextWriter writer, Opcode opcode)
         {
-            writer.WriteLine("\tInvertFlag(Flags::CARRY);");
-            writer.WriteLine("\tDisableFlag(Flags::HALFCARRY);");
-            writer.WriteLine("\tDisableFlag(Flags::SUB);");
+            writer.WriteLine("\tInvertFlag(Flag::Carry);");
+            writer.WriteLine("\tDisableFlag(Flag::Half_Carry);");
+            writer.WriteLine("\tDisableFlag(Flag::Sub);");
         }
 
         public void WriteScf(TextWriter writer, Opcode opcode)
         {
-            writer.WriteLine("\tEnableFlag(Flags::CARRY);");
-            writer.WriteLine("\tDisableFlag(Flags::HALFCARRY);");
-            writer.WriteLine("\tDisableFlag(Flags::SUB);");
+            writer.WriteLine("\tEnableFlag(Flag::Carry);");
+            writer.WriteLine("\tDisableFlag(Flag::Half_Carry);");
+            writer.WriteLine("\tDisableFlag(Flag::Sub);");
         }
 
         public void WriteCp(TextWriter writer, Opcode opcode)
         {
             writer.WriteLine("\tuint8 value = {0};", GetLoadStub(opcode.FirstOperand));
+            writer.WriteLine("\tSetFlags(Flag::Sub);");
+            writer.WriteLine("\tToggleFlag(Flag::Carry, A < value);");
+            writer.WriteLine("\tToggleFlag(Flag::Zero, A == value);");
+            writer.WriteLine("\tToggleFlag(Flag::Half_Carry, ((A - value) & 0xF) > (A & 0xF));");
+            /*
+            writer.WriteLine($"\tuint8 value = {GetLoadStub(opcode.FirstOperand)};");
             writer.WriteLine("\tuint8 result = A - value;");
-            writer.WriteLine("\tSetFlag(Flags::SUB);");
-            writer.WriteLine("\tif (A < value) EnableFlag(Flags::CARRY);");
-            writer.WriteLine("\tif (result == 0) EnableFlag(Flags::ZERO);");
-            writer.WriteLine("\tif (((A ^ value ^ result) & 0x10) != 0) EnableFlag(Flags::HALFCARRY);");
+            writer.WriteLine("\tSetFlags(Flag::Sub);");
+            writer.WriteLine("\tToggleFlag(Flag::Carry, A < value);");
+            writer.WriteLine("\tToggleFlag(Flag::Zero, result == 0);");
+            writer.WriteLine("\tToggleFlag(Flag::Half_Carry, ((A ^ value ^ result) & 0x10) != 0);");
+            */
         }
 
         public void WriteHalt(TextWriter writer, Opcode opcode)
@@ -375,7 +399,7 @@ namespace CpuGenerator
 
         public void WriteRst(TextWriter writer, Opcode opcode)
         {
-            writer.WriteLine("\tStackPush(PC);");
+            writer.WriteLine("\tPushToStack(PC);");
             writer.WriteLine("\tPC = {0};", string.IsNullOrEmpty(opcode.FirstOperand) ? "0x0000" : opcode.FirstOperand);
         }
 
@@ -383,7 +407,7 @@ namespace CpuGenerator
         {
             writer.WriteLine("\t{0} = (({0} >> 4) & 0x0F) | (({0} << 4) & 0xF0);", opcode.FirstOperand);
             writer.WriteLine("\tClearFlags();");
-            writer.WriteLine("\tif ({0} == 0) EnableFlag(Flags::ZERO);", opcode.FirstOperand);
+            writer.WriteLine($"\tToggleFlag(Flag::Zero, {opcode.FirstOperand} == 0);");
         }
 
         public void WriteSwapHL(TextWriter writer, Opcode opcode)
@@ -391,7 +415,7 @@ namespace CpuGenerator
             writer.WriteLine("\tuint8 val = memory->ReadByte(HL);");
             writer.WriteLine("\tmemory->WriteByte(HL, ((val >> 4) & 0x0F) | ((val << 4) & 0xF0));");
             writer.WriteLine("\tClearFlags();");
-            writer.WriteLine("\tif (memory->ReadByte(HL) == 0) EnableFlag(ZERO);");
+            writer.WriteLine("\tToggleFlag(Flag::Zero, memory->ReadByte(HL) == 0);");
         }
 
         public void WriteHLSPN(TextWriter writer, Opcode opcode)
@@ -399,49 +423,47 @@ namespace CpuGenerator
             writer.WriteLine("\tint8 n = static_cast<int8>(memory->ReadByte(PC++));");
             writer.WriteLine("\tHL = SP + n;");
             writer.WriteLine("\tClearFlags();");
-            writer.WriteLine("\tif (((SP ^ n ^ HL) & 0x100) == 0x100)");
-            writer.WriteLine("\t\tEnableFlag(Flags::CARRY);");
-            writer.WriteLine("\tif (((SP ^ n ^ HL) & 0x10) == 0x10)");
-            writer.WriteLine("\t\tEnableFlag(Flags::HALFCARRY);");
+            writer.WriteLine("\tToggleFlag(Flag::Carry, ((SP ^ n ^ HL) & 0x100) == 0x100);");
+            writer.WriteLine("\tToggleFlag(Flag::Half_Carry, ((SP ^ n ^ HL) & 0x10) == 0x10);");
         }
 
         public void WriteRl(TextWriter writer, Opcode opcode, bool a = false)
         {
             string operand = a ? "A" : opcode.FirstOperand;
-            writer.WriteLine("\t" + GetStoreStub(operand), string.Format("Rl({0})", GetLoadStub(operand)));
+            writer.WriteLine("\t" + GetStoreStub(operand), $"Rl({GetLoadStub(operand)})");
         }
 
         public void WriteRlc(TextWriter writer, Opcode opcode, bool a = false)
         {
             string operand = a ? "A" : opcode.FirstOperand;
-            writer.WriteLine("\t" + GetStoreStub(operand), string.Format("Rlc({0})", GetLoadStub(operand)));
+            writer.WriteLine("\t" + GetStoreStub(operand), $"Rlc({GetLoadStub(operand)})");
         }
 
         public void WriteRr(TextWriter writer, Opcode opcode, bool a = false)
         {
             string operand = a ? "A" : opcode.FirstOperand;
-            writer.WriteLine("\t" + GetStoreStub(operand), string.Format("Rr({0})", GetLoadStub(operand)));
+            writer.WriteLine("\t" + GetStoreStub(operand), $"Rr({GetLoadStub(operand)})");
         }
 
         public void WriteRrc(TextWriter writer, Opcode opcode, bool a = false)
         {
             string operand = a ? "A" : opcode.FirstOperand;
-            writer.WriteLine("\t" + GetStoreStub(operand), string.Format("Rrc({0})", GetLoadStub(operand)));
+            writer.WriteLine("\t" + GetStoreStub(operand), $"Rrc({GetLoadStub(operand)})");
         }
 
         public void WriteSla(TextWriter writer, Opcode opcode, bool a = false)
         {
-            writer.WriteLine("\t" + GetStoreStub(opcode.FirstOperand), string.Format("Sla({0})", GetLoadStub(opcode.FirstOperand)));
+            writer.WriteLine("\t" + GetStoreStub(opcode.FirstOperand), $"Sla({GetLoadStub(opcode.FirstOperand)})");
         }
 
         public void WriteSra(TextWriter writer, Opcode opcode, bool a = false)
         {
-            writer.WriteLine("\t" + GetStoreStub(opcode.FirstOperand), string.Format("Sra({0})", GetLoadStub(opcode.FirstOperand)));
+            writer.WriteLine("\t" + GetStoreStub(opcode.FirstOperand), $"Sra({GetLoadStub(opcode.FirstOperand)})");
         }
 
         public void WriteSrl(TextWriter writer, Opcode opcode, bool a = false)
         {
-            writer.WriteLine("\t" + GetStoreStub(opcode.FirstOperand), string.Format("Srl({0})", GetLoadStub(opcode.FirstOperand)));
+            writer.WriteLine("\t" + GetStoreStub(opcode.FirstOperand), $"Srl({GetLoadStub(opcode.FirstOperand)})");
         }
 
         #endregion

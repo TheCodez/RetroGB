@@ -18,6 +18,7 @@
  *
  */
 
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -41,70 +42,81 @@ namespace CpuGenerator
             writer.WriteLine();
 
             writer.WriteLine("#include \"Processor.h\"");
-            writer.WriteLine("#include \"Processor.Helpers.h\"");
+            writer.WriteLine("#include \"BitUtil.h\"");
             writer.WriteLine();
 
-            List<string> opcodes = Properties.Resources.Opcodes.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            List<string> opcodesCB = Properties.Resources.OpcodesCB.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            StreamReader opReader = new StreamReader("opcodes.json");
+            List<Opcode> opCodes = JsonConvert.DeserializeObject<List<Opcode>>(opReader.ReadToEnd());
 
-            if (opcodes.Count != 256 && opcodesCB.Count != 256)
-                return;
+            StreamReader cbReader = new StreamReader("opcodesCB.json");
+            List<Opcode> opCodesCB = JsonConvert.DeserializeObject<List<Opcode>>(cbReader.ReadToEnd());
+
+            // Should already be sorted
+            opCodes.Sort((x, y) => x.Address.CompareTo(y.Address));
+            opCodesCB.Sort((x, y) => x.Address.CompareTo(y.Address));
 
             writer.WriteLine("void Processor::InitOpcodes()");
             writer.WriteLine("{");
 
-            for (int i = 0; i < 256; i++)
+            foreach (Opcode opcode in opCodes)
             {
-                string line = opcodes.ElementAt(i);
+                string line = opcode.Operation;
 
-                if ((line != "UNDEFINED") && (line != "CB_OPCODE"))
-                    MapOpcode(writer, i, line);
+                if (line != "UNDEFINED")
+                {
+                    MapOpcode(writer, opcode);
+                }
                 else
-                    MapInvalid(writer, i, line);
+                {
+                    MapInvalidOpcode(writer, opcode);
+                }
             }
 
             writer.WriteLine();
             writer.WriteLine("\t// CB Obcodes");
 
-            for (int i = 0; i < 256; i++)
+            foreach (Opcode opcode in opCodesCB)
             {
-                string line = opcodesCB.ElementAt(i);
+                string line = opcode.Operation;
 
-                MapCBOpcode(writer, i, line);
+                MapCBOpcode(writer, opcode);
             }
 
             writer.WriteLine("}");
             writer.WriteLine();
 
-            for (int i = 0; i < 256; i++)
+            foreach (Opcode opcode in opCodes)
             {
-                string line = opcodes.ElementAt(i);
+                string operation = opcode.Operation;
 
-                if ((line != "UNDEFINED") && (line != "CB_OPCODE"))
-                    GenerateMethod(writer, i, line);
+                if (operation != "UNDEFINED")
+                {
+                    GenerateMethod(writer, opcode);
+                }
             }
 
             writer.WriteLine("// CB Obcodes");
             writer.WriteLine();
 
-            for (int i = 0; i < 256; i++)
+            foreach (Opcode opcode in opCodesCB)
             {
-                string line = opcodesCB.ElementAt(i);
-
-                GenerateMethod(writer, i, line);
+                GenerateMethod(writer, opcode);
             }
+
+            opReader.Close();
+            cbReader.Close();
         }
 
-        public void GenerateMethod(TextWriter writer, int op, string line)
+        public void GenerateMethod(TextWriter writer, Opcode opcode)
         {
-            Opcode opcode;
-            Utils.ParseOpcode(line, out opcode);
-
-            writer.WriteLine("/* {0} */", line.Replace(",", ", "));
-            writer.WriteLine("void Processor::{0}() // 0x{1:X2}", opcode.ToFunctionName(), op);
+            writer.WriteLine("/* {0} */", opcode.ToCompleteOpName());
+            writer.WriteLine("unsigned int Processor::{0}() // 0x{1:X2}", opcode.ToFunctionName(), opcode.Address);
             writer.WriteLine("{");
 
             WriteOpcodeStub(writer, opcode);
+
+            writer.WriteLine();
+            writer.WriteLine("\treturn {0};", opcode.Cycles);
 
             writer.WriteLine("}");
             writer.WriteLine();
@@ -203,89 +215,89 @@ namespace CpuGenerator
                         WriteHLRes(writer, opcode);
                         break;
                 case "CALL":
-                        WriteCall(writer, opcode);
-                        break;
+                    WriteCall(writer, opcode);
+                    break;
                 case "RET":
-                        WriteRet(writer, opcode);
-                        break;
+                    WriteRet(writer, opcode);
+                    break;
                 case "RETI":
-                        WriteReti(writer, opcode);
-                        break;
+                    WriteReti(writer, opcode);
+                    break;
                 case "PUSH":
-                        WritePush(writer, opcode);
-                        break;
+                    WritePush(writer, opcode);
+                    break;
                 case "POP":
-                        WritePop(writer, opcode);
-                        break;
+                    WritePop(writer, opcode);
+                    break;
                 case "JR":
-                        WriteJr(writer, opcode);
-                        break;
+                    WriteJr(writer, opcode);
+                    break;
                 case "JP":
-                        if (firstOperand == "(HL)")
-                            writer.WriteLine("\tPC = HL;");
-                        else
-                            WriteJp(writer, opcode);
-                        break;
+                    if (firstOperand == "(HL)")
+                        writer.WriteLine("\tPC = HL;");
+                    else
+                        WriteJp(writer, opcode);
+                    break;
                 case "DAA":
-                        WriteDaa(writer, opcode);
-                        break;
+                    WriteDaa(writer, opcode);
+                    break;
                 case "CPL":
-                        WriteCpl(writer, opcode);
-                        break;
+                    WriteCpl(writer, opcode);
+                    break;
                 case "CCF":
-                        WriteCcf(writer, opcode);
-                        break;
+                    WriteCcf(writer, opcode);
+                    break;
                 case "SCF":
-                        WriteScf(writer, opcode);
-                        break;
+                    WriteScf(writer, opcode);
+                    break;
                 case "CP":
-                        WriteCp(writer, opcode);
-                        break;
+                    WriteCp(writer, opcode);
+                    break;
                 case "HALT":
-                        WriteHalt(writer, opcode);
-                        break;
+                    WriteHalt(writer, opcode);
+                    break;
                 case "RST":
-                        WriteRst(writer, opcode);
-                        break;
+                    WriteRst(writer, opcode);
+                    break;
                 case "SWAP":
-                        if (firstOperand != "(HL)")
-                            WriteSwap(writer, opcode);
-                        else
-                            WriteSwapHL(writer, opcode);
-                        break;
+                    if (firstOperand != "(HL)")
+                        WriteSwap(writer, opcode);
+                    else
+                        WriteSwapHL(writer, opcode);
+                    break;
                 case "RL":
-                        WriteRl(writer, opcode);
-                        break;
+                    WriteRl(writer, opcode);
+                    break;
                 case "RLC":
-                        WriteRlc(writer, opcode);
-                        break;
+                    WriteRlc(writer, opcode);
+                    break;
                 case "RR":
-                        WriteRr(writer, opcode);
-                        break;
+                    WriteRr(writer, opcode);
+                    break;
                 case "RRC":
-                        WriteRrc(writer, opcode);
-                        break;
+                    WriteRrc(writer, opcode);
+                    break;
                 case "RLA":
-                        WriteRl(writer, opcode, true);
-                        break;
+                    WriteRl(writer, opcode, true);
+                    break;
                 case "RLCA":
-                        WriteRlc(writer, opcode, true);
-                        break;
+                    WriteRlc(writer, opcode, true);
+                    break;
                 case "RRA":
-                        WriteRr(writer, opcode, true);
-                        break;
+                    WriteRr(writer, opcode, true);
+                    break;
                 case "RRCA":
-                        WriteRrc(writer, opcode, true);
-                        break;
+                    WriteRrc(writer, opcode, true);
+                    break;
                 case "SLA":
-                        WriteSla(writer, opcode, true);
-                        break;
+                    WriteSla(writer, opcode, true);
+                    break;
                 case "SRA":
-                        WriteSra(writer, opcode, true);
-                        break;
+                    WriteSra(writer, opcode, true);
+                    break;
                 case "SRL":
-                        WriteSrl(writer, opcode, true);
-                        break;
+                    WriteSrl(writer, opcode, true);
+                    break;
                 default:
                     writer.WriteLine("\t// Not implemented yet");
                     writer.WriteLine("\tUnknownOpcode();");
@@ -293,29 +305,21 @@ namespace CpuGenerator
             }
         }
 
-        public void MapOpcode(TextWriter writer, int op, string line)
+        public void MapOpcode(TextWriter writer, Opcode opcode)
         {
-            Opcode opcode;
-            Utils.ParseOpcode(line, out opcode);
-
             var funcName = opcode.ToFunctionName();
-
-            writer.WriteLine("\topcodes[0x{0:X2}] = std::bind(&Processor::{1}, this);", op, funcName);
+            writer.WriteLine("\topcodes[0x{0:X2}] = std::bind(&Processor::{1}, this);", opcode.Address, funcName);
         }
 
-        public void MapInvalid(TextWriter writer, int op, string line)
+        public void MapInvalidOpcode(TextWriter writer, Opcode opcode)
         {
-            writer.WriteLine("\topcodes[0x{0:X2}] = std::bind(&Processor::InvalidOpcode, this);", op);
+            writer.WriteLine("\topcodes[0x{0:X2}] = std::bind(&Processor::InvalidOpcode, this);", opcode.Address);
         }
 
-        public void MapCBOpcode(TextWriter writer, int op, string line)
+        public void MapCBOpcode(TextWriter writer, Opcode opcode)
         {
-            Opcode opcode;
-            Utils.ParseOpcode(line, out opcode);
-
             var funcName = opcode.ToFunctionName();
-
-            writer.WriteLine("\topcodesCB[0x{0:X2}] = std::bind(&Processor::{1}, this);", op, funcName);
+            writer.WriteLine("\topcodesCB[0x{0:X2}] = std::bind(&Processor::{1}, this);", opcode.Address, funcName);
         }
     }
 }

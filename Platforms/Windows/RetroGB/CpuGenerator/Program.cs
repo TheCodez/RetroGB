@@ -26,6 +26,9 @@ namespace CpuGenerator
     {
         static void Main(string[] args)
         {
+            GenerateJson.Generate("opcodes.json", Properties.Resources.Opcodes);
+            GenerateJson.Generate("opcodesCB.json", Properties.Resources.OpcodesCB, true);
+
             using (var Output = new StreamWriter("Processor.Generated.cpp"))
             {
                 var generator = new Generator();
@@ -38,7 +41,14 @@ namespace CpuGenerator
                 generator.Generate(Output);
             }
 
+            using (var Output = new StreamWriter("OpcodeNames.h"))
+            {
+                var generator = new OpcodesNamesGenerator();
+                generator.Generate(Output);
+            }
+
             File.Copy("Processor.Generated.cpp", @"..\..\..\..\..\..\RetroGB\Processor.Generated.cpp", true);
+            File.Copy("OpcodeNames.h", @"..\..\..\..\..\..\RetroGB\OpcodeNames.h", true);
         }
     }
 }

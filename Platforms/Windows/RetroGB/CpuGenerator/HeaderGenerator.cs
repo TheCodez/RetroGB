@@ -18,6 +18,7 @@
  *
  */
 
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,37 +30,41 @@ namespace CpuGenerator
     {
         public void Generate(TextWriter writer)
         {
-            List<string> opcodes = Properties.Resources.Opcodes.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            List<string> opcodesCB = Properties.Resources.OpcodesCB.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            StreamReader opReader = new StreamReader("opcodes.json");
+            List<Opcode> opCodes = JsonConvert.DeserializeObject<List<Opcode>>(opReader.ReadToEnd());
 
-            if (opcodes.Count != 256 && opcodesCB.Count != 256)
-                return;
+            StreamReader cbReader = new StreamReader("opcodesCB.json");
+            List<Opcode> opCodesCB = JsonConvert.DeserializeObject<List<Opcode>>(cbReader.ReadToEnd());
 
-            for (int i = 0; i < 256; i++)
+            // Should already be sorted
+            opCodes.Sort((x, y) => x.Address.CompareTo(y.Address));
+            opCodesCB.Sort((x, y) => x.Address.CompareTo(y.Address));
+
+            foreach (Opcode opcode in opCodes)
             {
-                string line = opcodes.ElementAt(i);
+                string operation = opcode.Operation;
 
-                if ((line != "UNDEFINED") && (line != "CB_OPCODE"))
-                    GenerateMethod(writer, i, line);
+                if (operation != "UNDEFINED")
+                {
+                    GenerateMethod(writer, opcode);
+                }
             }
 
             writer.WriteLine();
             writer.WriteLine("// CB Obcodes");
 
-            for (int i = 0; i < 256; i++)
+            foreach (Opcode opcode in opCodesCB)
             {
-                string line = opcodesCB.ElementAt(i);
-
-                GenerateMethod(writer, i, line);
+                GenerateMethod(writer, opcode);
             }
+
+            opReader.Close();
+            cbReader.Close();
         }
 
-        public void GenerateMethod(TextWriter writer, int op, string line)
+        public void GenerateMethod(TextWriter writer, Opcode opcode)
         {
-            Opcode opcode;
-            Utils.ParseOpcode(line, out opcode);
-
-            writer.WriteLine("void {0}();", opcode.ToFunctionName());
+            writer.WriteLine("unsigned int {0}();", opcode.ToFunctionName());
         }
     }
 }

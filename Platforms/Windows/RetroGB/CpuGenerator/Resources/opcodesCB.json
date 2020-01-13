@@ -1,0 +1,2306 @@
+[
+  {
+    "operation": "RLC",
+    "firstOperand": "B",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 0,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RLC",
+    "firstOperand": "C",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 1,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RLC",
+    "firstOperand": "D",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 2,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RLC",
+    "firstOperand": "E",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 3,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RLC",
+    "firstOperand": "H",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 4,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RLC",
+    "firstOperand": "L",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 5,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RLC",
+    "firstOperand": "(HL)",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 6,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "RLC",
+    "firstOperand": "A",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 7,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RRC",
+    "firstOperand": "B",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 8,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RRC",
+    "firstOperand": "C",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 9,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RRC",
+    "firstOperand": "D",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 10,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RRC",
+    "firstOperand": "E",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 11,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RRC",
+    "firstOperand": "H",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 12,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RRC",
+    "firstOperand": "L",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 13,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RRC",
+    "firstOperand": "(HL)",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 14,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "RRC",
+    "firstOperand": "A",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 15,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RL",
+    "firstOperand": "B",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 16,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RL",
+    "firstOperand": "C",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 17,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RL",
+    "firstOperand": "D",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 18,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RL",
+    "firstOperand": "E",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 19,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RL",
+    "firstOperand": "H",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 20,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RL",
+    "firstOperand": "L",
+    "secondOperand": "",
+    "numberOfOperands": 2,
+    "address": 21,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RL",
+    "firstOperand": "(HL)",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 22,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "RL",
+    "firstOperand": "A",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 23,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RR",
+    "firstOperand": "B",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 24,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RR",
+    "firstOperand": "C",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 25,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RR",
+    "firstOperand": "D",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 26,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RR",
+    "firstOperand": "E",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 27,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RR",
+    "firstOperand": "H",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 28,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RR",
+    "firstOperand": "L",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 29,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RR",
+    "firstOperand": "(HL)",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 30,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "RR",
+    "firstOperand": "A",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 31,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SLA",
+    "firstOperand": "B",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 32,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SLA",
+    "firstOperand": "C",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 33,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SLA",
+    "firstOperand": "D",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 34,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SLA",
+    "firstOperand": "E",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 35,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SLA",
+    "firstOperand": "H",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 36,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SLA",
+    "firstOperand": "L",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 37,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SLA",
+    "firstOperand": "(HL)",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 38,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "SLA",
+    "firstOperand": "A",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 39,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SRA",
+    "firstOperand": "B",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 40,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SRA",
+    "firstOperand": "C",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 41,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SRA",
+    "firstOperand": "D",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 42,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SRA",
+    "firstOperand": "E",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 43,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SRA",
+    "firstOperand": "H",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 44,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SRA",
+    "firstOperand": "L",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 45,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SRA",
+    "firstOperand": "(HL)",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 46,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "SRA",
+    "firstOperand": "A",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 47,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SWAP",
+    "firstOperand": "B",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 48,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SWAP",
+    "firstOperand": "C",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 49,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SWAP",
+    "firstOperand": "D",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 50,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SWAP",
+    "firstOperand": "E",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 51,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SWAP",
+    "firstOperand": "H",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 52,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SWAP",
+    "firstOperand": "L",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 53,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SWAP",
+    "firstOperand": "(HL)",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 54,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "SWAP",
+    "firstOperand": "A",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 55,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SRL",
+    "firstOperand": "B",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 56,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SRL",
+    "firstOperand": "C",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 57,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SRL",
+    "firstOperand": "D",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 58,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SRL",
+    "firstOperand": "E",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 59,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SRL",
+    "firstOperand": "H",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 60,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SRL",
+    "firstOperand": "L",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 61,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SRL",
+    "firstOperand": "(HL)",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 62,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "SRL",
+    "firstOperand": "A",
+    "secondOperand": "",
+    "numberOfOperands": 1,
+    "address": 63,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "0",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 64,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "0",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 65,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "0",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 66,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "0",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 67,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "0",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 68,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "0",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 69,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "0",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 70,
+    "cycles": 12,
+    "conditionalCycles": 12
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "0",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 71,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "1",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 72,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "1",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 73,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "1",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 74,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "1",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 75,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "1",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 76,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "1",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 77,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "1",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 78,
+    "cycles": 12,
+    "conditionalCycles": 12
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "1",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 79,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "2",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 80,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "2",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 81,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "2",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 82,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "2",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 83,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "2",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 84,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "2",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 85,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "2",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 86,
+    "cycles": 12,
+    "conditionalCycles": 12
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "2",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 87,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "3",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 88,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "3",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 89,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "3",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 90,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "3",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 91,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "3",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 92,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "3",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 93,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "3",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 94,
+    "cycles": 12,
+    "conditionalCycles": 12
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "3",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 95,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "4",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 96,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "4",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 97,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "4",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 98,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "4",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 99,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "4",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 100,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "4",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 101,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "4",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 102,
+    "cycles": 12,
+    "conditionalCycles": 12
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "4",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 103,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "5",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 104,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "5",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 105,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "5",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 106,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "5",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 107,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "5",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 108,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "5",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 109,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "5",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 110,
+    "cycles": 12,
+    "conditionalCycles": 12
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "5",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 111,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "6",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 112,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "6",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 113,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "6",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 114,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "6",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 115,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "6",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 116,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "6",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 117,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "6",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 118,
+    "cycles": 12,
+    "conditionalCycles": 12
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "6",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 119,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "7",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 120,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "7",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 121,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "7",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 122,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "7",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 123,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "7",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 124,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "7",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 125,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "7",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 126,
+    "cycles": 12,
+    "conditionalCycles": 12
+  },
+  {
+    "operation": "BIT",
+    "firstOperand": "7",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 127,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "0",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 128,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "0",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 129,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "0",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 130,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "0",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 131,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "0",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 132,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "0",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 133,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "0",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 134,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "0",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 135,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "1",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 136,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "1",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 137,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "1",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 138,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "1",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 139,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "1",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 140,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "1",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 141,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "1",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 142,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "1",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 143,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "2",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 144,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "2",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 145,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "2",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 146,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "2",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 147,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "2",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 148,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "2",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 149,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "2",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 150,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "2",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 151,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "3",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 152,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "3",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 153,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "3",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 154,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "3",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 155,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "3",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 156,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "3",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 157,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "3",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 158,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "3",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 159,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "4",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 160,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "4",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 161,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "4",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 162,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "4",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 163,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "4",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 164,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "4",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 165,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "4",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 166,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "4",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 167,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "5",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 168,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "5",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 169,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "5",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 170,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "5",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 171,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "5",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 172,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "5",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 173,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "5",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 174,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "5",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 175,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "6",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 176,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "6",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 177,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "6",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 178,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "6",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 179,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "6",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 180,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "6",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 181,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "6",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 182,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "6",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 183,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "7",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 184,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "7",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 185,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "7",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 186,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "7",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 187,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "7",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 188,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "7",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 189,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "7",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 190,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "RES",
+    "firstOperand": "7",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 191,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "0",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 192,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "0",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 193,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "0",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 194,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "0",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 195,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "0",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 196,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "0",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 197,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "0",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 198,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "0",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 199,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "1",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 200,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "1",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 201,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "1",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 202,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "1",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 203,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "1",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 204,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "1",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 205,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "1",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 206,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "1",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 207,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "2",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 208,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "2",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 209,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "2",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 210,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "2",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 211,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "2",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 212,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "2",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 213,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "2",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 214,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "2",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 215,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "3",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 216,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "3",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 217,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "3",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 218,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "3",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 219,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "3",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 220,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "3",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 221,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "3",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 222,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "3",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 223,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "4",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 224,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "4",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 225,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "4",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 226,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "4",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 227,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "4",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 228,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "4",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 229,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "4",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 230,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "4",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 231,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "5",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 232,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "5",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 233,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "5",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 234,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "5",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 235,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "5",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 236,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "5",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 237,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "5",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 238,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "5",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 239,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "6",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 240,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "6",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 241,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "6",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 242,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "6",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 243,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "6",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 244,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "6",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 245,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "6",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 246,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "6",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 247,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "7",
+    "secondOperand": "B",
+    "numberOfOperands": 2,
+    "address": 248,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "7",
+    "secondOperand": "C",
+    "numberOfOperands": 2,
+    "address": 249,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "7",
+    "secondOperand": "D",
+    "numberOfOperands": 2,
+    "address": 250,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "7",
+    "secondOperand": "E",
+    "numberOfOperands": 2,
+    "address": 251,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "7",
+    "secondOperand": "H",
+    "numberOfOperands": 2,
+    "address": 252,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "7",
+    "secondOperand": "L",
+    "numberOfOperands": 2,
+    "address": 253,
+    "cycles": 8,
+    "conditionalCycles": 8
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "7",
+    "secondOperand": "(HL)",
+    "numberOfOperands": 2,
+    "address": 254,
+    "cycles": 16,
+    "conditionalCycles": 16
+  },
+  {
+    "operation": "SET",
+    "firstOperand": "7",
+    "secondOperand": "A",
+    "numberOfOperands": 2,
+    "address": 255,
+    "cycles": 8,
+    "conditionalCycles": 8
+  }
+]

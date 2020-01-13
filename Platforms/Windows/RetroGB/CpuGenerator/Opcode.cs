@@ -18,15 +18,33 @@
  *
  */
 
+using Newtonsoft.Json;
+
 namespace CpuGenerator
 {
     class Opcode
     {
+        [JsonProperty(PropertyName = "operation")]
         public string Operation { get; set; }
+
+        [JsonProperty(PropertyName = "firstOperand")]
         public string FirstOperand { get; set; }
+
+        [JsonProperty(PropertyName = "secondOperand")]
         public string SecondOperand { get; set; }
 
+        [JsonProperty(PropertyName = "numberOfOperands")]
         public int NumberOfOperands { get; set; }
+
+        [JsonProperty(PropertyName = "address")]
+        //[JsonConverter(typeof(HexStringJsonConverter))]
+        public int Address { get; set; }
+
+        [JsonProperty(PropertyName = "cycles")]
+        public int Cycles { get; set; }
+
+        [JsonProperty(PropertyName = "conditionalCycles")]
+        public int ConditionalCycles { get; set; }
 
         public Opcode()
         {
@@ -63,6 +81,23 @@ namespace CpuGenerator
                 if (SecondOperand != string.Empty)
                 {
                     ret += "_" + SecondOperand.Replace("(", "MEM_").Replace(")", "").Replace("+", "_");
+                }
+            }
+
+            return ret;
+        }
+
+        public string ToCompleteOpName()
+        {
+            string ret = Operation;
+
+            if (NumberOfOperands >= 1)
+            {
+                ret += " " + FirstOperand;
+
+                if (NumberOfOperands > 1)
+                {
+                    ret += ", " + SecondOperand;
                 }
             }
 
