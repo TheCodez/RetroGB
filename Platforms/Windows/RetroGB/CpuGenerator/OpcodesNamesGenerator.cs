@@ -50,11 +50,7 @@ namespace CpuGenerator
             foreach (Opcode opcode in opCodes)
             {
                 string operation = opcode.Operation;
-
-                if (operation != "UNDEFINED")
-                {
-                    GenerateOpcode(writer, opcode);
-                }
+                GenerateOpcode(writer, opcode);
             }
 
             writer.WriteLine("};");
