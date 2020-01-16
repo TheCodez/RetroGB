@@ -67,8 +67,7 @@ public:
 	bool IsFlagSet(uint8 flag);
 
 private:
-    
-	unsigned int HandleInterrupts();
+    unsigned int HandleInterrupts();
 
 	void SetFlags(Flag flag);
     void EnableFlag(Flag flag);
@@ -76,11 +75,13 @@ private:
     void InvertFlag(Flag flag);
     void ClearFlags();
 	void ToggleFlag(Flag flag, bool condition);
+	void KeepFlag(Flag flag);
 
 	void InitOpcodes();
 	
 public:
 	std::shared_ptr<Memory> memory;
+
 	std::array<std::function<int()>, 256> opcodes;
 	std::array<std::function<int()>, 256> opcodesCB;
 	
@@ -112,17 +113,17 @@ private:
 	void Sbc(uint8 reg);
 
 	void AddHL(uint16 val);
-	void AddSP(uint8 val);
+	void AddSP(int8 val);
 
-	uint8 Rl(uint8 reg);
-	uint8 Rlc(uint8 reg);
-	uint8 Rr(uint8 reg);
-	uint8 Rrc(uint8 reg);
+	uint8 Rl(uint8 reg, bool registerA);
+	uint8 Rlc(uint8 reg, bool registerA);
+	uint8 Rr(uint8 reg, bool registerA);
+	uint8 Rrc(uint8 reg, bool registerA);
 
 	uint8 Sla(uint8 reg);
 	uint8 Sra(uint8 reg);
 	uint8 Srl(uint8 reg);
-	void Bit(uint8 reg, uint8 bit);
+	void Bit(uint8 reg, int bit);
 
 private:
 	unsigned int NOP();

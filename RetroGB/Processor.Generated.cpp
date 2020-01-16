@@ -583,7 +583,7 @@ unsigned int Processor::LD_B_n() // 0x06
 /* RLCA */
 unsigned int Processor::RLCA() // 0x07
 {
-	A = Rlc(A);
+	A = Rlc(A, true);
 
 	return 4;
 }
@@ -648,7 +648,7 @@ unsigned int Processor::LD_C_n() // 0x0E
 /* RRCA */
 unsigned int Processor::RRCA() // 0x0F
 {
-	A = Rrc(A);
+	A = Rrc(A, true);
 
 	return 4;
 }
@@ -713,7 +713,7 @@ unsigned int Processor::LD_D_n() // 0x16
 /* RLA */
 unsigned int Processor::RLA() // 0x17
 {
-	A = Rl(A);
+	A = Rl(A, true);
 
 	return 4;
 }
@@ -777,7 +777,7 @@ unsigned int Processor::LD_E_n() // 0x1E
 /* RRA */
 unsigned int Processor::RRA() // 0x1F
 {
-	A = Rr(A);
+	A = Rr(A, true);
 
 	return 4;
 }
@@ -851,35 +851,40 @@ unsigned int Processor::LD_H_n() // 0x26
 /* DAA */
 unsigned int Processor::DAA() // 0x27
 {
-	uint8 reg = A;
+	int reg = A;
 
-	if (IsFlagSet(Flag::Sub))
+	if (!IsFlagSet(Flag::Sub))
 	{
-		if ((reg & 0x0F) > 9 || IsFlagSet(Flag::Half_Carry))
+		if (IsFlagSet(Flag::Half_Carry) || (reg & 0xF) > 9)
 		{
-			reg -= 0x06;
+			reg += 0x06;
 		}
-		else if ((reg & 0x9F) > 9 || IsFlagSet(Flag::Carry))
+
+		if (IsFlagSet(Flag::Carry) || (reg > 0x9F))
 		{
-			reg -= 0x60;
+			reg += 0x60;
 		}
 	}
 	else
 	{
-		if ((reg & 0x0F) > 9 || IsFlagSet(Flag::Half_Carry))
+		if (IsFlagSet(Flag::Half_Carry))
 		{
-			reg += 0x06;
-		}
-		else if ((reg & 0x9F) > 9 || IsFlagSet(Flag::Carry))
-		{
-			reg += 0x60;
+			reg = (reg - 6) & 0xFF;
 		}
 
+		if (IsFlagSet(Flag::Carry))
+		{
+			reg -= 0x60;
+		}
 	}
-	DisableFlag(Flag::Half_Carry);
-	if (reg == 0) EnableFlag(Flag::Zero);
 
-	A = reg;
+	DisableFlag(Flag::Half_Carry);
+	ToggleFlag(Flag::Carry, (reg & 0x100) == 0x100);
+
+	reg &= 0xFF;
+	ToggleFlag(Flag::Zero, reg == 0);
+
+	A = static_cast<uint8>(reg);
 
 	return 4;
 }
@@ -2115,11 +2120,10 @@ unsigned int Processor::OR_A() // 0xB7
 unsigned int Processor::CP_B() // 0xB8
 {
 	uint8 value = B;
-	uint8 result = A - value;
 	SetFlags(Flag::Sub);
 	ToggleFlag(Flag::Carry, A < value);
-	ToggleFlag(Flag::Zero, result == 0);
-	ToggleFlag(Flag::Half_Carry, ((A ^ value ^ result) & 0x10) != 0);
+	ToggleFlag(Flag::Zero, A == value);
+	ToggleFlag(Flag::Half_Carry, ((A - value) & 0xF) > (A & 0xF));
 
 	return 4;
 }
@@ -2128,11 +2132,10 @@ unsigned int Processor::CP_B() // 0xB8
 unsigned int Processor::CP_C() // 0xB9
 {
 	uint8 value = C;
-	uint8 result = A - value;
 	SetFlags(Flag::Sub);
 	ToggleFlag(Flag::Carry, A < value);
-	ToggleFlag(Flag::Zero, result == 0);
-	ToggleFlag(Flag::Half_Carry, ((A ^ value ^ result) & 0x10) != 0);
+	ToggleFlag(Flag::Zero, A == value);
+	ToggleFlag(Flag::Half_Carry, ((A - value) & 0xF) > (A & 0xF));
 
 	return 4;
 }
@@ -2141,11 +2144,10 @@ unsigned int Processor::CP_C() // 0xB9
 unsigned int Processor::CP_D() // 0xBA
 {
 	uint8 value = D;
-	uint8 result = A - value;
 	SetFlags(Flag::Sub);
 	ToggleFlag(Flag::Carry, A < value);
-	ToggleFlag(Flag::Zero, result == 0);
-	ToggleFlag(Flag::Half_Carry, ((A ^ value ^ result) & 0x10) != 0);
+	ToggleFlag(Flag::Zero, A == value);
+	ToggleFlag(Flag::Half_Carry, ((A - value) & 0xF) > (A & 0xF));
 
 	return 4;
 }
@@ -2154,11 +2156,10 @@ unsigned int Processor::CP_D() // 0xBA
 unsigned int Processor::CP_E() // 0xBB
 {
 	uint8 value = E;
-	uint8 result = A - value;
 	SetFlags(Flag::Sub);
 	ToggleFlag(Flag::Carry, A < value);
-	ToggleFlag(Flag::Zero, result == 0);
-	ToggleFlag(Flag::Half_Carry, ((A ^ value ^ result) & 0x10) != 0);
+	ToggleFlag(Flag::Zero, A == value);
+	ToggleFlag(Flag::Half_Carry, ((A - value) & 0xF) > (A & 0xF));
 
 	return 4;
 }
@@ -2167,11 +2168,10 @@ unsigned int Processor::CP_E() // 0xBB
 unsigned int Processor::CP_H() // 0xBC
 {
 	uint8 value = H;
-	uint8 result = A - value;
 	SetFlags(Flag::Sub);
 	ToggleFlag(Flag::Carry, A < value);
-	ToggleFlag(Flag::Zero, result == 0);
-	ToggleFlag(Flag::Half_Carry, ((A ^ value ^ result) & 0x10) != 0);
+	ToggleFlag(Flag::Zero, A == value);
+	ToggleFlag(Flag::Half_Carry, ((A - value) & 0xF) > (A & 0xF));
 
 	return 4;
 }
@@ -2180,11 +2180,10 @@ unsigned int Processor::CP_H() // 0xBC
 unsigned int Processor::CP_L() // 0xBD
 {
 	uint8 value = L;
-	uint8 result = A - value;
 	SetFlags(Flag::Sub);
 	ToggleFlag(Flag::Carry, A < value);
-	ToggleFlag(Flag::Zero, result == 0);
-	ToggleFlag(Flag::Half_Carry, ((A ^ value ^ result) & 0x10) != 0);
+	ToggleFlag(Flag::Zero, A == value);
+	ToggleFlag(Flag::Half_Carry, ((A - value) & 0xF) > (A & 0xF));
 
 	return 4;
 }
@@ -2193,11 +2192,10 @@ unsigned int Processor::CP_L() // 0xBD
 unsigned int Processor::CP_MEM_HL() // 0xBE
 {
 	uint8 value = memory->ReadByte(HL);
-	uint8 result = A - value;
 	SetFlags(Flag::Sub);
 	ToggleFlag(Flag::Carry, A < value);
-	ToggleFlag(Flag::Zero, result == 0);
-	ToggleFlag(Flag::Half_Carry, ((A ^ value ^ result) & 0x10) != 0);
+	ToggleFlag(Flag::Zero, A == value);
+	ToggleFlag(Flag::Half_Carry, ((A - value) & 0xF) > (A & 0xF));
 
 	return 8;
 }
@@ -2206,11 +2204,10 @@ unsigned int Processor::CP_MEM_HL() // 0xBE
 unsigned int Processor::CP_A() // 0xBF
 {
 	uint8 value = A;
-	uint8 result = A - value;
 	SetFlags(Flag::Sub);
 	ToggleFlag(Flag::Carry, A < value);
-	ToggleFlag(Flag::Zero, result == 0);
-	ToggleFlag(Flag::Half_Carry, ((A ^ value ^ result) & 0x10) != 0);
+	ToggleFlag(Flag::Zero, A == value);
+	ToggleFlag(Flag::Half_Carry, ((A - value) & 0xF) > (A & 0xF));
 
 	return 4;
 }
@@ -2605,7 +2602,7 @@ unsigned int Processor::RST_0x0020() // 0xE7
 /* ADD SP, n */
 unsigned int Processor::ADD_SP_n() // 0xE8
 {
-	AddSP(memory->ReadByte(PC++));
+	AddSP(static_cast<int8>(memory->ReadByte(PC++)));
 
 	return 16;
 }
@@ -2747,11 +2744,10 @@ unsigned int Processor::EI() // 0xFB
 unsigned int Processor::CP_n() // 0xFE
 {
 	uint8 value = memory->ReadByte(PC++);
-	uint8 result = A - value;
 	SetFlags(Flag::Sub);
 	ToggleFlag(Flag::Carry, A < value);
-	ToggleFlag(Flag::Zero, result == 0);
-	ToggleFlag(Flag::Half_Carry, ((A ^ value ^ result) & 0x10) != 0);
+	ToggleFlag(Flag::Zero, A == value);
+	ToggleFlag(Flag::Half_Carry, ((A - value) & 0xF) > (A & 0xF));
 
 	return 8;
 }
@@ -2770,7 +2766,7 @@ unsigned int Processor::RST_0x0038() // 0xFF
 /* RLC B */
 unsigned int Processor::RLC_B() // 0x00
 {
-	B = Rlc(B);
+	B = Rlc(B, false);
 
 	return 8;
 }
@@ -2778,7 +2774,7 @@ unsigned int Processor::RLC_B() // 0x00
 /* RLC C */
 unsigned int Processor::RLC_C() // 0x01
 {
-	C = Rlc(C);
+	C = Rlc(C, false);
 
 	return 8;
 }
@@ -2786,7 +2782,7 @@ unsigned int Processor::RLC_C() // 0x01
 /* RLC D */
 unsigned int Processor::RLC_D() // 0x02
 {
-	D = Rlc(D);
+	D = Rlc(D, false);
 
 	return 8;
 }
@@ -2794,7 +2790,7 @@ unsigned int Processor::RLC_D() // 0x02
 /* RLC E */
 unsigned int Processor::RLC_E() // 0x03
 {
-	E = Rlc(E);
+	E = Rlc(E, false);
 
 	return 8;
 }
@@ -2802,7 +2798,7 @@ unsigned int Processor::RLC_E() // 0x03
 /* RLC H */
 unsigned int Processor::RLC_H() // 0x04
 {
-	H = Rlc(H);
+	H = Rlc(H, false);
 
 	return 8;
 }
@@ -2810,7 +2806,7 @@ unsigned int Processor::RLC_H() // 0x04
 /* RLC L */
 unsigned int Processor::RLC_L() // 0x05
 {
-	L = Rlc(L);
+	L = Rlc(L, false);
 
 	return 8;
 }
@@ -2818,7 +2814,7 @@ unsigned int Processor::RLC_L() // 0x05
 /* RLC (HL) */
 unsigned int Processor::RLC_MEM_HL() // 0x06
 {
-	memory->WriteByte(HL, Rlc(memory->ReadByte(HL)));
+	memory->WriteByte(HL, Rlc(memory->ReadByte(HL), false));
 
 	return 16;
 }
@@ -2826,7 +2822,7 @@ unsigned int Processor::RLC_MEM_HL() // 0x06
 /* RLC A */
 unsigned int Processor::RLC_A() // 0x07
 {
-	A = Rlc(A);
+	A = Rlc(A, false);
 
 	return 8;
 }
@@ -2834,7 +2830,7 @@ unsigned int Processor::RLC_A() // 0x07
 /* RRC B */
 unsigned int Processor::RRC_B() // 0x08
 {
-	B = Rrc(B);
+	B = Rrc(B, false);
 
 	return 8;
 }
@@ -2842,7 +2838,7 @@ unsigned int Processor::RRC_B() // 0x08
 /* RRC C */
 unsigned int Processor::RRC_C() // 0x09
 {
-	C = Rrc(C);
+	C = Rrc(C, false);
 
 	return 8;
 }
@@ -2850,7 +2846,7 @@ unsigned int Processor::RRC_C() // 0x09
 /* RRC D */
 unsigned int Processor::RRC_D() // 0x0A
 {
-	D = Rrc(D);
+	D = Rrc(D, false);
 
 	return 8;
 }
@@ -2858,7 +2854,7 @@ unsigned int Processor::RRC_D() // 0x0A
 /* RRC E */
 unsigned int Processor::RRC_E() // 0x0B
 {
-	E = Rrc(E);
+	E = Rrc(E, false);
 
 	return 8;
 }
@@ -2866,7 +2862,7 @@ unsigned int Processor::RRC_E() // 0x0B
 /* RRC H */
 unsigned int Processor::RRC_H() // 0x0C
 {
-	H = Rrc(H);
+	H = Rrc(H, false);
 
 	return 8;
 }
@@ -2874,7 +2870,7 @@ unsigned int Processor::RRC_H() // 0x0C
 /* RRC L */
 unsigned int Processor::RRC_L() // 0x0D
 {
-	L = Rrc(L);
+	L = Rrc(L, false);
 
 	return 8;
 }
@@ -2882,7 +2878,7 @@ unsigned int Processor::RRC_L() // 0x0D
 /* RRC (HL) */
 unsigned int Processor::RRC_MEM_HL() // 0x0E
 {
-	memory->WriteByte(HL, Rrc(memory->ReadByte(HL)));
+	memory->WriteByte(HL, Rrc(memory->ReadByte(HL), false));
 
 	return 16;
 }
@@ -2890,7 +2886,7 @@ unsigned int Processor::RRC_MEM_HL() // 0x0E
 /* RRC A */
 unsigned int Processor::RRC_A() // 0x0F
 {
-	A = Rrc(A);
+	A = Rrc(A, false);
 
 	return 8;
 }
@@ -2898,7 +2894,7 @@ unsigned int Processor::RRC_A() // 0x0F
 /* RL B */
 unsigned int Processor::RL_B() // 0x10
 {
-	B = Rl(B);
+	B = Rl(B, false);
 
 	return 8;
 }
@@ -2906,7 +2902,7 @@ unsigned int Processor::RL_B() // 0x10
 /* RL C */
 unsigned int Processor::RL_C() // 0x11
 {
-	C = Rl(C);
+	C = Rl(C, false);
 
 	return 8;
 }
@@ -2914,7 +2910,7 @@ unsigned int Processor::RL_C() // 0x11
 /* RL D */
 unsigned int Processor::RL_D() // 0x12
 {
-	D = Rl(D);
+	D = Rl(D, false);
 
 	return 8;
 }
@@ -2922,7 +2918,7 @@ unsigned int Processor::RL_D() // 0x12
 /* RL E */
 unsigned int Processor::RL_E() // 0x13
 {
-	E = Rl(E);
+	E = Rl(E, false);
 
 	return 8;
 }
@@ -2930,7 +2926,7 @@ unsigned int Processor::RL_E() // 0x13
 /* RL H */
 unsigned int Processor::RL_H() // 0x14
 {
-	H = Rl(H);
+	H = Rl(H, false);
 
 	return 8;
 }
@@ -2938,7 +2934,7 @@ unsigned int Processor::RL_H() // 0x14
 /* RL L,  */
 unsigned int Processor::RL_L() // 0x15
 {
-	L = Rl(L);
+	L = Rl(L, false);
 
 	return 8;
 }
@@ -2946,7 +2942,7 @@ unsigned int Processor::RL_L() // 0x15
 /* RL (HL) */
 unsigned int Processor::RL_MEM_HL() // 0x16
 {
-	memory->WriteByte(HL, Rl(memory->ReadByte(HL)));
+	memory->WriteByte(HL, Rl(memory->ReadByte(HL), false));
 
 	return 16;
 }
@@ -2954,7 +2950,7 @@ unsigned int Processor::RL_MEM_HL() // 0x16
 /* RL A */
 unsigned int Processor::RL_A() // 0x17
 {
-	A = Rl(A);
+	A = Rl(A, false);
 
 	return 8;
 }
@@ -2962,7 +2958,7 @@ unsigned int Processor::RL_A() // 0x17
 /* RR B */
 unsigned int Processor::RR_B() // 0x18
 {
-	B = Rr(B);
+	B = Rr(B, false);
 
 	return 8;
 }
@@ -2970,7 +2966,7 @@ unsigned int Processor::RR_B() // 0x18
 /* RR C */
 unsigned int Processor::RR_C() // 0x19
 {
-	C = Rr(C);
+	C = Rr(C, false);
 
 	return 8;
 }
@@ -2978,7 +2974,7 @@ unsigned int Processor::RR_C() // 0x19
 /* RR D */
 unsigned int Processor::RR_D() // 0x1A
 {
-	D = Rr(D);
+	D = Rr(D, false);
 
 	return 8;
 }
@@ -2986,7 +2982,7 @@ unsigned int Processor::RR_D() // 0x1A
 /* RR E */
 unsigned int Processor::RR_E() // 0x1B
 {
-	E = Rr(E);
+	E = Rr(E, false);
 
 	return 8;
 }
@@ -2994,7 +2990,7 @@ unsigned int Processor::RR_E() // 0x1B
 /* RR H */
 unsigned int Processor::RR_H() // 0x1C
 {
-	H = Rr(H);
+	H = Rr(H, false);
 
 	return 8;
 }
@@ -3002,7 +2998,7 @@ unsigned int Processor::RR_H() // 0x1C
 /* RR L */
 unsigned int Processor::RR_L() // 0x1D
 {
-	L = Rr(L);
+	L = Rr(L, false);
 
 	return 8;
 }
@@ -3010,7 +3006,7 @@ unsigned int Processor::RR_L() // 0x1D
 /* RR (HL) */
 unsigned int Processor::RR_MEM_HL() // 0x1E
 {
-	memory->WriteByte(HL, Rr(memory->ReadByte(HL)));
+	memory->WriteByte(HL, Rr(memory->ReadByte(HL), false));
 
 	return 16;
 }
@@ -3018,7 +3014,7 @@ unsigned int Processor::RR_MEM_HL() // 0x1E
 /* RR A */
 unsigned int Processor::RR_A() // 0x1F
 {
-	A = Rr(A);
+	A = Rr(A, false);
 
 	return 8;
 }

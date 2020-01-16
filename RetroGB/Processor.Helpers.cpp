@@ -18,296 +18,319 @@
 *
 */
 
-#include "Processor.h"
 #include "BitUtil.h"
+#include "Processor.h"
 
 void Processor::SetFlags(Flag flag)
 {
-    F = flag;
+	F = flag;
 }
 
 void Processor::EnableFlag(Flag flag)
 {
-    F |= flag;
+	F |= flag;
 }
 
 void Processor::DisableFlag(Flag flag)
 {
-    F &= ~flag;
+	F &= ~flag;
 }
 
 void Processor::InvertFlag(Flag flag)
 {
-    F ^= flag;
+	F ^= flag;
 }
 
 void Processor::ClearFlags()
 {
-    SetFlags(Flag::None);
+	SetFlags(Flag::None);
 }
 
 bool Processor::IsFlagSet(uint8 flag)
 {
-    return (F & flag) != 0;
+	return (F & flag) != 0;
 }
 
 void Processor::ToggleFlag(Flag flag, bool condition)
 {
-    if (condition)
-    {
-        EnableFlag(flag);
-    }
-    else
-    {
-        DisableFlag(flag);
-    }
+	if (condition)
+	{
+		EnableFlag(flag);
+	}
+	else
+	{
+		DisableFlag(flag);
+	}
+}
+
+void Processor::KeepFlag(Flag flag)
+{
+	if (IsFlagSet(flag))
+	{
+		SetFlags(flag);
+	}
+	else
+	{
+		ClearFlags();
+	}
 }
 
 void Processor::PushToStack(uint16 reg)
 {
-    SP -= 2;
-    memory->WriteWord(SP, reg);
+	SP -= 2;
+	memory->WriteWord(SP, reg);
 }
 
 void Processor::PopFromStack(uint16& reg)
 {
-    reg = memory->ReadWord(SP);
-    SP += 2;
+	reg = memory->ReadWord(SP);
+	SP += 2;
 }
 
 uint8 Processor::Inc(uint8 reg)
 {
-    uint8 result = reg + 1;
-    
-    IsFlagSet(Flag::Carry) ? SetFlags(Flag::Carry) : ClearFlags();
+	uint8 result = reg + 1;
 
-    ToggleFlag(Flag::Zero, result == 0);
-    ToggleFlag(Flag::Half_Carry, (result & 0x0F) == 0);
+	KeepFlag(Flag::Carry);
+	ToggleFlag(Flag::Zero, result == 0);
+	ToggleFlag(Flag::Half_Carry, (result & 0x0F) == 0);
 
-    return result;
+	return result;
 }
 
 uint8 Processor::Dec(uint8 reg)
 {
-    uint8 result = reg - 1;
-    
-    IsFlagSet(Flag::Carry) ? SetFlags(Flag::Carry) : ClearFlags();
-    EnableFlag(Flag::Sub);
+	uint8 result = reg - 1;
 
-    ToggleFlag(Flag::Zero, result == 0);
-    ToggleFlag(Flag::Half_Carry, (result & 0x0F) == 0x0F);
+	KeepFlag(Flag::Carry);
+	EnableFlag(Flag::Sub);
 
-    return result;
+	ToggleFlag(Flag::Zero, result == 0);
+	ToggleFlag(Flag::Half_Carry, (result & 0x0F) == 0x0F);
+
+	return result;
 }
 
 void Processor::Add(uint8 reg)
 {
-    int result = A + reg;
-    int bits = A ^ reg ^ result;
-    
+	int result = A + reg;
+	int bits = A ^ reg ^ result;
+
 	A = static_cast<uint8>(result);
 
-    ClearFlags();
+	ClearFlags();
 
-    ToggleFlag(Flag::Zero, result == 0);
-    ToggleFlag(Flag::Carry, (bits & 0x100) != 0);
-    ToggleFlag(Flag::Half_Carry, (bits & 0x10) != 0);
+	ToggleFlag(Flag::Zero, A == 0);
+	ToggleFlag(Flag::Carry, (bits & 0x100) != 0);
+	ToggleFlag(Flag::Half_Carry, (bits & 0x10) != 0);
 }
 
 void Processor::Adc(uint8 reg)
 {
-    int carry = IsFlagSet(Flag::Carry) ? 1 : 0;
-    int result = A + reg + carry;
-    
-    ClearFlags();
+	int carry = IsFlagSet(Flag::Carry) ? 1 : 0;
+	int result = A + reg + carry;
 
-    ToggleFlag(Flag::Zero, result == 0);
-    ToggleFlag(Flag::Carry, result > 0xFF);
-    ToggleFlag(Flag::Half_Carry, ((A & 0x0F) + (reg & 0x0F) + carry) > 0x0F);
+	ClearFlags();
 
-    A = static_cast<uint8>(result);
+	ToggleFlag(Flag::Zero, static_cast< uint8 >(result) == 0);
+	ToggleFlag(Flag::Carry, result > 0xFF);
+	ToggleFlag(Flag::Half_Carry, ((A & 0x0F) + (reg & 0x0F) + carry) > 0x0F);
+
+	A = static_cast<uint8>(result);
 }
 
 void Processor::Sub(uint8 reg)
 {
-    int result = A - reg;
-    int bits = A ^ reg ^ result;
+	int result = A - reg;
+	int bits = A ^ reg ^ result;
 
-    A = static_cast<uint8>(result);
+	A = static_cast<uint8>(result);
 
-    SetFlags(Flag::Sub);
+	SetFlags(Flag::Sub);
 
-    ToggleFlag(Flag::Zero, result == 0);
-    ToggleFlag(Flag::Carry, (bits & 0x100) != 0);
-    ToggleFlag(Flag::Half_Carry, (bits & 0x10) != 0);
+	ToggleFlag(Flag::Zero, A == 0);
+	ToggleFlag(Flag::Carry, (bits & 0x100) != 0);
+	ToggleFlag(Flag::Half_Carry, (bits & 0x10) != 0);
 }
 
 void Processor::Sbc(uint8 reg)
 {
-    int carry = IsFlagSet(Flag::Carry) ? 1 : 0;
-    int result = A - reg - carry;
-    
-    SetFlags(Flag::Sub);
+	int carry = IsFlagSet(Flag::Carry) ? 1 : 0;
+	int result = A - reg - carry;
 
-	ToggleFlag(Flag::Zero, result == 0);
+	SetFlags(Flag::Sub);
+
+	ToggleFlag(Flag::Zero, static_cast< uint8 >(result) == 0);
 	ToggleFlag(Flag::Carry, result < 0);
-    ToggleFlag(Flag::Half_Carry, ((A & 0x0F) - (reg & 0x0F) - carry) < 0);
+	ToggleFlag(Flag::Half_Carry, ((A & 0x0F) - (reg & 0x0F) - carry) < 0);
 
-    A = static_cast<uint8>(result);
+	A = static_cast<uint8>(result);
 }
 
 void Processor::AddHL(uint16 val)
 {
-    int result = HL + val;
+	int result = HL + val;
 
-    IsFlagSet(Flag::Zero) ? SetFlags(Flag::Zero) : ClearFlags();
-    
-    ToggleFlag(Flag::Carry, result & 0x10000);
-    ToggleFlag(Flag::Half_Carry, (HL ^ val ^ (result & 0xFFFF)) & 0x1000);
+	KeepFlag(Flag::Zero);
 
-    HL = static_cast<uint16>(result);
+	ToggleFlag(Flag::Carry, result & 0x10000);
+	ToggleFlag(Flag::Half_Carry, (HL ^ val ^ (result & 0xFFFF)) & 0x1000);
+
+	HL = static_cast<uint16>(result);
 }
 
-void Processor::AddSP(uint8 val)
+void Processor::AddSP(int8 val)
 {
-    int result = SP + val;
+	int result = SP + val;
 
-    ClearFlags();
+	ClearFlags();
 
-    ToggleFlag(Flag::Carry, ((SP ^ val ^ (result & 0xFFFF)) & 0x100) == 0x100);
-    ToggleFlag(Flag::Half_Carry, ((SP ^ val ^ (result & 0xFFFF)) & 0x10) == 0x10);
+	ToggleFlag(Flag::Carry, ((SP ^ val ^ (result & 0xFFFF)) & 0x100) == 0x100);
+	ToggleFlag(Flag::Half_Carry, ((SP ^ val ^ (result & 0xFFFF)) & 0x10) == 0x10);
 
-    SP = static_cast<uint16>(result);
+	SP = static_cast<uint16>(result);
 }
 
-uint8 Processor::Rl(uint8 reg)
+uint8 Processor::Rl(uint8 reg, bool registerA)
 {
-    uint8 carry = IsFlagSet(Flag::Carry) ? 1 : 0;
-    uint8 result = reg;
+	uint8 carry = IsFlagSet(Flag::Carry) ? 1 : 0;
+	uint8 result = reg;
 
-    ClearFlags();
-    ToggleFlag(Flag::Carry, (result & 0x80) != 0);
+	ClearFlags();
+	ToggleFlag(Flag::Carry, (result & 0x80) != 0);
 
-    result <<= 1;
-    result |= carry;
+	result <<= 1;
+	result |= carry;
 
-    ToggleFlag(Flag::Zero, result == 0);
+	if (!registerA)
+	{
+		ToggleFlag(Flag::Zero, result == 0);
+	}
 
-    return result;
+	return result;
 }
 
-uint8 Processor::Rlc(uint8 reg)
+uint8 Processor::Rlc(uint8 reg, bool registerA)
 {
-    uint8 result = reg;
-    
-    if ((result & 0x80) != 0)
-    {
-        SetFlags(Flag::Carry);
-        result <<= 1;
-        result |= 1;
-    }
-    else
-    {
-        ClearFlags();
-        result <<= 1;
-    }
+	uint8 result = reg;
 
-	ToggleFlag(Flag::Zero, result == 0);
+	if ((result & 0x80) != 0)
+	{
+		SetFlags(Flag::Carry);
+		result <<= 1;
+		result |= 1;
+	}
+	else
+	{
+		ClearFlags();
+		result <<= 1;
+	}
 
-    return result;
+	if (!registerA)
+	{
+		ToggleFlag(Flag::Zero, result == 0);
+	}
+
+	return result;
 }
 
-uint8 Processor::Rr(uint8 reg)
+uint8 Processor::Rr(uint8 reg, bool registerA)
 {
-    uint8 carry = IsFlagSet(Flag::Carry) ? 1 : 0;
-    uint8 result = reg;
+	uint8 carry = IsFlagSet(Flag::Carry) ? 0x80 : 0x00;
+	uint8 result = reg;
 
-    ClearFlags();
-    ToggleFlag(Flag::Carry, (result & 0x80) != 0);
+	ClearFlags();
+	ToggleFlag(Flag::Carry, (result & 0x01) != 0);
 
-    result >>= 1;
-    result |= carry;
+	result >>= 1;
+	result |= carry;
 
-	ToggleFlag(Flag::Zero, result == 0);
+	if (!registerA)
+	{
+		ToggleFlag(Flag::Zero, result == 0);
+	}
 
-    return result;
+	return result;
 }
 
-uint8 Processor::Rrc(uint8 reg)
+uint8 Processor::Rrc(uint8 reg, bool registerA)
 {
-    uint8 result = reg;
+	uint8 result = reg;
 
-    if ((result & 0x80) != 0)
-    {
-        SetFlags(Flag::Carry);
-        result >>= 1;
-        result |= 1;
-    }
-    else
-    {
-        ClearFlags();
-        result >>= 1;
-    }
+	if ((result & 0x01) != 0)
+	{
+		SetFlags(Flag::Carry);
+		result >>= 1;
+		result |= 0x80;
+	}
+	else
+	{
+		ClearFlags();
+		result >>= 1;
+	}
 
-	ToggleFlag(Flag::Zero, result == 0);
+	if (!registerA)
+	{
+		ToggleFlag(Flag::Zero, result == 0);
+	}
 
-    return result;
+	return result;
 }
 
 uint8 Processor::Sla(uint8 reg)
 {
-    uint8 result = reg;
+	uint8 result = reg;
 
-    ClearFlags();
-    ToggleFlag(Flag::Carry, (result & 0x80) != 0);
+	ClearFlags();
+	ToggleFlag(Flag::Carry, (result & 0x80) != 0);
 
-    result <<= 1;
+	result <<= 1;
 
 	ToggleFlag(Flag::Zero, result == 0);
 
-    return result;
+	return result;
 }
 
 uint8 Processor::Sra(uint8 reg)
 {
-    uint8 result = reg;
+	uint8 result = reg;
 
-    ClearFlags();
-    ToggleFlag(Flag::Carry, (result & 0x01) != 0);
+	ClearFlags();
+	ToggleFlag(Flag::Carry, (result & 0x01) != 0);
 
-    if ((result & 0x80) != 0)
-    {
-        result >>= 1;
-        result |= 0x80;
-    }
-    else
-    {
-        result >>= 1;
-    }
+	if ((result & 0x80) != 0)
+	{
+		result >>= 1;
+		result |= 0x80;
+	}
+	else
+	{
+		result >>= 1;
+	}
 
 	ToggleFlag(Flag::Zero, result == 0);
 
-    return result;
+	return result;
 }
 
 uint8 Processor::Srl(uint8 reg)
 {
-    uint8 result = reg;
+	uint8 result = reg;
 
-    ClearFlags();
-    ToggleFlag(Flag::Carry, (result & 0x01) != 0);
+	ClearFlags();
+	ToggleFlag(Flag::Carry, (result & 0x01) != 0);
 
-    result >>= 1;
+	result >>= 1;
 
 	ToggleFlag(Flag::Zero, result == 0);
 
-    return result;
+	return result;
 }
 
-void Processor::Bit(uint8 reg, uint8 bit)
+void Processor::Bit(uint8 reg, int bit)
 {
 	ToggleFlag(Flag::Zero, ((reg >> bit) & 0x01) == 0);
 
-    DisableFlag(Flag::Sub);
-    EnableFlag(Flag::Half_Carry);
+	DisableFlag(Flag::Sub);
+	EnableFlag(Flag::Half_Carry);
 }
