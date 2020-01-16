@@ -851,40 +851,45 @@ unsigned int Processor::LD_H_n() // 0x26
 /* DAA */
 unsigned int Processor::DAA() // 0x27
 {
-	int reg = A;
+	int result = A;
 
 	if (!IsFlagSet(Flag::Sub))
 	{
-		if (IsFlagSet(Flag::Half_Carry) || (reg & 0xF) > 9)
+		if (IsFlagSet(Flag::Half_Carry) || (result & 0xF) > 9)
 		{
-			reg += 0x06;
+			result += 0x06;
 		}
 
-		if (IsFlagSet(Flag::Carry) || (reg > 0x9F))
+		if (IsFlagSet(Flag::Carry) || (result > 0x9F))
 		{
-			reg += 0x60;
+			result += 0x60;
 		}
 	}
 	else
 	{
 		if (IsFlagSet(Flag::Half_Carry))
 		{
-			reg = (reg - 6) & 0xFF;
+			result = (result - 0x06) & 0xFF;
 		}
 
 		if (IsFlagSet(Flag::Carry))
 		{
-			reg -= 0x60;
+			result -= 0x60;
 		}
 	}
 
 	DisableFlag(Flag::Half_Carry);
-	ToggleFlag(Flag::Carry, (reg & 0x100) == 0x100);
 
-	reg &= 0xFF;
-	ToggleFlag(Flag::Zero, reg == 0);
+	if ((result & 0x100) == 0x100)
+	{
+		EnableFlag(Flag::Carry);
+	}
 
-	A = static_cast<uint8>(reg);
+	result &= 0xFF;
+
+	ToggleFlag(Flag::Zero, result == 0);
+
+	A = static_cast<uint8>(result);
 
 	return 4;
 }

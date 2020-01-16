@@ -187,32 +187,35 @@ namespace CpuGenerator
 
         public void WriteDaa(TextWriter writer, Opcode opcode)
         {
-            writer.WriteLine("\tint reg = A;\n");
+            writer.WriteLine("\tint result = A;\n");
             writer.WriteLine("\tif (!IsFlagSet(Flag::Sub))\n\t{");
-            writer.WriteLine("\t\tif (IsFlagSet(Flag::Half_Carry) || (reg & 0xF) > 9)");
+            writer.WriteLine("\t\tif (IsFlagSet(Flag::Half_Carry) || (result & 0xF) > 9)");
             writer.WriteLine("\t\t{");
-            writer.WriteLine("\t\t\treg += 0x06;");
+            writer.WriteLine("\t\t\tresult += 0x06;");
             writer.WriteLine("\t\t}\n");
-            writer.WriteLine("\t\tif (IsFlagSet(Flag::Carry) || (reg > 0x9F))");
+            writer.WriteLine("\t\tif (IsFlagSet(Flag::Carry) || (result > 0x9F))");
             writer.WriteLine("\t\t{");
-            writer.WriteLine("\t\t\treg += 0x60;");
+            writer.WriteLine("\t\t\tresult += 0x60;");
             writer.WriteLine("\t\t}");
             writer.WriteLine("\t}");
             writer.WriteLine("\telse\n\t{");
             writer.WriteLine("\t\tif (IsFlagSet(Flag::Half_Carry))");
             writer.WriteLine("\t\t{");
-            writer.WriteLine("\t\t\treg = (reg - 6) & 0xFF;");
+            writer.WriteLine("\t\t\tresult = (result - 0x06) & 0xFF;");
             writer.WriteLine("\t\t}\n");
             writer.WriteLine("\t\tif (IsFlagSet(Flag::Carry))");
             writer.WriteLine("\t\t{");
-            writer.WriteLine("\t\t\treg -= 0x60;");
+            writer.WriteLine("\t\t\tresult -= 0x60;");
             writer.WriteLine("\t\t}");
             writer.WriteLine("\t}\n");
-            writer.WriteLine("\tDisableFlag(Flag::Half_Carry);");
-            writer.WriteLine("\tToggleFlag(Flag::Carry, (reg & 0x100) == 0x100);\n");
-            writer.WriteLine("\treg &= 0xFF;");
-            writer.WriteLine("\tToggleFlag(Flag::Zero, reg == 0);\n");
-            writer.WriteLine("\tA = static_cast<uint8>(reg);");
+            writer.WriteLine("\tDisableFlag(Flag::Half_Carry);\n");
+            writer.WriteLine("\tif ((result & 0x100) == 0x100)");
+            writer.WriteLine("\t{");
+            writer.WriteLine("\t\tEnableFlag(Flag::Carry);");
+            writer.WriteLine("\t}\n");
+            writer.WriteLine("\tresult &= 0xFF;\n");
+            writer.WriteLine("\tToggleFlag(Flag::Zero, result == 0);\n");
+            writer.WriteLine("\tA = static_cast<uint8>(result);");
         }
 
         public void WriteDi(TextWriter writer, Opcode opcode)
